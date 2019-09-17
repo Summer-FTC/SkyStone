@@ -44,6 +44,7 @@ public class CustomLinearOpMode extends LinearOpMode
 
     public void goStraight(int distance) {
         // To move straight a certain distance
+        // Not sure if we need a separate method for this
     }
 
     public void getStone() {
