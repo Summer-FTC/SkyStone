@@ -11,12 +11,12 @@ public class CustomLinearOpMode extends LinearOpMode
 
     public void runOpMode()
     {
-
+    //
     }
 
     public void initialize()
     {
-
+    // set up robot to run before start is pressed
     }
 
     public void waitForStart()
