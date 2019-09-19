@@ -20,10 +20,10 @@ public class VenomHardwareMap {
     public DcMotor mtrBR;
     public Servo leftFoundation;
     public Servo rightFoundation;
-    public Servo ;
-    public Servo ;
-    public Servo ;
-    public Servo ;
+    //public Servo ;
+    //public Servo ;
+    //public Servo ;
+    //public Servo ;
 
     public void init(HardwareMap hwMap, Telemetry telemetry, boolean isAutonomous){
         this.hwMap = hwMap;
