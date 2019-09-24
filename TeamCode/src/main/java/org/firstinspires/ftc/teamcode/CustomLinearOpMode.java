@@ -1,77 +1,160 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.os.Environment;
+
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
+import com.vuforia.Image;
+import com.vuforia.PIXEL_FORMAT;
+import com.vuforia.Vuforia;
 
-@Autonomous(name="Custom Linear OpMode")
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
-public class CustomLinearOpMode extends LinearOpMode
-{
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
-    // AUTO
+import static android.graphics.Color.blue;
+import static android.graphics.Color.red;
+import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
+
+public class CustomLinearOpMode extends LinearOpMode {
+
+    protected static final String VUFORIA_KEY = "";
+    protected VuforiaLocalizer vuforia;
+
     // Declare motors
-    DoMotor motorLeft = null;
-    DoMotor motorRight = null;
+    DcMotor motorFR;
+    DcMotor motorFL;
+    DcMotor motorBR;
+    DcMotor motorBL;
+
+    // Speed
+    double left = 1.00;
+
+    ModernRoboticsI2cRangeSensor rangeSensorB;
+    ModernRoboticsI2cRangeSensor rangeSensorL;
 
     // Declare servos
-    Servo servo1 = null;
-    Servo servo1 = null;
-    Servo servo1 = null;
-    Servo servo1 = null;
-    Servo servo1 = null;
-    Servo servo1 = null;
+    Servo servo1;
 
-    @Override public void main{} throws InterruptedException
-    {
-        // Initialize hardware
+    ElapsedTime eTime;
 
-        // Initialize motors
-        motorLeft = hardwareMap.doMotor.get("motorLeft");
-        motorRight = hardwareMap.doMotor.get("motorRight");
+    IMU imu;
+    protected ElapsedTime time = new ElapsedTime();
 
-        // Not sure if this will work; I just copied off video
-        motorLeft.setChannelMode(DoMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-        motorRight.setChannelMode(DoMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+    @Override
+    public void runOpMode() throws InterruptedException {
+    }
 
-        motorLeft.setDirection(DoMotor.Direction.REVERSE);
+    public void initialize() {
+        motorFR = hardwareMap.dcMotor.get("motorFR");
+        motorFL = hardwareMap.dcMotor.get("motorFL");
+        motorBR = hardwareMap.dcMotor.get("motorBR");
+        motorBL = hardwareMap.dcMotor.get("motorBL");
 
-        // Initialize servos
-        servo1 = hardwareMap.servo.get("");
+        motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        servo1.setPosition(.8); // Don't know correct position to set to
+        motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        // Wait for the game to start
-        waitForStart();
+        motorBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        stopMotors();
 
-        public void runOpMode()
-        {
+        telemetry.addData("Motor Initialization Complete", "");
 
+        rangeSensorB = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensorB");
+        rangeSensorL = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensorL");
+
+        //imu = new IMU(hardwareMap.get(BNO055IMU.class, "imu"));
+        //imu.IMUinit(hardwareMap);
+
+        telemetry.addData("IMU Initialization Complete", "");
+    }
+
+    private void initVuforia() {
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+        Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true);
+        vuforia.setFrameQueueCapacity(1);
+    }
+
+    public void moveToDistP(double inches, double angle, double timeout) {
+        double kPdist = .03;
+        double kPangle = .9/90.0;
+        // MIGHT NEED TO BE RETUNED
+        double minDrive = .15;
+        double maxDrive = .5;
+
+        time.reset();
+        while ((Math.abs(getDistB() - inches) > .25 || imu.getTrueDiff(angle) > .5) && opModeIsActive() && time.milliseconds() < timeout) {
+
+            double distError = inches - getDistB();
+            double PIDchangeDist = -Range.clip(-kPdist * distError, -maxDrive, maxDrive);
+
+            if (PIDchangeDist < minDrive && PIDchangeDist > 0) {
+                PIDchangeDist = minDrive;
+            } else if (PIDchangeDist > -minDrive && PIDchangeDist < 0) {
+                PIDchangeDist = -minDrive;
+            }
+
+            double angleError = imu.getTrueDiff(angle);
+            double PIDchangeAngle = kPangle * angleError;
+
+            motorBL.setPower(Range.clip((PIDchangeDist - PIDchangeAngle) * left, -1, 1));
+            motorFL.setPower(Range.clip((PIDchangeDist - PIDchangeAngle) * left, -1, 1));
+            motorBR.setPower(Range.clip(PIDchangeDist + PIDchangeAngle, -1, 1));
+            motorFR.setPower(Range.clip(PIDchangeDist + PIDchangeAngle, -1, 1));
         }
+        stopMotors();
+    }
 
-        public void initialize()
-        {
-            // set up robot to run before start is pressed
+    public void stopMotors() {
+        motorBL.setPower(0);
+        motorFL.setPower(0);
+        motorBR.setPower(0);
+        motorFR.setPower(0);
+    }
+
+    public double getDistB() {
+        double dist = rangeSensorB.getDistance(DistanceUnit.INCH);
+        while ((dist > 200 || Double.isNaN(dist)) && opModeIsActive()) {
+            dist = rangeSensorB.getDistance(DistanceUnit.INCH);
         }
+        return dist;
+    }
 
-        public void waitForStart()
-        {
-            // if start is pressed
-            // runopmode
-            //else
-            //wait for start
-        }
-
-        public void driveForwardDistance(double power, long distance) throws InterruptedException {
-            motorLeft.setPower(power);
-            motorRight.setPower(power);
-            // How long will it drive forward for?
-        }
-
-        public void StopDriving() {
-            DriveForward(0);
-        }
-
-        public void findSkystone() {
+    public void findSkystone() {
         // Tensor Flow stuff: detect Skystones
 
         // Scan first stones from left to right until first Skystone detected
@@ -79,51 +162,29 @@ public class CustomLinearOpMode extends LinearOpMode
         // Scan last three stones
         // If second Skystone still there, get
         // If in last three, ally already got first Skystone, get second
-        }
+    }
 
-        public void turn() {
-        // Use PID
-        // Not sure how this will work right now
-        }
-
-        public void getStone() {
+    public void getStone() {
         // Pick up a Stone with the robot
-        }
+    }
 
-        public void placeStone() {
+    public void placeStone() {
         // Place Stone on the foundation
 
         // Don't have to stack, can just throw on
         // For LM 1, only pushing across tape: use dropStone()
-        }
-
-        public void dropStone() {
-        // Drop Stone across the tape
-        }
-
-        public void goBack() {
-        // Go back to where the Stones are to retrieve another one
-        }
-
-        public void crossTape() {
-        // Go across the tape to drop Stone
-        }
-
-        public void park() {
-        // Park on the tape at the end of auto
-        // Call method when t =
-        }
-
-        public void lowerServo(Servo servo) {
-            servo.setPosition(0.8);
-        }
-
-        public void lowerServo(Servo servo) {
-            servo.setPosition(0.2);
-        }
     }
 
+    public void dropStone() {
+        // Drop Stone across the tape
+    }
 
+    public void crossTape() {
+        // Go across the tape to drop Stone
+    }
 
-
+    public void park() {
+        // Park on the tape at the end of auto
+        // Call method when t =
+    }
 }
