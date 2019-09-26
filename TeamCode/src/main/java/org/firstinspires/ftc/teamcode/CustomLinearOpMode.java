@@ -43,6 +43,7 @@ public class CustomLinearOpMode extends LinearOpMode {
 
     protected static final String VUFORIA_KEY = "";
     protected VuforiaLocalizer vuforia;
+    protected TFObjectDetector tfod;
 
     // Declare motors
     DcMotor motorFR;
@@ -112,7 +113,6 @@ public class CustomLinearOpMode extends LinearOpMode {
     public void moveToDistP(double inches, double angle, double timeout) {
         double kPdist = .03;
         double kPangle = .9/90.0;
-        // MIGHT NEED TO BE RETUNED
         double minDrive = .15;
         double maxDrive = .5;
 
@@ -154,6 +154,21 @@ public class CustomLinearOpMode extends LinearOpMode {
         return dist;
     }
 
+    public double getDistL() {
+        double dist = rangeSensorL.getDistance(DistanceUnit.INCH);
+        while ((dist > 200 || Double.isNaN(dist)) && opModeIsActive()) {
+            dist = rangeSensorL.getDistance(DistanceUnit.INCH);
+        }
+        return dist;
+    }
+
+    public void resetEncoders() {
+        motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
     public void findSkystone() {
         // Tensor Flow stuff: detect Skystones
 
@@ -164,7 +179,7 @@ public class CustomLinearOpMode extends LinearOpMode {
         // If in last three, ally already got first Skystone, get second
     }
 
-    public void getStone() {
+    public void getStone() throws InterruptedException {
         // Pick up a Stone with the robot
     }
 
