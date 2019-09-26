@@ -12,9 +12,11 @@ public class MecanumDrive
 
     // Vd = Desired robot speed [−1,1]
     // angle = Desired robot angle [0, 360]
-    // tD = Desired robot angle [0, 2pi)
-    // Vt = Desired speed for changing direction [−1,1]
-    public double wheelSpeed (double Vd, double tD, double angle, double Vt, String wheel)
+    // Vt = Desired rotational speed [−1,1]
+
+    // what's the difference between Vd and Vt ??
+
+    public double wheelSpeed (double Vd, double angle, double Vt, String wheel)
     {
         double rad = convertToRadians(angle);
         double v = 0.0; // wheel speed
@@ -36,6 +38,8 @@ public class MecanumDrive
 
 }
 
-
+// might need to add multipliers as seen here
 // https://ftcforum.usfirst.org/forum/ftc-technology/android-studio/6361-mecanum-wheels-drive-code-example
-// ^^ might need to add multipliers as seen here
+
+// more info here (clamp motor powers?)
+// https://github.com/tobortechftc/pmtischler/blob/master/SharedCode/src/main/java/com/github/pmtischler/control/Mecanum.java

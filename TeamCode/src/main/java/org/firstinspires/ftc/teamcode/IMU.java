@@ -65,12 +65,14 @@ public class IMU extends LinearOpMode
     Orientation angles;
     Acceleration gravity;
 
-    public IMU (BNO055IMU imu){
+    public IMU (BNO055IMU imu)
+    {
         IMU = imu;
     }
 
     //Just basic init stuff; run in robot init method
-    public void IMUinit(HardwareMap map) {
+    public void IMUinit(HardwareMap map)
+    {
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
@@ -121,12 +123,12 @@ public class IMU extends LinearOpMode
 
     }
 
-    String formatAngle(org.firstinspires.ftc.robotcore.external.navigation.AngleUnit angleUnit, double angle)
+    public String formatAngle(org.firstinspires.ftc.robotcore.external.navigation.AngleUnit angleUnit, double angle)
     {
         return formatDegrees(org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES.fromUnit(angleUnit, angle));
     }
 
-    String formatDegrees(double degrees)
+    public String formatDegrees(double degrees)
     {
         return String.format(Locale.getDefault(), "%.1f", org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES.normalize(degrees));
     }
