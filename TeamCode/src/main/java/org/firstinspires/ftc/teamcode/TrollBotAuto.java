@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
 public class TrollBotAuto extends CustomLinearOpMode {
 
     ModernRoboticsI2cRangeSensor rangeSensor;
@@ -48,17 +50,6 @@ public class TrollBotAuto extends CustomLinearOpMode {
             }
         }
 
-        moveToDistance(2);
-        turn(135);
-        moveToDistance(2);
-        // deposit marker
-        turn(-155);
-        moveToDistance(2);
-        stopAllMotors();
-
-        if(isSkystone()) {
-            driveBackward(2);
-        }
 
         /*blockLocation = getBlockLocation();
         if (blockLocation.equals("LEFT")) {
