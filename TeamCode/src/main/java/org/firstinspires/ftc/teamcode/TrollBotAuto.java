@@ -18,6 +18,8 @@ public class TrollBotAuto extends CustomLinearOpMode
         } catch (Exception e) {
         }
 
+        TensorFlowSkyStone tf = new TensorFlowSkyStone();
+
         // move to blocks
         // driveForward();
 
