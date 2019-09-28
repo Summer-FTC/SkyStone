@@ -1,11 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.os.Environment;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
@@ -54,7 +48,7 @@ public class CustomLinearOpMode extends LinearOpMode {
     // Speed
     double left = 1.00;
 
-<<<<<<< HEAD
+
     // AUTO
     // Declare motors
     public DcMotor mtrFL = null;
@@ -70,15 +64,12 @@ public class CustomLinearOpMode extends LinearOpMode {
     public Servo servo4 = null;
     public Servo servo5 = null;
     public Servo servo6 = null;
-=======
-    ModernRoboticsI2cRangeSensor rangeSensorB;
-    ModernRoboticsI2cRangeSensor rangeSensorL;
 
-    // Declare servos
-    Servo servo1;
+    ModernRoboticsI2cRangeSensor rangeSensorB;
+
 
     ElapsedTime eTime;
->>>>>>> adc9fb61bfb99ac284e8f05feee942fa3ce35e5f
+
 
     IMU imu;
     protected ElapsedTime time = new ElapsedTime();
@@ -111,7 +102,6 @@ public class CustomLinearOpMode extends LinearOpMode {
         telemetry.addData("Motor Initialization Complete", "");
 
         rangeSensorB = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensorB");
-        rangeSensorL = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensorL");
 
         //imu = new IMU(hardwareMap.get(BNO055IMU.class, "imu"));
         //imu.IMUinit(hardwareMap);
@@ -172,13 +162,6 @@ public class CustomLinearOpMode extends LinearOpMode {
         return dist;
     }
 
-    public double getDistL() {
-        double dist = rangeSensorL.getDistance(DistanceUnit.INCH);
-        while ((dist > 200 || Double.isNaN(dist)) && opModeIsActive()) {
-            dist = rangeSensorL.getDistance(DistanceUnit.INCH);
-        }
-        return dist;
-    }
 
     public void resetEncoders() {
         motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

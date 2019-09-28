@@ -2,7 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-public class TrollBotAuto extends CustomLinearOpMode {
+public class TrollBotAuto extends CustomLinearOpMode
+{
 
     ModernRoboticsI2cRangeSensor rangeSensor;
     boolean SkystoneDetected = false;
@@ -11,12 +12,14 @@ public class TrollBotAuto extends CustomLinearOpMode {
     @Override
     public void runOpMode() {
 
-        initizialize();
+        initialize();
         waitForStart();
 
-        try {
+        try
+        {
 
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             stop();
         }
 
@@ -25,16 +28,18 @@ public class TrollBotAuto extends CustomLinearOpMode {
 
         // Check first block
         turn(-90);
-        if(isSkystone()) {
+        if(isSkystone())
+        {
             driveBackward(2);
         }
 
         // Check second block
         if (!SkystoneDetected)
             turn(-90);
-            if (isSkystone()) {
+            if (isSkystone())
+            {
                 driveBackward(2);
-
+            }
         // Check third block
         // But don't need to because has to be if first two aren't
         if (!SkystoneDetected)
@@ -49,6 +54,12 @@ public class TrollBotAuto extends CustomLinearOpMode {
         public void isSkystone() {
             // if phone detects skystone
                 return true;
-            return false;
+                return false;
         }
+
+        public void driveForward()
+        {
+
+        }
+
 }

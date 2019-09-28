@@ -1,84 +1,93 @@
+
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.robocol.TelemetryMessage;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-
-<<<<<<< HEAD
-public class VenomHardwareMap {
-    public DcMotor mtrBR;
-    public DcMotor mtrBL;
-=======
-public class VenomHardwareMap
-{
-    HardwareMap hwMap = null;
-    public Telemetry telemetry = null;
-    LinearOpMode opMode = null;
-
-    BNO055IMU imu = null;
->>>>>>> adc9fb61bfb99ac284e8f05feee942fa3ce35e5f
-    public DcMotor mtrFL;
-    public DcMotor mtrFR;
-    public Servo leftFoundation;
-    public Servo rightFoundation;
-    public Servo servo1;
-    public Servo servo2;
-    public Servo servo3;
-    public Servo servo4;
-    public Servo capStone;
-    public Servo numberTwo;
-    public Servo numberThree;
-    public Servo numberFour;
-    boolean isAutonomous = false;
-    public
-    BNO055IMU imu = null;
+import org.firstinspires.ftc.robotcore.internal.opmode.TelemetryImpl;
+import org.firstinspires.ftc.robotcore.internal.opmode.TelemetryInternal;
+import org.firstinspires.ftc.robotcore.internal.opmode.OpModeServices;
+import com.qualcomm.hardware.bosch.BNO055IMU;
 
 
-    public void init(HardwareMap hwMap, Telemetry telemetry, boolean isAutonomous) {
-        this.hwMap = hwMap;
-        this.telemetry = telemetry;
-        this.isAutonomous = isAutonomous;
 
-        mtrBL.setDirection
+public class VenomHardwareMap extends OpMode{
+    //drive motors
+    DcMotor motorFR;
+    DcMotor motorFL;
+    DcMotor motorBR;
+    DcMotor motorBL;
 
-        capStone = hwMap.get(Servo.class, "capStone");
+    IMU imu;
 
-        if(isAutonomous) initIMU();
+    //just had to put these to run the code dw about it
+    public void init() {
 
+    }
+    public void loop() {
 
     }
 
+    // initzialization method
+    public void initizialize() {
+        motorFR = hardwareMap.dcMotor.get("motorFR");
+        motorFL = hardwareMap.dcMotor.get("motorFL");
+        motorBR = hardwareMap.dcMotor.get("motorBR");
+        motorBL = hardwareMap.dcMotor.get("motorBL");
 
-    public static class Motion(){
-        public final double vD;
-        public final double thetaD;
-        public final double vTheta;
+
+        motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        motorBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        stopAllMotors();
+
+        telemetry.addData("Motor Initialization Complete", "");
+
+
+        telemetry.addData("Servo Initialization Complete", "");
+
+        imu = new IMU(hardwareMap.get(BNO055IMU.class, "imu"));
+        imu.IMUinit(hardwareMap);
+
+        telemetry.addData("IMU Initialization Complete", "");
+
+        telemetry.addData("Initialization Complete", "");
     }
 
-    public Motion (double vD, double thetaD ,double vTheta){
-        this vD = vD;
-        this thetaD = thetaD;
-        this vTheta = vTheta;
+    /*
+    public void stopDriveMotors() {
+        motorFR.setPower(0);
+        motorFL.setPower(0);
+        motorBR.setPower(0);
+        motorBL.setPower(0);
     }
 
-    public static void driveFRS (double forward, double rotate, double sideways, double maxPower){
-    Motion motion = createMotionFromFRS(sideways, forward, rotate);
+     */
 
+    public void stopAllMotors() {
+        motorFR.setPower(0);
+        motorFL.setPower(0);
+        motorBR.setPower(0);
+        motorBL.setPower(0);
 
-
-    }
-    public static Motion createMotionFromFRS(double forward, double sideways, double rotate) {
-        // V_d = desired robot speed.
-        // theta_d = desired robot velocity angle.
-        // V_theta = desired robot rotational speed.
-        double vD = Math.min(Math.sqrt(Math.pow(sideways, 2) + Math.pow(forward, 2)), 1);
-        double thetaD = Math.atan2(-sideways, -forward);
-        double vTheta = -rotate;
-        return new Motion(vD, thetaD, vTheta);
     }
 
 }
