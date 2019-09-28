@@ -8,7 +8,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class VenomHardwareMap {
+public class VenomHardwareMap
+{
     HardwareMap hwMap = null;
     public Telemetry telemetry = null;
     LinearOpMode opMode = null;

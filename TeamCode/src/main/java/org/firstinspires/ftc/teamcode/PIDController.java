@@ -21,9 +21,7 @@ public class PIDController extends CustomLinearOpMode
         double kD = tU / 8;
 
 
-        IMU a = new IMU (BNO055IMU imu);
-
-        double angleError = a.getTrueDiff(angle);
+        double angleError = imu.getTrueDiff(angle);
 
         double oldTime = 0;
         double totalError = 0;
