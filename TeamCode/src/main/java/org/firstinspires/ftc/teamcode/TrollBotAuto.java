@@ -3,25 +3,7 @@ package org.firstinspires.ftc.teamcode;
 public class TrollBotAuto extends CustomLinearOpMode {
 
     ModernRoboticsI2cRangeSensor rangeSensor;
-
-
-    public void test ()
-    {
-        moveToDistance(2);
-        // hit marker
-        turn(-90);
-        moveToDistance(2);
-        turn(135);
-        moveToDistance(2);
-        // deposit marker
-        turn(-155);
-        moveToDistance(2);
-        stopAllMotors();
-
-        if(isSkystone()) {
-            driveBackward(2);
-        }
-    }
+    boolean SkystoneDetected = false;
 
     public void isSkystone() {
         // if phone detects skystone
@@ -37,18 +19,46 @@ public class TrollBotAuto extends CustomLinearOpMode {
         waitForStart();
 
         try {
-            //release();
+
         } catch (Exception e) {
             stop();
         }
 
-////
-////        knockFirstBlock();
-////
-////        goToSecondBlocks();
-////
-////        knockSecondBlock();
+        // move to blocks
+        moveToDistance(2);
 
+        // Check first block
+        turn(-90);
+        if(isSkystone()) {
+            driveBackward(2);
+        }
+
+        // Check second block
+        if (!SkystoneDetected)
+            turn(-90);
+            if (isSkystone()) {
+                driveBackward(2);
+
+        // Check third block
+        // But don't need to because has to be if first two aren't
+        if (!SkystoneDetected)
+            turn(-90);
+            if (isSkystone()) {
+                driveBackward(2);
+            }
+        }
+
+        moveToDistance(2);
+        turn(135);
+        moveToDistance(2);
+        // deposit marker
+        turn(-155);
+        moveToDistance(2);
+        stopAllMotors();
+
+        if(isSkystone()) {
+            driveBackward(2);
+        }
 
         /*blockLocation = getBlockLocation();
         if (blockLocation.equals("LEFT")) {
