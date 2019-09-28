@@ -1,102 +1,33 @@
 package org.firstinspires.ftc.teamcode;
 
-public class TrollBotAuto
-{
-    String blockLocation = "CENTER";
+public class TrollBotAuto extends CustomLinearOpMode {
+
     ModernRoboticsI2cRangeSensor rangeSensor;
 
 
-    // if starting in position 1
-
-    public void SummerTest1 ()
+    public void test ()
     {
-        moveToDistance(2);//??));
+        moveToDistance(2);
         // hit marker
         turn(-90);
-        moveToDistance(2);//??);
+        moveToDistance(2);
         turn(135);
-        moveToDistance(2);//??);
+        moveToDistance(2);
         // deposit marker
         turn(-155);
-        moveToDistance(2);//??);
+        moveToDistance(2);
         stopAllMotors();
+
+        if(isSkystone()) {
+            driveBackward(2);
+        }
     }
 
-    // if starting in position 2
-
-    public void SummerTest2()
-    {
-        moveToDistance(2);//??);
-        // hit marker
-        turn(-90);
-        moveToDistance(2);//??);
-        turn(-35);
-        moveToDistance(2);//??);
-        turn(155);
-        moveToDistance(2);//??)
-        // stopAllMotors();
-    }
-
-
-
-
-
-
-
-    /*public boolean isBlock1onLeft() {
-        // **needs a new name
-        //if first block is on the left
-            //return true
-        //else
-            //return false
-        return true;
-    }
-
-    public boolean isBlock2onLeft() {
-        // **needs a new name
-        //if second block is on the left
-            //return true
-        //else
-            //return false
+    public void isSkystone() {
+        // if phone detects skystone
+            return true;
         return false;
     }
-
-    public boolean isBlock2onRight() {
-        // **needs a new name
-        //if second block is on the right
-            //return true
-        //else
-            //return false
-        return true;
-    }
-
-    public boolean isBlock2onCenter() {
-        // **needs a new name
-        //if second block is on the center
-            //return true
-        //else
-            //return false
-        return false;
-    }
-
-    public boolean isBlock1onRight() {
-        // **needs a new name
-        //if first block is on the right
-            //return true
-        //else
-            //return false
-        return true;
-    }
-
-    public boolean isBlock1onCenter() {
-        // **needs a new name
-        //if first block is on the center
-            //return true
-        //else
-            //return false
-            \.l"?..Æ""">
-        return true;
-    } */
 
 
     @Override
@@ -111,9 +42,6 @@ public class TrollBotAuto
             stop();
         }
 
-        //SummerTest1();
-
-//        moveToDistance(40);
 ////
 ////        knockFirstBlock();
 ////
