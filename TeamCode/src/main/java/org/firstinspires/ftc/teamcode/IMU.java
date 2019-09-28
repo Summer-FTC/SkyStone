@@ -48,7 +48,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 import java.util.Locale;
-
 /**
  * {@link IMU} gives a short demo on how to use the BNO055 Inertial Motion Unit (IMU) from AdaFruit.
  *
@@ -62,25 +61,48 @@ import java.util.Locale;
 
 public class IMU extends LinearOpMode
 {
-
+    BNO055IMU IMU;
     Orientation angles;
     Acceleration gravity;
 
+    public IMU (BNO055IMU imu){
+        IMU = imu;
+    }
 
-    public double getYaw() { //returns yaw between -179.9999 and 180 degrees
+    //Just basic init stuff; run in robot init method
+    public void IMUinit(HardwareMap map) {
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "AdafruitIMUCalibration.json"; // see the calibration sample opmode
+        parameters.loggingEnabled      = true;
+        parameters.loggingTag          = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+        // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
+        // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
+        // and named "imu".
+        IMU = map.get(BNO055IMU.class, "imu");
+        IMU.initialize(parameters);
+    }
+
+    //returns yaw between -179.9999 and 180 degrees
+    public double getYaw()
+    {
         // yaw is side to side (turning)
         angles = IMU.getAngularOrientation().toAxesReference(AxesReference.INTRINSIC).toAxesOrder(AxesOrder.ZYX);
         return -Double.parseDouble(formatAngle(angles.angleUnit, angles.firstAngle));
     }
 
-    public double getPitch() { //returns yaw between -179.9999 and 180 degrees
-        //pitch is up and down like the nose of an airplane
+    //returns yaw between -179.9999 and 180 degrees
+    public double getPitch()
+    {
+        // pitch is up and down like the nose of an airplane
         angles = IMU.getAngularOrientation().toAxesReference(AxesReference.INTRINSIC).toAxesOrder(AxesOrder.ZYX);
         return Double.parseDouble(formatAngle(angles.angleUnit, angles.thirdAngle));
     }
 
     public double getRoll() {
-        //roll is side to side rotation (think about an airplane doing a barrel roll)
+        // roll is side to side rotation (think about an airplane doing a barrel roll)
         angles = IMU.getAngularOrientation().toAxesReference(AxesReference.INTRINSIC).toAxesOrder(AxesOrder.ZYX);
         return Double.parseDouble(formatAngle(angles.angleUnit, angles.secondAngle));
     }
@@ -96,6 +118,17 @@ public class IMU extends LinearOpMode
             return -(360 - (currAngle - origAngle));
         else
             return (360 + (currAngle - origAngle));
+
+    }
+
+    String formatAngle(org.firstinspires.ftc.robotcore.external.navigation.AngleUnit angleUnit, double angle)
+    {
+        return formatDegrees(org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES.fromUnit(angleUnit, angle));
+    }
+
+    String formatDegrees(double degrees)
+    {
+        return String.format(Locale.getDefault(), "%.1f", org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES.normalize(degrees));
     }
 
     public void runOpMode()
