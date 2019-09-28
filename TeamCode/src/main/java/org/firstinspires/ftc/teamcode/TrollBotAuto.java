@@ -1,65 +1,80 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import java.util.List;
 
 public class TrollBotAuto extends CustomLinearOpMode
 {
-
-    ModernRoboticsI2cRangeSensor rangeSensor;
     boolean SkystoneDetected = false;
 
-
     @Override
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException {
 
         initialize();
         waitForStart();
 
-        try
-        {
-
-        } catch (Exception e)
-        {
-            stop();
+        try {
+        } catch (Exception e) {
         }
 
         // move to blocks
-        moveToDistance(2);
+        // driveForward();
 
         // Check first block
-        turn(-90);
-        if(isSkystone())
-        {
-            driveBackward(2);
-        }
+        if (isSkystone())
+            driveBackward();
 
         // Check second block
-        if (!SkystoneDetected)
-            turn(-90);
+        if (!SkystoneDetected) {
+            turnRight();
             if (isSkystone())
-            {
-                driveBackward(2);
-            }
+                driveBackward();
+        }
+
         // Check third block
         // But don't need to because has to be if first two aren't
         if (!SkystoneDetected)
-            turn(-90);
+            turnRight();
             if (isSkystone()) {
-                driveBackward(2);
+                driveBackward();
             }
         }
 
-        goForward(12.0);
-
-        public void isSkystone() {
-            // if phone detects skystone
-                return true;
-                return false;
+        public boolean isSkystone() {
+            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+            for (Recognition recognition : updatedRecognitions) {
+                if (recognition.getLabel().equals("Skystone")) {
+                    SkystoneDetected = true;
+                    return true;
+                }
+            }
+            SkystoneDetected = false;
+            return false;
         }
 
-        public void driveForward()
+        public void driveBackward()
         {
-
+            motorBL.setPower(-0.25);
+            motorFL.setPower(-0.25);
+            motorBR.setPower(-0.25);
+            motorFR.setPower(-0.25);
+            sleep(4000);
         }
 
+        public void turnLeft() {
+            motorBL.setPower(-0.25);
+            motorFL.setPower(-0.25);
+            motorBR.setPower(0.25);
+            motorFR.setPower(0.25);
+            sleep(500);
+        }
+
+        public void turnRight() {
+            motorBL.setPower(0.25);
+            motorFL.setPower(0.25);
+            motorBR.setPower(-0.25);
+            motorFR.setPower(-0.25);
+            sleep(500);
+        }
 }
