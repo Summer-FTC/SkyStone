@@ -20,19 +20,13 @@ public class TrollBotHardwareMap
     public DcMotor mtrR;
     public SensorMRRangeSensor dist;
 
-    // public Servo leftFoundation;
-    // public Servo rightFoundation;
-    // public Servo ;
-    // public Servo ;
-    // public Servo ;
-    // public Servo ;
 
     public void init (HardwareMap hwMap, Telemetry telemetry, boolean isAutonomous){
         this.hwMap = hwMap;
 
         this.telemetry = telemetry;
-        mtrL = hwMap.dcMotor.get("motorL");
-        mtrR = hwMap.dcMotor.get("motorR");
+        mtrL = hwMap.dcMotor.get("mtrL");
+        mtrR = hwMap.dcMotor.get("mtrR");
         mtrL.setDirection(DcMotor.Direction.REVERSE);
 
         mtrL.setPower(0);

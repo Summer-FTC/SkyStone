@@ -81,19 +81,19 @@ public class CustomLinearOpMode extends LinearOpMode {
     public void initialize() {
         motorFR = hardwareMap.dcMotor.get("motorFR");
         motorFL = hardwareMap.dcMotor.get("motorFL");
-        motorBR = hardwareMap.dcMotor.get("motorBR");
-        motorBL = hardwareMap.dcMotor.get("motorBL");
+       // motorBR = hardwareMap.dcMotor.get("motorBR");
+       // motorBL = hardwareMap.dcMotor.get("motorBL");
 
         motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
-        motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
+       // motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    //    motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+     //   motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        motorBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+     //   motorBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+       // motorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
