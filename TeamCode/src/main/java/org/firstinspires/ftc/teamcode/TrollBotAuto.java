@@ -35,8 +35,6 @@ public class TrollBotAuto extends CustomLinearOpMode
                 motorFR.setPower(0);
             }
 
-        TensorFlowSkyStone tf = new TensorFlowSkyStone();
-
         // move to blocks
         // driveForward();
 

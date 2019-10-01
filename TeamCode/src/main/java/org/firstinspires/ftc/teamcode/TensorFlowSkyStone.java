@@ -83,7 +83,7 @@ public class TensorFlowSkyStone extends LinearOpMode{
      * {@link #tfod} is the variable we will use to store our instance of the TensorFlow Object
      * Detection engine.
      */
-    public TFObjectDetector tfod;
+    private TFObjectDetector tfod;
 
     @Override
     public void runOpMode() {
@@ -167,5 +167,9 @@ public class TensorFlowSkyStone extends LinearOpMode{
         tfodParameters.minimumConfidence = 0.8;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
+    }
+
+    public TFObjectDetector getTfod() {
+        return tfod;
     }
 }

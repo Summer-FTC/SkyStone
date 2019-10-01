@@ -81,19 +81,19 @@ public class CustomLinearOpMode extends LinearOpMode {
     public void initialize() {
         motorFR = hardwareMap.dcMotor.get("motorFR");
         motorFL = hardwareMap.dcMotor.get("motorFL");
-       // motorBR = hardwareMap.dcMotor.get("motorBR");
-       // motorBL = hardwareMap.dcMotor.get("motorBL");
+        motorBR = hardwareMap.dcMotor.get("motorBR");
+        motorBL = hardwareMap.dcMotor.get("motorBL");
 
         motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
-       // motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
 
-    //    motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-     //   motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-     //   motorBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-       // motorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
@@ -103,8 +103,8 @@ public class CustomLinearOpMode extends LinearOpMode {
 
         rangeSensorB = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensorB");
 
-        //imu = new IMU(hardwareMap.get(BNO055IMU.class, "imu"));
-        //imu.IMUinit(hardwareMap);
+        imu = new IMU(hardwareMap.get(BNO055IMU.class, "imu"));
+        imu.IMUinit(hardwareMap);
 
         telemetry.addData("IMU Initialization Complete", "");
     }
@@ -170,7 +170,7 @@ public class CustomLinearOpMode extends LinearOpMode {
         motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-    public void findSkystone() {
+    public void findSkystone() throws InterruptedException {
         // Tensor Flow stuff: detect Skystones
 
         // Scan first stones from left to right until first Skystone detected
@@ -178,6 +178,22 @@ public class CustomLinearOpMode extends LinearOpMode {
         // Scan last three stones
         // If second Skystone still there, get
         // If in last three, ally already got first Skystone, get second
+        TensorFlowSkyStone tf = new TensorFlowSkyStone();
+        tf.runOpMode();
+
+        // will change to certain amount of distance
+        while (opModeIsActive()) {
+            tfod = tf.getTfod();
+            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+            for (Recognition recognition : updatedRecognitions) {
+                if (recognition.getLabel().equals("Skystone"))
+                    getSkystone();
+            }
+        }
+    }
+
+    public void getSkystone() throws InterruptedException {
+        // use intake to get Skystone
     }
 
     public void getStone() throws InterruptedException {
