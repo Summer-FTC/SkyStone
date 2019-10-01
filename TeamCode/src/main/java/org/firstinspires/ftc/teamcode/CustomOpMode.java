@@ -38,26 +38,31 @@ public class CustomOpMode extends OpMode
    {
        motorFR = hardwareMap.dcMotor.get("motorFR");
        motorFL = hardwareMap.dcMotor.get("motorFL");
-       motorBR = hardwareMap.dcMotor.get("motorBR");
-       motorBL = hardwareMap.dcMotor.get("motorBL");
+
+
+       //  motorBR = hardwareMap.dcMotor.get("motorBR");
+      // motorBL = hardwareMap.dcMotor.get("motorBL");
 
        rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensor");
 
-       motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       // motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-       motorBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-       motorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+     //  motorBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    //   motorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
        motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
        motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
        motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
-       motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
+    //   motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
+
 
        motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
        motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+
        stopDriveMotors();
+
 
        telemetry.addData("Motor Initialization Complete", "");
 
@@ -73,41 +78,43 @@ public class CustomOpMode extends OpMode
     public void stopDriveMotors() {
         motorFR.setPower(0);
         motorFL.setPower(0);
-        motorBR.setPower(0);
-        motorBL.setPower(0);
+      //  motorBR.setPower(0);
+      //  motorBL.setPower(0);
     }
 
 
     public void setLeftMotors(double left){
         motorFL.setPower(left);
-        motorBL.setPower(left);
+    //    motorBL.setPower(left);
     }
 
     public void setRightMotors(double right){
         motorFR.setPower(right);
-        motorBR.setPower(right);
+     //   motorBR.setPower(right);
     }
+
 
     public double rightABSMotorVal(double joyStickVal) {
         double maxJump = .4;
         double c = .1;
-        if (joyStickVal >= motorBR.getPower() + maxJump) {
-            return Range.clip(motorBR.getPower() + c, -1, joyStickVal);
+        if (joyStickVal >= motorFR.getPower() + maxJump) {
+            return Range.clip(motorFR.getPower() + c, -1, joyStickVal);
         }
-        else if (joyStickVal < motorBR.getPower() - maxJump) {
-            return Range.clip(motorBR.getPower() - c, joyStickVal, 1);
+        else if (joyStickVal < motorFR.getPower() - maxJump) {
+            return Range.clip(motorFR.getPower() - c, joyStickVal, 1);
         }
         else return joyStickVal;
     }
 
+    // SHOULD BE BL NOT FL
     public double leftABSMotorVal(double joyStickVal) {
         double maxJump = .4;
         double c = .1;
-        if (joyStickVal >= motorBL.getPower() + maxJump) {
-            return Range.clip(motorBL.getPower() + c, -1, joyStickVal);
+        if (joyStickVal >= motorFL.getPower() + maxJump) {
+            return Range.clip(motorFL.getPower() + c, -1, joyStickVal);
         }
-        else if (joyStickVal < motorBL.getPower() - maxJump) {
-            return Range.clip(motorBL.getPower() - c, joyStickVal, 1);
+        else if (joyStickVal < motorFL.getPower() - maxJump) {
+            return Range.clip(motorFL.getPower() - c, joyStickVal, 1);
         }
         else return joyStickVal;
     }
