@@ -26,11 +26,26 @@ public class CustomOpMode extends OpMode
 
    public void init()
    {
-
+        initialize();
+        loop();
    }
 
    public void loop()
    {
+       // extend mecanum drive class?
+       /*
+            // Vd = Desired robot speed [−1,1]
+            // angle = Desired robot angle [0, 360]
+            // Vt = Desired speed for changing direction [−1,1]
+
+            // double angle = gamepad.leftStick(Get360degrees)
+            // double robotAngle = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4;
+            // int Vd = gamepad.
+            // int
+
+           motorBR.setPower(WheelSpeed(Vd, angle, Vt));
+
+        */
 
    }
 
@@ -38,23 +53,21 @@ public class CustomOpMode extends OpMode
    {
        motorFR = hardwareMap.dcMotor.get("motorFR");
        motorFL = hardwareMap.dcMotor.get("motorFL");
-
-
-       //  motorBR = hardwareMap.dcMotor.get("motorBR");
-      // motorBL = hardwareMap.dcMotor.get("motorBL");
+       motorBR = hardwareMap.dcMotor.get("motorBR");
+       motorBL = hardwareMap.dcMotor.get("motorBL");
 
        rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensor");
 
-       // motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-     //  motorBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    //   motorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+       motorBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+       motorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
        motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
        motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
        motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
-    //   motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
+       motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
        motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -78,43 +91,43 @@ public class CustomOpMode extends OpMode
     public void stopDriveMotors() {
         motorFR.setPower(0);
         motorFL.setPower(0);
-      //  motorBR.setPower(0);
-      //  motorBL.setPower(0);
+        motorBR.setPower(0);
+        motorBL.setPower(0);
     }
 
 
     public void setLeftMotors(double left){
         motorFL.setPower(left);
-    //    motorBL.setPower(left);
+        motorBL.setPower(left);
     }
 
     public void setRightMotors(double right){
         motorFR.setPower(right);
-     //   motorBR.setPower(right);
+        motorBR.setPower(right);
     }
 
 
     public double rightABSMotorVal(double joyStickVal) {
         double maxJump = .4;
         double c = .1;
-        if (joyStickVal >= motorFR.getPower() + maxJump) {
-            return Range.clip(motorFR.getPower() + c, -1, joyStickVal);
+        if (joyStickVal >= motorBR.getPower() + maxJump) {
+            return Range.clip(motorBR.getPower() + c, -1, joyStickVal);
         }
-        else if (joyStickVal < motorFR.getPower() - maxJump) {
-            return Range.clip(motorFR.getPower() - c, joyStickVal, 1);
+        else if (joyStickVal < motorBR.getPower() - maxJump) {
+            return Range.clip(motorBR.getPower() - c, joyStickVal, 1);
         }
         else return joyStickVal;
     }
 
-    // SHOULD BE BL NOT FL
+
     public double leftABSMotorVal(double joyStickVal) {
         double maxJump = .4;
         double c = .1;
-        if (joyStickVal >= motorFL.getPower() + maxJump) {
-            return Range.clip(motorFL.getPower() + c, -1, joyStickVal);
+        if (joyStickVal >= motorBL.getPower() + maxJump) {
+            return Range.clip(motorBL.getPower() + c, -1, joyStickVal);
         }
-        else if (joyStickVal < motorFL.getPower() - maxJump) {
-            return Range.clip(motorFL.getPower() - c, joyStickVal, 1);
+        else if (joyStickVal < motorBL.getPower() - maxJump) {
+            return Range.clip(motorBL.getPower() - c, joyStickVal, 1);
         }
         else return joyStickVal;
     }

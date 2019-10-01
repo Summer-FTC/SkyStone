@@ -12,9 +12,8 @@ public class MecanumDrive
 
     // Vd = Desired robot speed [−1,1]
     // angle = Desired robot angle [0, 360]
-    // tD = Desired robot angle [0, 2pi)
     // Vt = Desired speed for changing direction [−1,1]
-    public double wheelSpeed (double Vd, double tD, double angle, double Vt, String wheel)
+    public double WheelSpeed (double Vd, double angle, double Vt, String wheel)
     {
         double rad = convertToRadians(angle);
         double v = 0.0; // wheel speed
@@ -33,6 +32,7 @@ public class MecanumDrive
 
         return v;
     }
+
 
 }
 
