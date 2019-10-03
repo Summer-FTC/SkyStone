@@ -10,8 +10,8 @@ import java.util.List;
 
 public class TrollBotAuto extends CustomLinearOpMode
 {
+    /*
     boolean SkystoneDetected = false;
-
 
 
     @Override
@@ -123,4 +123,6 @@ public class TrollBotAuto extends CustomLinearOpMode
         }
         else return joyStickVal;
     }
+
+     */
 }

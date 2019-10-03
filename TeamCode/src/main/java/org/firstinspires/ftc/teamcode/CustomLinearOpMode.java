@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -33,7 +34,9 @@ import static android.graphics.Color.blue;
 import static android.graphics.Color.red;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
 
+@Autonomous
 public class CustomLinearOpMode extends LinearOpMode {
+
 
     protected static final String VUFORIA_KEY = "";
     protected VuforiaLocalizer vuforia;
@@ -67,7 +70,6 @@ public class CustomLinearOpMode extends LinearOpMode {
 
     ModernRoboticsI2cRangeSensor rangeSensorB;
 
-
     ElapsedTime eTime;
 
 
@@ -75,7 +77,10 @@ public class CustomLinearOpMode extends LinearOpMode {
     protected ElapsedTime time = new ElapsedTime();
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() throws InterruptedException
+    {
+        initialize();
+        initVuforia();
     }
 
     public void initialize() {
@@ -109,7 +114,8 @@ public class CustomLinearOpMode extends LinearOpMode {
         telemetry.addData("IMU Initialization Complete", "");
     }
 
-    private void initVuforia() {
+    private void initVuforia()
+    {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
@@ -162,7 +168,6 @@ public class CustomLinearOpMode extends LinearOpMode {
         return dist;
     }
 
-
     public void resetEncoders() {
         motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -170,7 +175,7 @@ public class CustomLinearOpMode extends LinearOpMode {
         motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-    public void findSkystone() throws InterruptedException {
+    public void detectSkystone() throws InterruptedException {
         // Tensor Flow stuff: detect Skystones
 
         // Scan first stones from left to right until first Skystone detected
@@ -181,42 +186,73 @@ public class CustomLinearOpMode extends LinearOpMode {
         TensorFlowSkyStone tf = new TensorFlowSkyStone();
         tf.runOpMode();
 
-        // will change to certain amount of distance
+        // Will change to certain amount of distance
         while (opModeIsActive()) {
             tfod = tf.getTfod();
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
             for (Recognition recognition : updatedRecognitions) {
                 if (recognition.getLabel().equals("Skystone"))
-                    getSkystone();
+                    intakeSkystone();
             }
         }
     }
 
-    public void getSkystone() throws InterruptedException {
+    public void intakeSkystone() throws InterruptedException
+    {
         // use intake to get Skystone
+        // scans each stone
+        // if !Skystone
+            // punch it
+        // if Skystone
+            // keep strafing
+        // after it scans all of them
+            // drives around to the end
+            // intakes the first one the normal way
     }
 
-    public void getStone() throws InterruptedException {
-        // Pick up a Stone with the robot
+    public void punchBlock()
+    {
+        // punches the block if it is not a skystone
     }
 
-    public void placeStone() {
+
+    public void intakeStone() throws InterruptedException
+    {
+        // Line up the robot
+        //
+        // Pick up a Stone using output
+    }
+
+    public void placeStone()
+    {
         // Place Stone on the foundation
 
         // Don't have to stack, can just throw on
         // For LM 1, only pushing across tape: use dropStone()
     }
 
-    public void dropStone() {
+
+    // hey @Bridget What are the differences between dropStone() and crossTape()? -Summer
+    public void dropStone()
+    {
         // Drop Stone across the tape
     }
 
-    public void crossTape() {
+    public void crossTape()
+    {
         // Go across the tape to drop Stone
     }
 
-    public void park() {
+    public void park()
+    {
         // Park on the tape at the end of auto
         // Call method when t =
     }
+
+    public void stackStone()
+    {
+        // Stacks the stones
+        // Not needed in auto for AML 1
+    }
+
 }
