@@ -39,37 +39,31 @@ public class CustomLinearOpMode extends LinearOpMode {
     protected VuforiaLocalizer vuforia;
     protected TFObjectDetector tfod;
 
-    // Declare motors
-    DcMotor motorFR;
-    DcMotor motorFL;
-    DcMotor motorBR;
-    DcMotor motorBL;
 
     // Speed
     double left = 1.00;
 
-
     // AUTO
     // Declare motors
-    public DcMotor mtrFL = null;
-    public DcMotor mtrFR = null;
-    public DcMotor mtrBL = null;
-    public DcMotor mtrBR = null;
-
+    public DcMotor motorFR;
+    public DcMotor motorFL;
+    public DcMotor motorBR;
+    public DcMotor motorBL;
+    public DcMotor motorIntakeL;
+    public DcMotor motorIntakeR;
+    public DcMotor motorLift;
+    public DcMotor motorOutput;
 
     // Declare servos
-    public Servo servo1 = null;
-    public Servo servo2 = null;
-    public Servo servo3 = null;
-    public Servo servo4 = null;
-    public Servo servo5 = null;
-    public Servo servo6 = null;
+    public CRServo servoClamp;
+    public CRServo servoTwist;
+    public Servo servoHookL;
+    public Servo servoHookR;
 
     ModernRoboticsI2cRangeSensor rangeSensorB;
 
 
     ElapsedTime eTime;
-
 
     IMU imu;
     protected ElapsedTime time = new ElapsedTime();
@@ -79,27 +73,51 @@ public class CustomLinearOpMode extends LinearOpMode {
     }
 
     public void initialize() {
+
         motorFR = hardwareMap.dcMotor.get("motorFR");
         motorFL = hardwareMap.dcMotor.get("motorFL");
         motorBR = hardwareMap.dcMotor.get("motorBR");
         motorBL = hardwareMap.dcMotor.get("motorBL");
+        motorIntakeL = hardwareMap.dcMotor.get("motorIntakeL");
+        motorIntakeR = hardwareMap.dcMotor.get("motorIntakeR");
+        motorLift = hardwareMap.dcMotor.get("motorLift");
+        motorOutput = hardwareMap.dcMotor.get("motorOutput");
 
         motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorIntakeL.setDirection(DcMotorSimple.Direction.REVERSE);
 
         motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorIntakeL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorIntakeR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorOutput.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         motorBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorIntakeL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorIntakeR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorOutput.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         stopMotors();
 
         telemetry.addData("Motor Initialization Complete", "");
+
+        // servos vs continuous servos?
+        servoClamp = hardwareMap.crservo.get("servoClamp");
+        servoTwist = hardwareMap.crservo.get("servoTwist");
+        servoHookL = hardwareMap.servo.get("servoHookL");
+        servoHookR = hardwareMap.servo.get("servoHookR");
+
+        // set servo positions
+
+        telemetry.addData("Servo Initialization Complete", "");
 
         rangeSensorB = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensorB");
 
@@ -170,7 +188,7 @@ public class CustomLinearOpMode extends LinearOpMode {
         motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-    public void findSkystone() throws InterruptedException {
+    public boolean findSkystone() throws InterruptedException {
         // Tensor Flow stuff: detect Skystones
 
         // Scan first stones from left to right until first Skystone detected
@@ -186,18 +204,17 @@ public class CustomLinearOpMode extends LinearOpMode {
             tfod = tf.getTfod();
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
             for (Recognition recognition : updatedRecognitions) {
-                if (recognition.getLabel().equals("Skystone"))
-                    getSkystone();
+                if (recognition.getLabel().equals("Skystone")) {
+                    getStone();
+                    return true;
+                }
             }
         }
     }
 
-    public void getSkystone() throws InterruptedException {
-        // use intake to get Skystone
-    }
-
     public void getStone() throws InterruptedException {
         // Pick up a Stone with the robot
+        // Call once right in front
     }
 
     public void placeStone() {
@@ -207,12 +224,18 @@ public class CustomLinearOpMode extends LinearOpMode {
         // For LM 1, only pushing across tape: use dropStone()
     }
 
-    public void dropStone() {
-        // Drop Stone across the tape
+    public void movePlatform() {
+        // Move platform into depot
+        // Need to figure out mechanism (hooks to drag in)
     }
 
     public void crossTape() {
         // Go across the tape to drop Stone
+    }
+
+
+    public void dropStone() {
+        // Drop Stone across the tape
     }
 
     public void park() {

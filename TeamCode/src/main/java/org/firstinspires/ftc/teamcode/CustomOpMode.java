@@ -18,7 +18,16 @@ public class CustomOpMode extends OpMode
    DcMotor motorFL;
    DcMotor motorBR;
    DcMotor motorBL;
+    public DcMotor motorIntakeL;
+    public DcMotor motorIntakeR;
+    public DcMotor motorLift;
+    public DcMotor motorOutput;
 
+    // Declare servos
+    public CRServo servoClamp;
+    public CRServo servoTwist;
+    public Servo servoHookL;
+    public Servo servoHookR;
 
    IMU imu;
 
@@ -55,37 +64,50 @@ public class CustomOpMode extends OpMode
        motorFL = hardwareMap.dcMotor.get("motorFL");
        motorBR = hardwareMap.dcMotor.get("motorBR");
        motorBL = hardwareMap.dcMotor.get("motorBL");
+       motorIntakeL = hardwareMap.dcMotor.get("motorIntakeL");
+       motorIntakeR = hardwareMap.dcMotor.get("motorIntakeR");
+       motorLift = hardwareMap.dcMotor.get("motorLift");
+       motorOutput = hardwareMap.dcMotor.get("motorOutput");
 
        rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensor");
 
-       motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       motorIntakeL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       motorIntakeR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       motorLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       motorOutput.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
        motorBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
        motorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
        motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
        motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-
        motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
        motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
-
-
-       motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-       motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
+       motorIntakeL.setDirection(DcMotorSimple.Direction.REVERSE);
 
        stopDriveMotors();
 
-
        telemetry.addData("Motor Initialization Complete", "");
+
+       servoClamp = hardwareMap.crservo.get("servoClamp");
+       servoTwist = hardwareMap.crservo.get("servoTwist");
+       servoHookL = hardwareMap.servo.get("servoHookL");
+       servoHookR = hardwareMap.servo.get("servoHookR");
+
+       // set servo positions
+
+       telemetry.addData("Servo Initialization Complete", "");
 
        imu = new IMU(hardwareMap.get(BNO055IMU.class, "imu"));
        imu.IMUinit(hardwareMap);
 
        telemetry.addData("IMU Initialization Complete", "");
+
        telemetry.addData("Initialization Complete", "");
-
-
    }
 
     public void stopDriveMotors() {
