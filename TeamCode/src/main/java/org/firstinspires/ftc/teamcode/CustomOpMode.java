@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -12,6 +13,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcontroller.external.samples.SensorREV2mDistance;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
+@TeleOp
 public class CustomOpMode extends OpMode
 {
    DcMotor motorFR;
@@ -36,7 +38,7 @@ public class CustomOpMode extends OpMode
    public void init()
    {
         initialize();
-        loop();
+      //  loop();
    }
 
    public void loop()
@@ -55,6 +57,8 @@ public class CustomOpMode extends OpMode
            motorBR.setPower(WheelSpeed(Vd, angle, Vt));
 
         */
+
+       gamepad1.left_stick_y = 0;
 
    }
 
@@ -106,8 +110,13 @@ public class CustomOpMode extends OpMode
        imu.IMUinit(hardwareMap);
 
        telemetry.addData("IMU Initialization Complete", "");
+<<<<<<< HEAD
 
        telemetry.addData("Initialization Complete", "");
+=======
+       telemetry.addData("Initialization Complete", "");
+
+>>>>>>> 35fdeb14c740f807aa1303c7fce734c3f0f13bed
    }
 
     public void stopDriveMotors() {
@@ -154,7 +163,8 @@ public class CustomOpMode extends OpMode
         else return joyStickVal;
     }
 
-    public double getDist() {
+    public double getDist()
+    {
         double dist = rangeSensor.getDistance(DistanceUnit.INCH);
         while ((dist > 200 || Double.isNaN(dist))) {
             dist = rangeSensor.getDistance(DistanceUnit.INCH);
@@ -164,3 +174,45 @@ public class CustomOpMode extends OpMode
 
 
 }
+
+/*
+        public void arcadeDrive() {
+        //checking for valid range to apply power (has to give greater power than .1)
+        if (((Math.abs(Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y))) > .1) ||
+                Math.abs(Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4) > .1) {
+
+            // r can be sqrt(2)
+            double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
+            double theta = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x) - Math.PI / 4;
+            double rightX = -gamepad1.right_stick_x;
+
+            //as per unit circle cos gives x, sin gives you y
+            double FL = r * Math.cos(theta) + rightX;
+            double FR = r * Math.sin(theta) - rightX;
+            double BL = r * Math.sin(theta) + rightX;
+            double BR = r * Math.cos(theta) - rightX;
+
+            //make sure you don't try and give power bigger than 1
+            if (((Math.abs(FL) > 1) || (Math.abs(BL) > 1)) || ((Math.abs(FR) > 1) || (Math.abs(BR) > 1))) {
+                FL /= Math.max(Math.max(Math.abs(FL), Math.abs(FR)), Math.max(Math.abs(BL), Math.abs(BR)));
+                BL /= Math.max(Math.max(Math.abs(FL), Math.abs(FR)), Math.max(Math.abs(BL), Math.abs(BR)));
+                FR /= Math.max(Math.max(Math.abs(FL), Math.abs(FR)), Math.max(Math.abs(BL), Math.abs(BR)));
+                BR /= Math.max(Math.max(Math.abs(FL), Math.abs(FR)), Math.max(Math.abs(BL), Math.abs(BR)));
+
+            }
+            dt.fl.setPower(FL);
+            dt.fr.setPower(FR);
+            dt.bl.setPower(BL);
+            dt.br.setPower(BR);
+
+        }
+        else {
+            dt.fl.setPower(0);
+            dt.fr.setPower(0);
+            dt.bl.setPower(0);
+            dt.br.setPower(0);
+
+        }
+
+    }
+ */
