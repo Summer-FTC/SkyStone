@@ -4,7 +4,7 @@ public class MecanumDrive
 {
 
     // Converts degree parameter (0 - 360) to radians
-    public double convertToRadians (double degrees)
+    public static double convertToRadians (double degrees)
     {
         double rad = degrees/180;
         return rad;
@@ -13,7 +13,7 @@ public class MecanumDrive
     // Vd = Desired robot speed [−1,1]
     // angle = Desired robot angle [0, 360]
     // Vt = Desired speed for changing direction [−1,1]
-    public double WheelSpeed (double Vd, double angle, double Vt, String wheel)
+    public static double wheelSpeed (double Vd, double angle, double Vt, String wheel)
     {
         double rad = convertToRadians(angle);
         double v = 0.0; // wheel speed
@@ -32,6 +32,8 @@ public class MecanumDrive
 
         return v;
     }
+
+  //  public static double[]
 
 
 }

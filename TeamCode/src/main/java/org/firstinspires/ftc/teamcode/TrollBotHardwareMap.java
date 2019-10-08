@@ -10,6 +10,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class TrollBotHardwareMap
 {
+    /*
     HardwareMap hwMap = null;
     public Telemetry telemetry = null;
     LinearOpMode opMode = null;
@@ -37,4 +38,6 @@ public class TrollBotHardwareMap
 
     }
 
+
+     */
 }

@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 public class TrollBotTeleOp extends CustomOpMode
 {
+    /*
     public void init()
     {
         initialize();
@@ -44,6 +45,8 @@ public class TrollBotTeleOp extends CustomOpMode
             motorFR.setPower(0);
         }
     }
+
+     */
 
 }
 
