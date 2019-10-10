@@ -16,10 +16,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 @TeleOp
 public class CustomOpMode extends OpMode
 {
-   DcMotor motorFR;
-   DcMotor motorFL;
-   DcMotor motorBR;
-   DcMotor motorBL;
+    public DcMotor motorFR;
+    public DcMotor motorFL;
+    public DcMotor motorBR;
+    public DcMotor motorBL;
     public DcMotor motorIntakeL;
     public DcMotor motorIntakeR;
     public DcMotor motorLift;
