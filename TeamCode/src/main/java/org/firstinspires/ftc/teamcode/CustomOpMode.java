@@ -38,28 +38,12 @@ public class CustomOpMode extends OpMode
    public void init()
    {
         initialize();
-      //  loop();
+        loop();
    }
 
    public void loop()
    {
-       // extend mecanum drive class?
-       /*
-            // Vd = Desired robot speed [−1,1]
-            // angle = Desired robot angle [0, 360]
-            // Vt = Desired speed for changing direction [−1,1]
-
-            // double angle = gamepad.leftStick(Get360degrees)
-            // double robotAngle = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4;
-            // int Vd = gamepad.
-            // int
-
-           motorBR.setPower(WheelSpeed(Vd, angle, Vt));
-
-        */
-
-       gamepad1.left_stick_y = 0;
-
+       arcadeDrive();
    }
 
    public void initialize()
@@ -102,7 +86,7 @@ public class CustomOpMode extends OpMode
        servoHookL = hardwareMap.servo.get("servoHookL");
        servoHookR = hardwareMap.servo.get("servoHookR");
 
-       // set servo positions
+       // Set servo positions
 
        telemetry.addData("Servo Initialization Complete", "");
 
@@ -110,14 +94,59 @@ public class CustomOpMode extends OpMode
        imu.IMUinit(hardwareMap);
 
        telemetry.addData("IMU Initialization Complete", "");
-<<<<<<< HEAD
+
 
        telemetry.addData("Initialization Complete", "");
-=======
+
        telemetry.addData("Initialization Complete", "");
 
->>>>>>> 35fdeb14c740f807aa1303c7fce734c3f0f13bed
    }
+
+    // don't need mecanum drive class anymore ??
+    public void arcadeDrive()
+    {
+        double FL = 0.0;
+        double FR = 0.0;
+        double BL = 0.0;
+        double BR = 0.0;
+
+        if (((Math.abs(Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y))) > .1) ||
+                Math.abs(Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4) > .1) {
+
+            // r can be sqrt(2)
+            double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
+            double theta = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x) - Math.PI / 4;
+            double rightX = -gamepad1.right_stick_x;
+
+            //as per unit circle cos gives x, sin gives you y
+            FL = r * Math.cos(theta) + rightX;
+            FR = r * Math.sin(theta) - rightX;
+            BL = r * Math.sin(theta) + rightX;
+            BR = r * Math.cos(theta) - rightX;
+
+            // Don't give a value greater than 1 so scale them all down
+            // would we ever get a value greater than 1? root2?
+            // this is Jank, fix later
+            if (((Math.abs(FL) > 1) || (Math.abs(BL) > 1)) || ((Math.abs(FR) > 1) || (Math.abs(BR) > 1))) {
+                FL /= Math.max(Math.max(Math.abs(FL), Math.abs(FR)), Math.max(Math.abs(BL), Math.abs(BR)));
+                BL /= Math.max(Math.max(Math.abs(FL), Math.abs(FR)), Math.max(Math.abs(BL), Math.abs(BR)));
+                FR /= Math.max(Math.max(Math.abs(FL), Math.abs(FR)), Math.max(Math.abs(BL), Math.abs(BR)));
+                BR /= Math.max(Math.max(Math.abs(FL), Math.abs(FR)), Math.max(Math.abs(BL), Math.abs(BR)));
+
+            }
+        }
+
+        // is this needed? it would be 0.0 anyways
+        else
+        {
+            stopDriveMotors();
+        }
+
+        motorFL.setPower(FL);
+        motorBL.setPower(BL);
+        motorFR.setPower(FR);
+        motorBR.setPower(BR);
+    }
 
     public void stopDriveMotors() {
         motorFR.setPower(0);
@@ -138,6 +167,7 @@ public class CustomOpMode extends OpMode
     }
 
 
+    // Idk if we need these lol just copied them from last year
     public double rightABSMotorVal(double joyStickVal) {
         double maxJump = .4;
         double c = .1;
@@ -149,8 +179,7 @@ public class CustomOpMode extends OpMode
         }
         else return joyStickVal;
     }
-
-
+    
     public double leftABSMotorVal(double joyStickVal) {
         double maxJump = .4;
         double c = .1;
@@ -171,48 +200,4 @@ public class CustomOpMode extends OpMode
         }
         return dist;
     }
-
-
 }
-
-/*
-        public void arcadeDrive() {
-        //checking for valid range to apply power (has to give greater power than .1)
-        if (((Math.abs(Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y))) > .1) ||
-                Math.abs(Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4) > .1) {
-
-            // r can be sqrt(2)
-            double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
-            double theta = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x) - Math.PI / 4;
-            double rightX = -gamepad1.right_stick_x;
-
-            //as per unit circle cos gives x, sin gives you y
-            double FL = r * Math.cos(theta) + rightX;
-            double FR = r * Math.sin(theta) - rightX;
-            double BL = r * Math.sin(theta) + rightX;
-            double BR = r * Math.cos(theta) - rightX;
-
-            //make sure you don't try and give power bigger than 1
-            if (((Math.abs(FL) > 1) || (Math.abs(BL) > 1)) || ((Math.abs(FR) > 1) || (Math.abs(BR) > 1))) {
-                FL /= Math.max(Math.max(Math.abs(FL), Math.abs(FR)), Math.max(Math.abs(BL), Math.abs(BR)));
-                BL /= Math.max(Math.max(Math.abs(FL), Math.abs(FR)), Math.max(Math.abs(BL), Math.abs(BR)));
-                FR /= Math.max(Math.max(Math.abs(FL), Math.abs(FR)), Math.max(Math.abs(BL), Math.abs(BR)));
-                BR /= Math.max(Math.max(Math.abs(FL), Math.abs(FR)), Math.max(Math.abs(BL), Math.abs(BR)));
-
-            }
-            dt.fl.setPower(FL);
-            dt.fr.setPower(FR);
-            dt.bl.setPower(BL);
-            dt.br.setPower(BR);
-
-        }
-        else {
-            dt.fl.setPower(0);
-            dt.fr.setPower(0);
-            dt.bl.setPower(0);
-            dt.br.setPower(0);
-
-        }
-
-    }
- */
