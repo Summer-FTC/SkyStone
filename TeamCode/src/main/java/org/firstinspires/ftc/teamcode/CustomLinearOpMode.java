@@ -65,9 +65,13 @@ public class CustomLinearOpMode extends LinearOpMode {
     ModernRoboticsI2cRangeSensor rangeSensorB;
 
     ElapsedTime eTime;
+    protected ElapsedTime time = new ElapsedTime();
 
     IMU imu;
-    protected ElapsedTime time = new ElapsedTime();
+
+    String alliance;
+    String action;
+    String park;
 
     @Override
     public void runOpMode() throws InterruptedException
@@ -75,18 +79,52 @@ public class CustomLinearOpMode extends LinearOpMode {
         initialize();
         initVuforia();
 
-        // if 'a' pressed, red/blue
-            // reverses direction of stuff
-        // foundation or Skystone
-        // park in center or side
+        setParameters();
 
+        if (action == "foundation") {
+            runOpModeFoundation();
+        } else if (action == "Skystone") }
+            runOpModeSkystone();
+        }
     }
 
-    public void runOpMode1() throws InterruptedException
+    public void runOpModeFoundation() throws InterruptedException
     {
+        // go to platform
         movePlatform();
-        // move to distance
+        // go to side, get out of the way
         park();
+    }
+
+    public void runOpModeSkystone() throws InterruptedException
+    {
+        // go to stones
+        findSkystone();
+        // go across line
+        dropStone();
+        // return to saved location (3 blocks distance from first Skystone)
+        findSkystone();
+        // go across line
+        dropStone();
+        park();
+    }
+
+    public void setParameters() {
+
+        while (opModeIsActive()) {
+            if (gamepad1.x)
+                alliance = "blue";
+            if (gamepad1.b)
+                alliance = "red";
+            if (gamepad1.a)
+                action = "foundation";
+            if (gamepad1.y)
+                action = "Skystone";
+            if (gamepad1.dpad_left)
+                park = "side";
+            if (gamepad1.dpad_right)
+                park = "center";
+        }
     }
 
     public void initialize() {
@@ -268,7 +306,11 @@ public class CustomLinearOpMode extends LinearOpMode {
 
     public void park()
     {
-        // Park on the tape at the end of auto
+        if (park.equals("center")){
+            // park in center
+        } else if (park.equals("side")){
+            // park in side
+        }
         // Call method when t =
     }
 }
