@@ -81,14 +81,18 @@ public class CustomLinearOpMode extends LinearOpMode {
 
         setParameters();
 
-        if (action == "foundation") {
-            runOpModeFoundation();
-        } else if (action == "Skystone") }
-            runOpModeSkystone();
+        if (action.equals("foundation") && alliance.equals("blue")) {
+            runOpModeFoundationBlue();
+        } else if (action.equals("foundation") && alliance.equals("red")) {
+            runOpModeFoundationRed();
+        } else if (action.equals("Skystone") && alliance.equals("blue")) {
+            runOpModeSkystoneBlue();
+        } else if (action.equals("Skystone") && alliance.equals("red")) {
+            runOpModeSkystoneRed();
         }
     }
 
-    public void runOpModeFoundation() throws InterruptedException
+    public void runOpModeFoundationBlue() throws InterruptedException
     {
         // go to platform
         movePlatform();
@@ -96,7 +100,28 @@ public class CustomLinearOpMode extends LinearOpMode {
         park();
     }
 
-    public void runOpModeSkystone() throws InterruptedException
+    public void runOpModeFoundationRed() throws InterruptedException
+    {
+        // go to platform
+        movePlatform();
+        // go to side, get out of the way
+        park();
+    }
+
+    public void runOpModeSkystoneBlue() throws InterruptedException
+    {
+        // go to stones
+        findSkystone();
+        // go across line
+        dropStone();
+        // return to saved location (3 blocks distance from first Skystone)
+        findSkystone();
+        // go across line
+        dropStone();
+        park();
+    }
+
+    public void runOpModeSkystoneRed() throws InterruptedException
     {
         // go to stones
         findSkystone();
