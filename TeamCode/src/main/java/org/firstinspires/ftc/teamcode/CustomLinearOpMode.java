@@ -42,7 +42,6 @@ public class CustomLinearOpMode extends LinearOpMode {
     protected VuforiaLocalizer vuforia;
     protected TFObjectDetector tfod;
 
-
     // Speed
     double left = 1.00;
 
@@ -75,6 +74,19 @@ public class CustomLinearOpMode extends LinearOpMode {
     {
         initialize();
         initVuforia();
+
+        // if 'a' pressed, red/blue
+            // reverses direction of stuff
+        // foundation or Skystone
+        // park in center or side
+
+    }
+
+    public void runOpMode1() throws InterruptedException
+    {
+        movePlatform();
+        // move to distance
+        park();
     }
 
     public void initialize() {
@@ -190,10 +202,6 @@ public class CustomLinearOpMode extends LinearOpMode {
         motorOutput.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-    public boolean findSkystone() throws InterruptedException {
-
-    }
-
     public void findSkystone() throws InterruptedException {
         // Tensor Flow stuff: detect Skystones
 
@@ -218,21 +226,14 @@ public class CustomLinearOpMode extends LinearOpMode {
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
             for (Recognition recognition : updatedRecognitions) {
                 if (recognition.getLabel().equals("Skystone")) {
-                    getStone();
-                    return true;
-                }
-                if (recognition.getLabel().equals("Skystone"))
                     // if within range
                     // left: 140-200
                     // right: 560-640
+                    stopMotors();
                     intakeStone();
+                }
             }
         }
-    }
-
-    public void getStone() throws InterruptedException {
-            // Pick up a Stone with the robot
-            // Call once right in front
     }
 
     public void intakeStone() throws InterruptedException
@@ -254,7 +255,6 @@ public class CustomLinearOpMode extends LinearOpMode {
     public void placeStone()
     {
         // Place Stone on the foundation
-
         // Don't have to stack, can just throw on
         // For LM 1, only pushing across tape: use dropStone()
     }
