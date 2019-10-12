@@ -210,33 +210,55 @@ public class CustomLinearOpMode extends LinearOpMode {
         vuforia.setFrameQueueCapacity(1);
     }
 
-    public void moveToDistP(double inches, double angle, double timeout) {
-        double kPdist = .03;
-        double kPangle = .9/90.0;
-        double minDrive = .15;
-        double maxDrive = .5;
+    public void encoderDrive(double speed,
+                             double leftInches, double rightInches,
+                             double timeoutS) {
+        int newLeftTarget;
+        int newRightTarget;
 
-        time.reset();
-        while ((Math.abs(getDistB() - inches) > .25 || imu.getTrueDiff(angle) > .5) && opModeIsActive() && time.milliseconds() < timeout) {
+        // Ensure that the opmode is still active
+        if (opModeIsActive()) {
 
-            double distError = inches - getDistB();
-            double PIDchangeDist = -Range.clip(-kPdist * distError, -maxDrive, maxDrive);
+            // Determine new target position, and pass to motor controller
+            newLeftTarget = robot.leftDrive.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH);
+            newRightTarget = robot.rightDrive.getCurrentPosition() + (int) (rightInches * COUNTS_PER_INCH);
+            robot.leftDrive.setTargetPosition(newLeftTarget);
+            robot.rightDrive.setTargetPosition(newRightTarget);
 
-            if (PIDchangeDist < minDrive && PIDchangeDist > 0) {
-                PIDchangeDist = minDrive;
-            } else if (PIDchangeDist > -minDrive && PIDchangeDist < 0) {
-                PIDchangeDist = -minDrive;
+            // Turn On RUN_TO_POSITION
+            robot.leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // reset the timeout time and start motion.
+            runtime.reset();
+            robot.leftDrive.setPower(Math.abs(speed));
+            robot.rightDrive.setPower(Math.abs(speed));
+
+            // keep looping while we are still active, and there is time left, and both motors are running.
+            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+            // its target position, the motion will stop.  This is "safer" in the event that the robot will
+            // always end the motion as soon as possible.
+            // However, if you require that BOTH motors have finished their moves before the robot continues
+            // onto the next step, use (isBusy() || isBusy()) in the loop test.
+            while (opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) &&
+                    (robot.leftDrive.isBusy() && robot.rightDrive.isBusy())) {
+
+                // Display it for the driver.
+                telemetry.addData("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
+                telemetry.addData("Path2", "Running at %7d :%7d",
+                        robot.leftDrive.getCurrentPosition(),
+                        robot.rightDrive.getCurrentPosition());
+                telemetry.update();
             }
 
-            double angleError = imu.getTrueDiff(angle);
-            double PIDchangeAngle = kPangle * angleError;
+            // Stop all motion;
+            stopMotors();
 
-            motorBL.setPower(Range.clip((PIDchangeDist - PIDchangeAngle) * left, -1, 1));
-            motorFL.setPower(Range.clip((PIDchangeDist - PIDchangeAngle) * left, -1, 1));
-            motorBR.setPower(Range.clip(PIDchangeDist + PIDchangeAngle, -1, 1));
-            motorFR.setPower(Range.clip(PIDchangeDist + PIDchangeAngle, -1, 1));
+            // Turn off RUN_TO_POSITION
+            robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
-        stopMotors();
     }
 
     public void stopMotors() {
@@ -292,7 +314,8 @@ public class CustomLinearOpMode extends LinearOpMode {
                     // if within range
                     // left: 140-200
                     // right: 560-640
-                    stopMotors();
+
+                    // stopMotors();
                     intakeStone();
                 }
             }
@@ -302,6 +325,7 @@ public class CustomLinearOpMode extends LinearOpMode {
     public void intakeStone() throws InterruptedException
     {
         // use output to get stone
+        encoderDrive(left, -12, -12, 4.0);
     }
 
     public void movePlatform()
