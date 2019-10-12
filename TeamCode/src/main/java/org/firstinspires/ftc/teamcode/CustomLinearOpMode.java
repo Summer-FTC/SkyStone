@@ -69,9 +69,9 @@ public class CustomLinearOpMode extends LinearOpMode {
 
     IMU imu;
 
-    String alliance;
-    String action;
-    String park;
+    String alliance = "";
+    String action = "";
+    String park = "";
 
     @Override
     public void runOpMode() throws InterruptedException
