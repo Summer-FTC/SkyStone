@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 @TeleOp(name="TrollbotTeleOp", group="TrollBot")
 
 
-public class TrollBotTeleOp
+public class TrollBotTeleOp extends CustomOpMode
 {
     /*
     public void init()
