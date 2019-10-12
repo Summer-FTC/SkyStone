@@ -16,24 +16,24 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 @TeleOp
 public class CustomOpMode extends OpMode
 {
-    public DcMotor motorFR;
-    public DcMotor motorFL;
-    public DcMotor motorBR;
-    public DcMotor motorBL;
-    public DcMotor motorIntakeL;
-    public DcMotor motorIntakeR;
-    public DcMotor motorLift;
-    public DcMotor motorOutput;
+   DcMotor motorFR;
+   DcMotor motorFL;
+   DcMotor motorBR;
+   DcMotor motorBL;
+ //   public DcMotor motorIntakeL;
+   // public DcMotor motorIntakeR;
+   // public DcMotor motorLift;
+  //  public DcMotor motorOutput;
 
     // Declare servos
-    public CRServo servoClamp;
-    public CRServo servoTwist;
-    public Servo servoHookL;
-    public Servo servoHookR;
+ //   public CRServo servoClamp;
+ //   public CRServo servoTwist;
+ //   public Servo servoHookL;
+ //   public Servo servoHookR;
 
    IMU imu;
 
-   ModernRoboticsI2cRangeSensor rangeSensor;
+  // ModernRoboticsI2cRangeSensor rangeSensor;
 
    public void init()
    {
@@ -52,22 +52,22 @@ public class CustomOpMode extends OpMode
        motorFL = hardwareMap.dcMotor.get("motorFL");
        motorBR = hardwareMap.dcMotor.get("motorBR");
        motorBL = hardwareMap.dcMotor.get("motorBL");
-       motorIntakeL = hardwareMap.dcMotor.get("motorIntakeL");
-       motorIntakeR = hardwareMap.dcMotor.get("motorIntakeR");
-       motorLift = hardwareMap.dcMotor.get("motorLift");
-       motorOutput = hardwareMap.dcMotor.get("motorOutput");
+ //      motorIntakeL = hardwareMap.dcMotor.get("motorIntakeL");
+ //      motorIntakeR = hardwareMap.dcMotor.get("motorIntakeR");
+ //      motorLift = hardwareMap.dcMotor.get("motorLift");
+ //      motorOutput = hardwareMap.dcMotor.get("motorOutput");
 
-       rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensor");
+ //      rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensor");
 
        motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
        motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
        motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
        motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-       motorIntakeL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-       motorIntakeR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-       motorLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-       motorOutput.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
+ //      motorIntakeL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+ //      motorIntakeR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+ //      motorLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+ //    /  motorOutput.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//
        motorBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
        motorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
        motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -75,16 +75,16 @@ public class CustomOpMode extends OpMode
 
        motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
        motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
-       motorIntakeL.setDirection(DcMotorSimple.Direction.REVERSE);
+ //      motorIntakeL.setDirection(DcMotorSimple.Direction.REVERSE);
 
        stopDriveMotors();
 
        telemetry.addData("Motor Initialization Complete", "");
 
-       servoClamp = hardwareMap.crservo.get("servoClamp");
-       servoTwist = hardwareMap.crservo.get("servoTwist");
-       servoHookL = hardwareMap.servo.get("servoHookL");
-       servoHookR = hardwareMap.servo.get("servoHookR");
+//       servoClamp = hardwareMap.crservo.get("servoClamp");
+  //     servoTwist = hardwareMap.crservo.get("servoTwist");
+    //   servoHookL = hardwareMap.servo.get("servoHookL");
+      // servoHookR = hardwareMap.servo.get("servoHookR");
 
        // Set servo positions
 
@@ -126,13 +126,12 @@ public class CustomOpMode extends OpMode
 
             // Don't give a value greater than 1 so scale them all down
             // would we ever get a value greater than 1? root2?
-            // this is Jank, fix later
+            // this might be Jank, fix later
             if (((Math.abs(FL) > 1) || (Math.abs(BL) > 1)) || ((Math.abs(FR) > 1) || (Math.abs(BR) > 1))) {
                 FL /= Math.max(Math.max(Math.abs(FL), Math.abs(FR)), Math.max(Math.abs(BL), Math.abs(BR)));
                 BL /= Math.max(Math.max(Math.abs(FL), Math.abs(FR)), Math.max(Math.abs(BL), Math.abs(BR)));
                 FR /= Math.max(Math.max(Math.abs(FL), Math.abs(FR)), Math.max(Math.abs(BL), Math.abs(BR)));
                 BR /= Math.max(Math.max(Math.abs(FL), Math.abs(FR)), Math.max(Math.abs(BL), Math.abs(BR)));
-
             }
         }
 
@@ -179,7 +178,7 @@ public class CustomOpMode extends OpMode
         }
         else return joyStickVal;
     }
-    
+
     public double leftABSMotorVal(double joyStickVal) {
         double maxJump = .4;
         double c = .1;
@@ -194,10 +193,14 @@ public class CustomOpMode extends OpMode
 
     public double getDist()
     {
-        double dist = rangeSensor.getDistance(DistanceUnit.INCH);
+        double dist = 0.0;
+        /*
+                rangeSensor.getDistance(DistanceUnit.INCH);
         while ((dist > 200 || Double.isNaN(dist))) {
             dist = rangeSensor.getDistance(DistanceUnit.INCH);
         }
+
+         */
         return dist;
     }
 }

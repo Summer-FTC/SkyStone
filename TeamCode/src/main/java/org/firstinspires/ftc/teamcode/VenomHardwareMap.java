@@ -20,41 +20,44 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 
 
 public class VenomHardwareMap extends OpMode{
+
     //drive motors
     DcMotor motorFR;
     DcMotor motorFL;
-   // DcMotor motorBR;
-   // DcMotor motorBL;
-
+   DcMotor motorBR;
+   DcMotor motorBL;
     IMU imu;
 
     //just had to put these to run the code dw about it
-    public void init() {
-
+    public void init()
+    {
+        initialize();
     }
-    public void loop() {
+    public void loop()
+    {
 
     }
 
     // initzialization method
-    public void initialize () {
+    public void initialize ()
+    {
         motorFR = hardwareMap.dcMotor.get("motorFR");
         motorFL = hardwareMap.dcMotor.get("motorFL");
-  //      motorBR = hardwareMap.dcMotor.get("motorBR");
-//        motorBL = hardwareMap.dcMotor.get("motorBL");
+        motorBR = hardwareMap.dcMotor.get("motorBR");
+        motorBL = hardwareMap.dcMotor.get("motorBL");
 
 
-       // motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-       // motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-     //   motorBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-      //  motorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-   //     motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
         motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
 
         stopAllMotors();
@@ -72,7 +75,7 @@ public class VenomHardwareMap extends OpMode{
         telemetry.addData("Initialization Complete", "");
     }
 
-    /*
+
     public void stopDriveMotors() {
         motorFR.setPower(0);
         motorFL.setPower(0);
@@ -80,13 +83,13 @@ public class VenomHardwareMap extends OpMode{
         motorBL.setPower(0);
     }
 
-     */
+
 
     public void stopAllMotors() {
         motorFR.setPower(0);
         motorFL.setPower(0);
-    //    motorBR.setPower(0);
-     //   motorBL.setPower(0);
+        motorBR.setPower(0);
+        motorBL.setPower(0);
 
     }
 

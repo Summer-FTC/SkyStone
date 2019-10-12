@@ -2,12 +2,13 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name="TrollbotTeleOp", group="TrollBot")
+ @TeleOp(name="TrollbotTeleOp", group="TrollBot")
 
 
 public class TrollBotTeleOp extends CustomOpMode
 {
     /*
+
     public void init()
     {
         initialize();
@@ -47,6 +48,7 @@ public class TrollBotTeleOp extends CustomOpMode
     }
 
      */
+
 
 }
 
