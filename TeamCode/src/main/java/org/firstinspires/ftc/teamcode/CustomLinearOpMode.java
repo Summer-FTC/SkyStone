@@ -51,18 +51,18 @@ public class CustomLinearOpMode extends LinearOpMode {
     public DcMotor motorFL;
     public DcMotor motorBR;
     public DcMotor motorBL;
-    public DcMotor motorIntakeL;
-    public DcMotor motorIntakeR;
-    public DcMotor motorLift;
-    public DcMotor motorOutput;
+  //  public DcMotor motorIntakeL;
+    //public DcMotor motorIntakeR;
+    //public DcMotor motorLift;
+    //public DcMotor motorOutput;
 
     // Declare servos
-    public CRServo servoClamp;
-    public CRServo servoTwist;
-    public Servo servoHookL;
-    public Servo servoHookR;
+  //  public CRServo servoClamp;
+   // public CRServo servoTwist;
+   // public Servo servoHookL;
+   // public Servo servoHookR;
 
-    ModernRoboticsI2cRangeSensor rangeSensorB;
+    //ModernRoboticsI2cRangeSensor rangeSensorB;
 
     ElapsedTime eTime;
 
@@ -95,14 +95,14 @@ public class CustomLinearOpMode extends LinearOpMode {
         motorFL = hardwareMap.dcMotor.get("motorFL");
         motorBR = hardwareMap.dcMotor.get("motorBR");
         motorBL = hardwareMap.dcMotor.get("motorBL");
-        motorIntakeL = hardwareMap.dcMotor.get("motorIntakeL");
-        motorIntakeR = hardwareMap.dcMotor.get("motorIntakeR");
-        motorLift = hardwareMap.dcMotor.get("motorLift");
-        motorOutput = hardwareMap.dcMotor.get("motorOutput");
+   //     motorIntakeL = hardwareMap.dcMotor.get("motorIntakeL");
+   //     motorIntakeR = hardwareMap.dcMotor.get("motorIntakeR");
+   //     motorLift = hardwareMap.dcMotor.get("motorLift");
+   //     motorOutput = hardwareMap.dcMotor.get("motorOutput");
 
         motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
-        motorIntakeL.setDirection(DcMotorSimple.Direction.REVERSE);
+ //       motorIntakeL.setDirection(DcMotorSimple.Direction.REVERSE);
 
         resetEncoders();
 
@@ -110,26 +110,26 @@ public class CustomLinearOpMode extends LinearOpMode {
         motorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motorIntakeL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motorIntakeR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motorLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motorOutput.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+  ////      motorIntakeL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+  //      motorIntakeR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+  //      motorLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//  /      motorOutput.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         stopMotors();
 
         telemetry.addData("Motor Initialization Complete", "");
 
         // servos vs continuous servos?
-        servoClamp = hardwareMap.crservo.get("servoClamp");
-        servoTwist = hardwareMap.crservo.get("servoTwist");
-        servoHookL = hardwareMap.servo.get("servoHookL");
-        servoHookR = hardwareMap.servo.get("servoHookR");
+ //       servoClamp = hardwareMap.crservo.get("servoClamp");
+   //     servoTwist = hardwareMap.crservo.get("servoTwist");
+     //   servoHookL = hardwareMap.servo.get("servoHookL");
+      //  servoHookR = hardwareMap.servo.get("servoHookR");
 
         // set servo positions
 
         telemetry.addData("Servo Initialization Complete", "");
 
-        rangeSensorB = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensorB");
+    //    rangeSensorB = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensorB");
 
         imu = new IMU(hardwareMap.get(BNO055IMU.class, "imu"));
         imu.IMUinit(hardwareMap);
@@ -184,22 +184,24 @@ public class CustomLinearOpMode extends LinearOpMode {
     }
 
     public double getDistB() {
-        double dist = rangeSensorB.getDistance(DistanceUnit.INCH);
-        while ((dist > 200 || Double.isNaN(dist)) && opModeIsActive()) {
-            dist = rangeSensorB.getDistance(DistanceUnit.INCH);
-        }
+        double dist = 0.0;
+                //rangeSensorB.getDistance(DistanceUnit.INCH);
+      //  while ((dist > 200 || Double.isNaN(dist)) && opModeIsActive()) {
+        //    dist = rangeSensorB.getDistance(DistanceUnit.INCH);
+       // }
         return dist;
     }
+
 
     public void resetEncoders() {
         motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorIntakeL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorIntakeR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorOutput.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+     //   motorIntakeL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       // motorIntakeR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+      //  motorLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+      //  motorOutput.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     public void findSkystone() throws InterruptedException {
