@@ -94,7 +94,7 @@ public class CustomLinearOpMode extends LinearOpMode {
             runOpModeSkystoneBlue();
 
         } else if (action.equals("Skystone") && alliance.equals("red")) {
-            telemetry.addData("Mode: Skystone Red");
+            telemetry.addData("Mode: Skystone Red", "");
             runOpModeSkystoneRed();
         }
     }
