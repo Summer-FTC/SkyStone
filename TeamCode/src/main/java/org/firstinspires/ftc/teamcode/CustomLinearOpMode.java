@@ -77,7 +77,7 @@ public class CustomLinearOpMode extends LinearOpMode {
     public void runOpMode() throws InterruptedException
     {
         initialize();
-        initVuforia();
+       // initVuforia();
 
         setParameters();
 
