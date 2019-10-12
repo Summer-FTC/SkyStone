@@ -207,7 +207,7 @@ public class CustomLinearOpMode extends LinearOpMode {
         telemetry.addData("IMU Initialization Complete", "");
     }
 
-    private void initVuforia()
+    /** private void initVuforia()
     {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
@@ -216,6 +216,7 @@ public class CustomLinearOpMode extends LinearOpMode {
         Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true);
         vuforia.setFrameQueueCapacity(1);
     }
+     **/
 
     public void stopMotors() {
         motorBL.setPower(0);
