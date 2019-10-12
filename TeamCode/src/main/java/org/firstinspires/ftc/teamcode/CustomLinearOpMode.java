@@ -293,22 +293,6 @@ public class CustomLinearOpMode extends LinearOpMode {
         // If in last three, ally already got first Skystone, get second
         TensorFlowSkyStone tf = new TensorFlowSkyStone();
         tf.runOpMode();
-
-        // Will change to certain amount of distance
-        while (opModeIsActive()) {
-            tfod = tf.getTfod();
-            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-            for (Recognition recognition : updatedRecognitions) {
-                if (recognition.getLabel().equals("Skystone")) {
-                    // if within range
-                    // left: 140-200
-                    // right: 560-640
-
-                    // stopMotors();
-                    intakeStone();
-                }
-            }
-        }
     }
 
     public void intakeStone() throws InterruptedException

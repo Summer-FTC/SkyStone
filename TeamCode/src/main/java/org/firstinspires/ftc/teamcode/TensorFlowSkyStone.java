@@ -127,6 +127,14 @@ public class TensorFlowSkyStone extends LinearOpMode{
                                           recognition.getLeft(), recognition.getTop());
                         telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
                                 recognition.getRight(), recognition.getBottom());
+                        if (recognition.getLabel().equals("Skystone")) {
+                            // if within range
+                            // left: 140-200
+                            // right: 560-640
+
+                            // stopMotors();
+                            intakeStone();
+                          }
                       }
                       telemetry.update();
                     }
