@@ -82,12 +82,19 @@ public class CustomLinearOpMode extends LinearOpMode {
         setParameters();
 
         if (action.equals("foundation") && alliance.equals("blue")) {
+            telemetry.addData("Mode: Foundation Blue", "");
             runOpModeFoundationBlue();
+
         } else if (action.equals("foundation") && alliance.equals("red")) {
+            telemetry.addData("Mode: Foundation Red", "");
             runOpModeFoundationRed();
+
         } else if (action.equals("Skystone") && alliance.equals("blue")) {
+            telemetry.addData("Mode: Skystone Blue", "");
             runOpModeSkystoneBlue();
+
         } else if (action.equals("Skystone") && alliance.equals("red")) {
+            telemetry.addData("Mode: Skystone Red");
             runOpModeSkystoneRed();
         }
     }
@@ -210,57 +217,6 @@ public class CustomLinearOpMode extends LinearOpMode {
         vuforia.setFrameQueueCapacity(1);
     }
 
-    public void encoderDrive(double speed,
-                             double leftInches, double rightInches,
-                             double timeoutS) {
-        int newLeftTarget;
-        int newRightTarget;
-
-        // Ensure that the opmode is still active
-        if (opModeIsActive()) {
-
-            // Determine new target position, and pass to motor controller
-            newLeftTarget = robot.leftDrive.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH);
-            newRightTarget = robot.rightDrive.getCurrentPosition() + (int) (rightInches * COUNTS_PER_INCH);
-            robot.leftDrive.setTargetPosition(newLeftTarget);
-            robot.rightDrive.setTargetPosition(newRightTarget);
-
-            // Turn On RUN_TO_POSITION
-            robot.leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            // reset the timeout time and start motion.
-            runtime.reset();
-            robot.leftDrive.setPower(Math.abs(speed));
-            robot.rightDrive.setPower(Math.abs(speed));
-
-            // keep looping while we are still active, and there is time left, and both motors are running.
-            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-            // its target position, the motion will stop.  This is "safer" in the event that the robot will
-            // always end the motion as soon as possible.
-            // However, if you require that BOTH motors have finished their moves before the robot continues
-            // onto the next step, use (isBusy() || isBusy()) in the loop test.
-            while (opModeIsActive() &&
-                    (runtime.seconds() < timeoutS) &&
-                    (robot.leftDrive.isBusy() && robot.rightDrive.isBusy())) {
-
-                // Display it for the driver.
-                telemetry.addData("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
-                telemetry.addData("Path2", "Running at %7d :%7d",
-                        robot.leftDrive.getCurrentPosition(),
-                        robot.rightDrive.getCurrentPosition());
-                telemetry.update();
-            }
-
-            // Stop all motion;
-            stopMotors();
-
-            // Turn off RUN_TO_POSITION
-            robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
-    }
-
     public void stopMotors() {
         motorBL.setPower(0);
         motorFL.setPower(0);
@@ -285,6 +241,39 @@ public class CustomLinearOpMode extends LinearOpMode {
         motorIntakeR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorOutput.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    public void moveToEncoder(double encoder, double power, double angle) {
+        resetEncoders();
+
+        double kPangle = 3.0/90.0;
+
+
+        if (encoder > 0) {
+            while (motorBL.getCurrentPosition() < encoder && opModeIsActive()) {
+
+                double angleError = imu.getTrueDiff(angle);
+                double PIDchangeAngle = kPangle * angleError;
+
+                motorBL.setPower(Range.clip((power - PIDchangeAngle) * left, -1, 1));
+                motorFL.setPower(Range.clip((power - PIDchangeAngle) * left, -1, 1));
+                motorBR.setPower(Range.clip(power + PIDchangeAngle, -1, 1));
+                motorFR.setPower(Range.clip(power + PIDchangeAngle, -1, 1));
+            }
+        }
+        else {
+            while (motorBL.getCurrentPosition() > encoder && opModeIsActive()) {
+
+                double angleError = imu.getTrueDiff(angle);
+                double PIDchangeAngle = kPangle * angleError;
+
+                motorBL.setPower(Range.clip((-power - PIDchangeAngle) * left, -1, 1));
+                motorFL.setPower(Range.clip((-power - PIDchangeAngle) * left, -1, 1));
+                motorBR.setPower(Range.clip(-power + PIDchangeAngle, -1, 1));
+                motorFR.setPower(Range.clip(-power + PIDchangeAngle, -1, 1));
+            }
+        }
+        stopMotors();
     }
 
     public void findSkystone() throws InterruptedException {
@@ -325,7 +314,7 @@ public class CustomLinearOpMode extends LinearOpMode {
     public void intakeStone() throws InterruptedException
     {
         // use output to get stone
-        encoderDrive(left, -12, -12, 4.0);
+        moveToEncoder(1500, -.25, 0);
     }
 
     public void movePlatform()
