@@ -34,18 +34,13 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.Func;
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.Position;
-import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 import java.util.Locale;
 /**
@@ -65,12 +60,14 @@ public class IMU extends LinearOpMode
     Orientation angles;
     Acceleration gravity;
 
-    public IMU (BNO055IMU imu){
+    public IMU (BNO055IMU imu)
+    {
         IMU = imu;
     }
 
-    //Just basic init stuff; run in robot init method
-    public void IMUinit(HardwareMap map) {
+    // Just basic init stuff; run in robot init method
+    public void IMUinit(HardwareMap map)
+    {
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
@@ -101,14 +98,16 @@ public class IMU extends LinearOpMode
         return Double.parseDouble(formatAngle(angles.angleUnit, angles.thirdAngle));
     }
 
-    public double getRoll() {
+    public double getRoll()
+    {
         // roll is side to side rotation (think about an airplane doing a barrel roll)
         angles = IMU.getAngularOrientation().toAxesReference(AxesReference.INTRINSIC).toAxesOrder(AxesOrder.ZYX);
         return Double.parseDouble(formatAngle(angles.angleUnit, angles.secondAngle));
     }
 
     // Calculates the smallest difference between a specified angle and the current angle
-    public double getTrueDiff(double origAngle) {
+    public double getTrueDiff(double origAngle)
+    {
         double currAngle = getYaw();
         if (currAngle >= 0 && origAngle >= 0 || currAngle <= 0 && origAngle <= 0)
             return currAngle - origAngle;
