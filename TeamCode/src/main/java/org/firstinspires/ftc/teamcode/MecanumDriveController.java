@@ -14,6 +14,11 @@ public class MecanumDriveController
     DcMotor motorBL;
     String color;
 
+    HardwareMap hwMap = null;
+    Telemetry telemetry = null;
+
+    public DcMotor[] motors = null;
+
     public MecanumDriveController()
     {
         // default to red i guess
@@ -26,10 +31,15 @@ public class MecanumDriveController
 
     public void init(HardwareMap hwMap, Telemetry telemetry)
     {
+        this.hwMap = hwMap;
+        this.telemetry = telemetry;
+
         motorFR = hwMap.dcMotor.get("motorFR");
         motorFL = hwMap.dcMotor.get("motorFL");
         motorBR = hwMap.dcMotor.get("motorBR");
         motorBL = hwMap.dcMotor.get("motorBL");
+
+        motors = new DcMotor[]{motorFL, motorBL, motorBR, motorFR};
 
         motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -49,10 +59,9 @@ public class MecanumDriveController
         telemetry.addData("Motor Initialization Complete", "");
 
 
-
     }
 
-    public void moveForward()
+    public void moveForward(double power)
     {
 
     }
@@ -82,11 +91,20 @@ public class MecanumDriveController
 
     }
 
-    public void stopDriveMotors() {
-        motorFR.setPower(0);
-        motorFL.setPower(0);
-        motorBR.setPower(0);
-        motorBL.setPower(0);
+    public void setPowers(int power)
+    {
+        for (DcMotor m : motors)
+        {
+            m.setPower(power);
+        }
+    }
+
+    public void stopDriveMotors()
+    {
+        for(DcMotor m : motors)
+        {
+            m.setPower(0);
+        }
     }
 
     public void arcadeDrive(double forward, double strafe, double rotate)
@@ -121,7 +139,6 @@ public class MecanumDriveController
             }
         }
 
-        // is this needed? it would be 0.0 anyways
         else
         {
             stopDriveMotors();
@@ -132,4 +149,30 @@ public class MecanumDriveController
         motorFR.setPower(FR);
         motorBR.setPower(BR);
     }
+
+    public void resetEncoders()
+    {
+        for(DcMotor m : motors)
+        {
+            m.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
+    }
+
+
+    public void runUsingEncoders()
+    {
+        for (DcMotor m : motors)
+        {
+            m.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+    }
+
+    public void runToPosition()
+    {
+        for (DcMotor m : motors)
+        {
+            m.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        }
+    }
+
 }
