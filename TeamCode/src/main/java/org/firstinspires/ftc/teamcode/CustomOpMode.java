@@ -66,8 +66,8 @@ public class CustomOpMode extends OpMode
  //      motorIntakeL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
  //      motorIntakeR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
  //      motorLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
- //    /  motorOutput.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//
+       //      motorOutput.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //
        motorBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
        motorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
        motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -75,16 +75,16 @@ public class CustomOpMode extends OpMode
 
        motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
        motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
- //      motorIntakeL.setDirection(DcMotorSimple.Direction.REVERSE);
+       // motorIntakeL.setDirection(DcMotorSimple.Direction.REVERSE);
 
        stopDriveMotors();
 
        telemetry.addData("Motor Initialization Complete", "");
 
-//       servoClamp = hardwareMap.crservo.get("servoClamp");
-  //     servoTwist = hardwareMap.crservo.get("servoTwist");
-    //   servoHookL = hardwareMap.servo.get("servoHookL");
-      // servoHookR = hardwareMap.servo.get("servoHookR");
+       // servoClamp = hardwareMap.crservo.get("servoClamp");
+       // servoTwist = hardwareMap.crservo.get("servoTwist");
+       // servoHookL = hardwareMap.servo.get("servoHookL");
+       // servoHookR = hardwareMap.servo.get("servoHookR");
 
        // Set servo positions
 
@@ -113,12 +113,12 @@ public class CustomOpMode extends OpMode
         if (((Math.abs(Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y))) > .1) ||
                 Math.abs(Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4) > .1) {
 
-            // r can be sqrt(2)
+            // r can be sqrt(2)/2
             double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
             double theta = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x) - Math.PI / 4;
             double rightX = -gamepad1.right_stick_x;
 
-            //as per unit circle cos gives x, sin gives you y
+            // as per unit circle cos gives x, sin gives you y
             FL = r * Math.cos(theta) + rightX;
             FR = r * Math.sin(theta) - rightX;
             BL = r * Math.sin(theta) + rightX;
@@ -164,7 +164,6 @@ public class CustomOpMode extends OpMode
         motorFR.setPower(right);
         motorBR.setPower(right);
     }
-
 
     // Idk if we need these lol just copied them from last year
     public double rightABSMotorVal(double joyStickVal) {

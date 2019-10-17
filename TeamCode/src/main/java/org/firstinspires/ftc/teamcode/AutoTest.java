@@ -1,25 +1,15 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.annotation.SuppressLint;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
-import com.vuforia.Image;
-import com.vuforia.PIXEL_FORMAT;
-import com.vuforia.Vuforia;
 
 
 @Autonomous
-public class AutoTest extends CustomLinearOpMode
+public class AutoTest extends LinearOpMode
 {
     DcMotor motorFR = null;
     DcMotor motorFL = null;
@@ -29,8 +19,13 @@ public class AutoTest extends CustomLinearOpMode
     @Override
     public void runOpMode() throws InterruptedException
     {
-        telemetry.addData("runOpMode()", "");
-        main();
+        waitForStart();
+        log("runOpMode", "running");
+        try {
+            main();
+        } catch(Exception e){
+            log("exception", e);
+        }
     }
 
 
@@ -41,18 +36,14 @@ public class AutoTest extends CustomLinearOpMode
         motorBR = hardwareMap.dcMotor.get("motorBR");
         motorBL = hardwareMap.dcMotor.get("motorBL");
 
-        motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        runUsingEncoders();
 
         motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        telemetry.addData("Motor Initialization Complete", "");
+        log("Status", "Motor initialization complete");
 
-        driveForwardDistance(0.5, 100);
-
+        driveForwardDistance(0.5, 5000);
     }
 
     public void stopDriving()
@@ -62,6 +53,7 @@ public class AutoTest extends CustomLinearOpMode
 
     public void driveForward(double power)
     {
+        log("Status", "Driving forward with power: " + power);
         // all go forward
         motorBL.setPower(power);
         motorBR.setPower(power);
@@ -98,7 +90,8 @@ public class AutoTest extends CustomLinearOpMode
         motorFR.setPower(power);
     }
 
-    public void driveForwardDistance(double power, int distance) //throws InterruptedException
+    @SuppressLint("DefaultLocale")
+    public void driveForwardDistance(double power, int distance) throws InterruptedException
     {
         resetEncoders();
 
@@ -112,21 +105,40 @@ public class AutoTest extends CustomLinearOpMode
 
         driveForward(power);
 
+        log("Current Position", String.format("FR=%d BR=%d FL=%d BL=%d",
+                motorFR.getCurrentPosition(),
+                motorBR.getCurrentPosition(),
+                motorFL.getCurrentPosition(),
+                motorBL.getCurrentPosition()));
 
-        while(motorFL.isBusy() && motorBL.isBusy())
+        log("Target Position", String.format("FR=%d BR=%d FL=%d BL=%d",
+                motorFR.getTargetPosition(),
+                motorBR.getTargetPosition(),
+                motorFL.getTargetPosition(),
+                motorBL.getTargetPosition()));
+
+        while(motorFL.isBusy() || motorBL.isBusy())
         {
-            telemetry.addData("busy...", "");
+            log("Current Position", String.format("FR=%d BR=%d FL=%d BL=%d",
+                    motorFR.getCurrentPosition(),
+                    motorBR.getCurrentPosition(),
+                    motorFL.getCurrentPosition(),
+                    motorBL.getCurrentPosition()));
 
-            Thread.yield();
+            log("Target Position", String.format("FR=%d BR=%d FL=%d BL=%d",
+                    motorFR.getTargetPosition(),
+                    motorBR.getTargetPosition(),
+                    motorFL.getTargetPosition(),
+                    motorBL.getTargetPosition()));
+
+
+            Thread.sleep(100);
         }
 
-        telemetry.addData("done", "");
+        log("Status","done");
         stopDriving();
-        runUsingEncoders();
-
-
+        resetEncoders();
     }
-
 
     public void resetEncoders()
     {
@@ -150,6 +162,12 @@ public class AutoTest extends CustomLinearOpMode
         motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    private void log(String caption, Object message)
+    {
+        telemetry.addData(caption, message);
+        telemetry.update();
     }
 
 }

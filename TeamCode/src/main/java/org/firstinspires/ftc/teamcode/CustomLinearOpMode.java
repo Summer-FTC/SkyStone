@@ -57,12 +57,12 @@ public class CustomLinearOpMode extends LinearOpMode {
     //public DcMotor motorOutput;
 
     // Declare servos
-  //  public CRServo servoClamp;
-   // public CRServo servoTwist;
-   // public Servo servoHookL;
-   // public Servo servoHookR;
+    // public CRServo servoClamp;
+    // public CRServo servoTwist;
+    // public Servo servoHookL;
+    // public Servo servoHookR;
 
-    //ModernRoboticsI2cRangeSensor rangeSensorB;
+    // ModernRoboticsI2cRangeSensor rangeSensorB;
 
     ElapsedTime eTime;
     protected ElapsedTime time = new ElapsedTime();
@@ -77,7 +77,9 @@ public class CustomLinearOpMode extends LinearOpMode {
     public void runOpMode() throws InterruptedException
     {
         initialize();
-       // initVuforia();
+        telemetry.addData("Initilization complete.","");
+
+        // initVuforia();
 
         setParameters();
 
@@ -146,15 +148,15 @@ public class CustomLinearOpMode extends LinearOpMode {
         while (opModeIsActive()) {
             if (gamepad1.x)
                 alliance = "blue";
-            if (gamepad1.b)
+            else if (gamepad1.b)
                 alliance = "red";
             if (gamepad1.a)
                 action = "foundation";
-            if (gamepad1.y)
+            else if (gamepad1.y)
                 action = "Skystone";
             if (gamepad1.dpad_left)
                 park = "side";
-            if (gamepad1.dpad_right)
+            else if (gamepad1.dpad_right)
                 park = "center";
         }
     }
@@ -180,22 +182,22 @@ public class CustomLinearOpMode extends LinearOpMode {
         motorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-  ////      motorIntakeL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-  //      motorIntakeR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-  //      motorLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//  /      motorOutput.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        // motorIntakeL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        // motorIntakeR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        // motorLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        // motorOutput.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         stopMotors();
 
         telemetry.addData("Motor Initialization Complete", "");
 
         // servos vs continuous servos?
- //       servoClamp = hardwareMap.crservo.get("servoClamp");
-   //     servoTwist = hardwareMap.crservo.get("servoTwist");
-     //   servoHookL = hardwareMap.servo.get("servoHookL");
-      //  servoHookR = hardwareMap.servo.get("servoHookR");
+        // servoClamp = hardwareMap.crservo.get("servoClamp");
+        // servoTwist = hardwareMap.crservo.get("servoTwist");
+        // servoHookL = hardwareMap.servo.get("servoHookL");
+        // servoHookR = hardwareMap.servo.get("servoHookR");
 
-        // set servo positions
+        // INSERT HERE LATER: set servo positions
 
         telemetry.addData("Servo Initialization Complete", "");
 
@@ -218,14 +220,17 @@ public class CustomLinearOpMode extends LinearOpMode {
     }
      **/
 
-    public void stopMotors() {
+
+    public void stopMotors()
+    {
         motorBL.setPower(0);
         motorFL.setPower(0);
         motorBR.setPower(0);
         motorFR.setPower(0);
     }
 
-    public double getDistB() {
+    public double getDistB()
+    {
         double dist = 0.0;
                 //rangeSensorB.getDistance(DistanceUnit.INCH);
       //  while ((dist > 200 || Double.isNaN(dist)) && opModeIsActive()) {
@@ -235,7 +240,8 @@ public class CustomLinearOpMode extends LinearOpMode {
     }
 
 
-    public void resetEncoders() {
+    public void resetEncoders()
+    {
         motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -251,8 +257,8 @@ public class CustomLinearOpMode extends LinearOpMode {
 
         double kPangle = 3.0/90.0;
 
-
-        if (encoder > 0) {
+        if (encoder > 0)
+        {
             while (motorBL.getCurrentPosition() < encoder && opModeIsActive()) {
 
                 double angleError = imu.getTrueDiff(angle);
@@ -264,6 +270,7 @@ public class CustomLinearOpMode extends LinearOpMode {
                 motorFR.setPower(Range.clip(power + PIDchangeAngle, -1, 1));
             }
         }
+
         else {
             while (motorBL.getCurrentPosition() > encoder && opModeIsActive()) {
 
@@ -336,6 +343,5 @@ public class CustomLinearOpMode extends LinearOpMode {
         } else if (park.equals("side")){
             // park in side
         }
-        // Call method when t =
     }
 }
