@@ -35,14 +35,46 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     }
 
 
-    public void moveForward(double power)
+    public void moveForward(double angle, double power, double encoderTicks)
     {
+        while (robot.getAvgEncoderTicks() < encoderTicks && opModeIsActive())
+        {
+            double newPower = power * ((encoderTicks - robot.getAvgEncoderTicks())/encoderTicks);
+            double PIDchange = PID(angle);
 
+            if (newPower < 0.1)
+            {
+                newPower = 0.1;
+            }
+
+            // TODO: figure out + and -
+            // either set left or right to negative
+            robot.setMotorBL(PIDchange + newPower);
+            robot.setMotorBR(PIDchange + newPower);
+            robot.setMotorFL(PIDchange + newPower);
+            robot.setMotorFR(PIDchange + newPower);
+
+        }
     }
 
-    public void moveBackward(double power)
+    public void moveBackward(double angle, double power, double encoderTicks)
     {
+        while (robot.getAvgEncoderTicks() < encoderTicks && opModeIsActive())
+        {
+            double newPower = power * ((encoderTicks - robot.getAvgEncoderTicks())/encoderTicks);
+            double PIDchange = PID(angle);
 
+            if (newPower < 0.1)
+            {
+                newPower = 0.1;
+            }
+
+            // TODO: figure out + and -
+            robot.setMotorBL(PIDchange - newPower);
+            robot.setMotorBR(PIDchange - newPower);
+            robot.setMotorFL(PIDchange - newPower);
+            robot.setMotorFR(PIDchange - newPower);
+        }
     }
 
     // pass in current angle as the parameter
@@ -85,7 +117,6 @@ public abstract class BaseLinearOpMode extends LinearOpMode
             robot.setMotorBR(-PIDchange - newPower);
             robot.setMotorFL(PIDchange - newPower);
             robot.setMotorFR(-PIDchange + newPower);
-
         }
     }
 

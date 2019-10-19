@@ -57,11 +57,7 @@ public class MecanumDriveController
         stopDriveMotors();
 
         telemetry.addData("Motor Initialization Complete", "");
-
-
     }
-
-
 
     public void setPowers(int power)
     {
