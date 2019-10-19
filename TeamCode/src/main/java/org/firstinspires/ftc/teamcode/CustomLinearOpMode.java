@@ -57,8 +57,8 @@ public class CustomLinearOpMode extends LinearOpMode {
     //public DcMotor motorOutput;
 
     // Declare servos
-    // public servo servoClamp;
-    // public servo servoTwist;
+    // public Servo servoClamp;
+    // public Servo servoTwist;
     // public Servo servoHookL;
     // public Servo servoHookR;
 

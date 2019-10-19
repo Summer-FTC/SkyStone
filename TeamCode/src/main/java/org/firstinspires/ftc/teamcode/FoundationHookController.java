@@ -10,8 +10,14 @@ public class FoundationHookController
     public Servo servoHookL;
     public Servo servoHookR;
 
+    HardwareMap hwMap = null;
+    Telemetry telemetry = null;
+
     public void init(HardwareMap hwMap, Telemetry telemetry)
     {
+        this.hwMap = hwMap;
+        this.telemetry = telemetry;
+
         servoHookL = hwMap.servo.get("servoHookL");
         servoHookR = hwMap.servo.get("servoHookR");
 
