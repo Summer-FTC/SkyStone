@@ -34,7 +34,7 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
     }
 
     public void park() {
-        // park robot: center or side?
+        // park robot on line: center or side?
     }
 
 }
