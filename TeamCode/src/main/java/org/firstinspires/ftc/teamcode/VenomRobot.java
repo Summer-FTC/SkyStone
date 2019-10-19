@@ -31,11 +31,13 @@ public class VenomRobot
         this.telemetry = telemetry;
         this.isAuto = isAuto;
 
-
         driveTrain.init(hwMap, telemetry);
 
         imu = new IMU(hwMap.get(BNO055IMU.class, "imu"));
         imu.IMUinit(hwMap);
+
+        intake = new IntakeController();
+        intake.init(hwMap, telemetry);
     }
 
 

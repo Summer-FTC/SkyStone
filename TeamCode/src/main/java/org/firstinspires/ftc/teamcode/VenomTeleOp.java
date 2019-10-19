@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 public class VenomTeleOp extends OpMode
 {
     VenomRobot robot = new VenomRobot(new MecanumDriveController());
-
+    double intakePower = 1;
 
     @Override
     public void init()
@@ -31,6 +31,7 @@ public class VenomTeleOp extends OpMode
     public void loop()
     {
         doDrive();
+        doIntake();
         // add other methods such as DoLift or DoIntake
     }
 
@@ -41,5 +42,13 @@ public class VenomTeleOp extends OpMode
         double rotate = gamepad1.right_stick_x;
 
         robot.driveTrain.arcadeDrive(forward, strafe, rotate);
+    }
+
+    public void doIntake()
+    {
+        if(gamepad1.right_bumper)
+        {
+            robot.intake.setPower(intakePower);
+        }
     }
 }
