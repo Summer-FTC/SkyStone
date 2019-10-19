@@ -66,7 +66,6 @@ public class CustomLinearOpMode extends LinearOpMode {
 
     ElapsedTime eTime;
     protected ElapsedTime time = new ElapsedTime();
-
     IMU imu;
 
     String alliance = "";
