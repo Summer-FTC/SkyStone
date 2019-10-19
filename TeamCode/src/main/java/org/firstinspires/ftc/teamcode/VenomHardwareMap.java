@@ -24,8 +24,8 @@ public class VenomHardwareMap extends OpMode{
     //drive motors
     DcMotor motorFR;
     DcMotor motorFL;
-   DcMotor motorBR;
-   DcMotor motorBL;
+    DcMotor motorBR;
+    DcMotor motorBL;
     IMU imu;
 
     //just had to put these to run the code dw about it
@@ -48,7 +48,7 @@ public class VenomHardwareMap extends OpMode{
 
 
         motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-       motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
