@@ -40,6 +40,6 @@ public class VenomTeleOp extends OpMode
         double strafe = gamepad1.left_stick_x;
         double rotate = gamepad1.right_stick_x;
 
-        robot.drive.arcadeDrive(forward, strafe, rotate);
+        robot.driveTrain.arcadeDrive(forward, strafe, rotate);
     }
 }

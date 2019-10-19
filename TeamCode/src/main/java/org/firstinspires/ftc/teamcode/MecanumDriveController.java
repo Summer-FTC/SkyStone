@@ -61,35 +61,7 @@ public class MecanumDriveController
 
     }
 
-    public void moveForward(double power)
-    {
 
-    }
-
-    public void moveBackward()
-    {
-
-    }
-
-    public void strafeRight()
-    {
-
-    }
-
-    public void strafeLeft()
-    {
-
-    }
-
-    public void moveToLoadingZone()
-    {
-
-    }
-
-    public void rotate()
-    {
-
-    }
 
     public void setPowers(int power)
     {

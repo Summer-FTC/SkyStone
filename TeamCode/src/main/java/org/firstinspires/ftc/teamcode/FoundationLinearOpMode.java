@@ -10,4 +10,13 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
     {
 
     }
+
+    public void moveToFoundation()
+    {
+        // if red
+        // test # of encoder ticks
+            // use tele op to figure out
+        strafeRight(0, 0.5, 3000);
+    }
+
 }
