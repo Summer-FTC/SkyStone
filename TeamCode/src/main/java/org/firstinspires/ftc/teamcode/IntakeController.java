@@ -8,12 +8,12 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class IntakeController
 {
-    public DcMotor motorIntake = null;
-    public Servo leftClamp = null;
-    public Servo rightClamp = null;
+    public DcMotor motorIntake;
+    public Servo leftClamp;
+    public Servo rightClamp;
 
-    HardwareMap hwMap = null;
-    Telemetry telemetry = null;
+    HardwareMap hwMap;
+    Telemetry telemetry;
 
     public void init(HardwareMap hwMap, Telemetry telemetry)
     {

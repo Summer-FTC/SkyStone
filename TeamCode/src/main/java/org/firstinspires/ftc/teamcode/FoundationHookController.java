@@ -7,12 +7,18 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class FoundationHookController
 {
+<<<<<<< HEAD
     public Servo leftHook;
     public Servo rightHook;
+=======
+    public Servo servoHookL;
+    public Servo servoHookR;
+>>>>>>> 060a4a0e9df7ede0df64cd39d437b0c22c88485d
 
     HardwareMap hwMap = null;
     Telemetry telemetry = null;
 
+<<<<<<< HEAD
     public void init(HardwareMap hardwareMap,Telemetry telemetry){
         this.hwMap = hardwareMap;
         this.telemetry = telemetry;
@@ -31,5 +37,24 @@ public class FoundationHookController
         }
     }
 
+=======
+    public void init(HardwareMap hwMap, Telemetry telemetry)
+    {
+        this.hwMap = hwMap;
+        this.telemetry = telemetry;
 
+        servoHookL = hwMap.servo.get("servoHookL");
+        servoHookR = hwMap.servo.get("servoHookR");
+
+        telemetry.addData("Hook Servo Initialization Complete", "");
+    }
+
+    public void extendHooks() {
+        // extend hooks
+    }
+>>>>>>> 060a4a0e9df7ede0df64cd39d437b0c22c88485d
+
+    public void retractHooks() {
+        // retract hooks
+    }
 }

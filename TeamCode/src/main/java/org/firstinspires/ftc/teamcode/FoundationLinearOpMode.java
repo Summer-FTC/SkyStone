@@ -1,10 +1,17 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous
 public class FoundationLinearOpMode extends BaseLinearOpMode
 {
+
+    FoundationHookController found = new FoundationHookController();
+
+    ElapsedTime eTime;
+    protected ElapsedTime time = new ElapsedTime();
+
     @Override
     public void runOpMode() throws InterruptedException
     {
@@ -19,6 +26,17 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         // We can also use the distance in inches to find out how far we need to go.
         // I think encoders would be a little inaccurate.
         strafeRight(0, 0.5, 3000);
+    }
+
+    public void pullFoundation()
+    {
+        found.extendHooks();
+        // hook on and pull back
+        found.retractHooks();
+    }
+
+    public void park() {
+        // park robot on line: center or side?
     }
 
 }

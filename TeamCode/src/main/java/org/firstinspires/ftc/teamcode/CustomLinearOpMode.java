@@ -57,8 +57,8 @@ public class CustomLinearOpMode extends LinearOpMode {
     //public DcMotor motorOutput;
 
     // Declare servos
-    // public CRServo servoClamp;
-    // public CRServo servoTwist;
+    // public Servo servoClamp;
+    // public Servo servoTwist;
     // public Servo servoHookL;
     // public Servo servoHookR;
 
@@ -66,7 +66,6 @@ public class CustomLinearOpMode extends LinearOpMode {
 
     ElapsedTime eTime;
     protected ElapsedTime time = new ElapsedTime();
-
     IMU imu;
 
     String alliance = "";
@@ -77,7 +76,7 @@ public class CustomLinearOpMode extends LinearOpMode {
     public void runOpMode() throws InterruptedException
     {
         initialize();
-        telemetry.addData("Initilization complete.","");
+        telemetry.addData("Initialization complete.","");
 
         // initVuforia();
 
@@ -192,8 +191,9 @@ public class CustomLinearOpMode extends LinearOpMode {
         telemetry.addData("Motor Initialization Complete", "");
 
         // servos vs continuous servos?
-        // servoClamp = hardwareMap.crservo.get("servoClamp");
-        // servoTwist = hardwareMap.crservo.get("servoTwist");
+        // servoClamp = hardwareMap.servo.get("servoClamp");
+        // servoTwist = hardwareMap.servo.get("servoTwist");
+        // motor - use crservo
         // servoHookL = hardwareMap.servo.get("servoHookL");
         // servoHookR = hardwareMap.servo.get("servoHookR");
 
