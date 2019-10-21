@@ -49,11 +49,11 @@ public abstract class BaseLinearOpMode extends LinearOpMode
             // TODO: figure out + and -
             // either set left or right to negative
             // if statement for if knocked left or right
+            // curves left
             robot.setMotorBL(PIDchange + newPower);
-            robot.setMotorBR(PIDchange + newPower);
+            robot.setMotorBR(-PIDchange + newPower);
             robot.setMotorFL(PIDchange + newPower);
-            robot.setMotorFR(PIDchange + newPower);
-
+            robot.setMotorFR(-PIDchange + newPower);
         }
     }
 
@@ -71,9 +71,9 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
             // TODO: figure out + and -
             robot.setMotorBL(PIDchange - newPower);
-            robot.setMotorBR(PIDchange - newPower);
+            robot.setMotorBR(-PIDchange - newPower);
             robot.setMotorFL(PIDchange - newPower);
-            robot.setMotorFR(PIDchange - newPower);
+            robot.setMotorFR(-PIDchange - newPower);
         }
     }
 
