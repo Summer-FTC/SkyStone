@@ -13,10 +13,11 @@ public class VenomRobot
 
     IMU imu ;
 
-    MecanumDriveController driveTrain = new MecanumDriveController();
-    OutputController output = new OutputController();
-    FoundationHookController hooks = new FoundationHookController();
-    IntakeController intake = new IntakeController();
+    MecanumDriveController driveTrain;
+    OutputController output;
+    FoundationHookController hooks;
+    IntakeController intake;
+
 
 
     public VenomRobot(MecanumDriveController drive)
@@ -33,12 +34,18 @@ public class VenomRobot
 
         driveTrain.init(hwMap, telemetry);
 
-        imu = new IMU(hwMap.get(BNO055IMU.class, "imu"));
-        imu.IMUinit(hwMap);
-
-        intake = new IntakeController();
-        intake.init(hwMap, telemetry);
-    }
+//        imu = new IMU(hwMap.get(BNO055IMU.class, "imu"));
+//        imu.IMUinit(hwMap);
+//
+//        intake = new IntakeController();
+//        intake.init(hwMap, telemetry);
+//
+//        output = new OutputController();
+//        output.init(hwMap,telemetry);
+//
+//        hooks = new FoundationHookController();
+//        hooks.init(hwMap,telemetry);
+  }
 
 
     public void setMotorFL(double power)

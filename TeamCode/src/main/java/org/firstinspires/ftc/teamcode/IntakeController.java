@@ -30,15 +30,17 @@ public class IntakeController
         motorIntake.setPower(power);
     }
 
-    public void clampClose()
+    public void clampPositions(boolean clamp)
     {
-        leftClamp.setPosition(1);
-        rightClamp.setPosition(1);
+        if(clamp){
+            leftClamp.setPosition(1);
+            rightClamp.setPosition(1);
+        } else {
+            leftClamp.setPosition(0);
+            rightClamp.setPosition(0);
+        }
+
     }
 
-    public void clampOpen()
-    {
-        leftClamp.setPosition(0);
-        rightClamp.setPosition(0);
-    }
+
 }

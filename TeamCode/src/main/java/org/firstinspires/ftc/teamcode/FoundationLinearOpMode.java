@@ -16,6 +16,8 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         // if red
         // test # of encoder ticks
             // use tele op to figure out
+        // We can also use the distance in inches to find out how far we need to go.
+        // I think encoders would be a little inaccurate.
         strafeRight(0, 0.5, 3000);
     }
 

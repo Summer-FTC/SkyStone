@@ -20,7 +20,6 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         double kP = 0.4/90;
         double minSpeed = 0.1;
 
-
             double angleError = robot.imu.getTrueDiff(angle);
 
             double PIDchange = kP * angleError;
