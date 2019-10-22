@@ -29,7 +29,6 @@ public abstract class BaseLinearOpMode extends LinearOpMode
             else if (PIDchange < 0 && PIDchange > -minSpeed)
                 PIDchange = -minSpeed;
 
-
         return PIDchange;
     }
 

@@ -83,7 +83,7 @@ public class MecanumDriveController
         double BR = 0.0;
 
         // change tolerance, maybe make stop method so that brakes as approaching zero speed
-        if (((Math.abs(Math.hypot(strafe, forward))) > 0.2) ||
+        if (((Math.abs(Math.hypot(strafe, forward))) > 0.1) ||
                 Math.abs(Math.atan2(forward, strafe) - Math.PI / 4) > .1) {
 
             // r can be sqrt(2)/2
