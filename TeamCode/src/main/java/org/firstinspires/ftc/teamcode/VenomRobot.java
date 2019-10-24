@@ -69,9 +69,15 @@ public class VenomRobot
     }
 
     // TODO: FIX
-    public double getAvgEncoderTicks()
+    public double getEncoderTicks()
     {
         double avg = 0.0;
+        avg += driveTrain.motorFL.getCurrentPosition();
+        avg += driveTrain.motorFR.getCurrentPosition();
+        avg += driveTrain.motorBL.getCurrentPosition();
+        avg += driveTrain.motorBR.getCurrentPosition();
+        avg /= 4;
+
         return avg;
     }
 

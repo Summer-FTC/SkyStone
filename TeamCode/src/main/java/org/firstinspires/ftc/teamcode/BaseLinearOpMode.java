@@ -35,9 +35,10 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
     public void moveForward(double angle, double power, double encoderTicks)
     {
-        while (robot.getAvgEncoderTicks() < encoderTicks && opModeIsActive())
+        robot.driveTrain.resetEncoders();
+        while (robot.getEncoderTicks() < encoderTicks && opModeIsActive())
         {
-            double newPower = power * ((encoderTicks - robot.getAvgEncoderTicks())/encoderTicks);
+            double newPower = power * ((encoderTicks - robot.getEncoderTicks())/encoderTicks);
             double PIDchange = PID(angle);
 
             if (newPower < 0.1)
@@ -58,9 +59,11 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
     public void moveBackward(double angle, double power, double encoderTicks)
     {
-        while (robot.getAvgEncoderTicks() < encoderTicks && opModeIsActive())
+        robot.driveTrain.resetEncoders();
+        while (robot.getEncoderTicks() < encoderTicks && opModeIsActive())
         {
-            double newPower = power * ((encoderTicks - robot.getAvgEncoderTicks())/encoderTicks);
+            // try to change to scale down at the end
+            double newPower = power * ((encoderTicks - robot.getEncoderTicks())/encoderTicks);
             double PIDchange = PID(angle);
 
             if (newPower < 0.1)
@@ -79,9 +82,10 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     // pass in current angle as the parameter
     public void strafeRight(double angle, double power, double encoderTicks)
     {
-        while (robot.getAvgEncoderTicks() < encoderTicks && opModeIsActive())
+        robot.driveTrain.resetEncoders();
+        while (robot.getEncoderTicks() < encoderTicks && opModeIsActive())
         {
-            double newPower = power * ((encoderTicks - robot.getAvgEncoderTicks())/encoderTicks);
+            double newPower = power * ((encoderTicks - robot.getEncoderTicks())/encoderTicks);
             double PIDchange = PID(angle);
 
             if (newPower < 0.1)
@@ -101,9 +105,10 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
     public void strafeLeft(double angle, double power, double encoderTicks)
     {
-        while (robot.getAvgEncoderTicks() < encoderTicks && opModeIsActive())
+        robot.driveTrain.resetEncoders();
+        while (robot.getEncoderTicks() < encoderTicks && opModeIsActive())
         {
-            double newPower = power * ((encoderTicks - robot.getAvgEncoderTicks())/encoderTicks);
+            double newPower = power * ((encoderTicks - robot.getEncoderTicks())/encoderTicks);
             double PIDchange = PID(angle);
 
             if (newPower < 0.1)

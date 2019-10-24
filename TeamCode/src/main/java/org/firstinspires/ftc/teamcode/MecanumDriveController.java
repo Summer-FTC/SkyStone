@@ -136,6 +136,12 @@ public class MecanumDriveController
         }
     }
 
+    public double getEncoderTicks() {
+        double ticks = motorBL.getCurrentPosition();
+        telemetry.addData("encoderBL", ticks);
+        return ticks;
+    }
+
     public void runToPosition()
     {
         for (DcMotor m : motors)
