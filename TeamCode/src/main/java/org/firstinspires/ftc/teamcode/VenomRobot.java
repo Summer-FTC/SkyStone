@@ -34,8 +34,8 @@ public class VenomRobot
 
         driveTrain.init(hwMap, telemetry);
 
-//        imu = new IMU(hwMap.get(BNO055IMU.class, "imu"));
-//        imu.IMUinit(hwMap);
+        imu = new IMU(hwMap.get(BNO055IMU.class, "imu"));
+        imu.IMUinit(hwMap);
 //
 //        intake = new IntakeController();
 //        intake.init(hwMap, telemetry);

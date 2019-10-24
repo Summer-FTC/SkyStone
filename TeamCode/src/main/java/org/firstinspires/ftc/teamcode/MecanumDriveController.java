@@ -128,10 +128,10 @@ public class MecanumDriveController
             stopDriveMotors();
         }
 
-        motorFL.setPower(FL*1.03);
+        motorFL.setPower(FL*.95);
         motorBL.setPower(BL);
         motorFR.setPower(FR);
-        motorBR.setPower(BR*0.95);
+        motorBR.setPower(BR*1.03);
     }
 
     public void resetEncoders()
