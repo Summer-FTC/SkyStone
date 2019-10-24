@@ -93,7 +93,7 @@ public class MecanumDriveController
         double BR = 0.0;
 
         // change tolerance, maybe make stop method so that brakes as approaching zero speed
-        if (((Math.abs(Math.hypot(strafe, forward))) > 0.2) ||
+        if (((Math.abs(Math.hypot(strafe, forward))) > 0.1) ||
                 Math.abs(Math.atan2(forward, strafe) - Math.PI / 4) > .1) {
 
             // r can be sqrt(2)/2
@@ -144,6 +144,12 @@ public class MecanumDriveController
         {
             m.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
+    }
+
+    public double getEncoderTicks() {
+        double ticks = motorBL.getCurrentPosition();
+        telemetry.addData("encoderBL", ticks);
+        return ticks;
     }
 
     public void runToPosition()

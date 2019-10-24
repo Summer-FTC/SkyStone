@@ -6,8 +6,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Autonomous
 public class FoundationLinearOpMode extends BaseLinearOpMode
 {
-
-    FoundationHookController found = new FoundationHookController();
+    @Override
+    public void initialize() {
+        super.initialize();
+    }
 
     ElapsedTime eTime;
     protected ElapsedTime time = new ElapsedTime();
@@ -15,7 +17,8 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
     @Override
     public void runOpMode() throws InterruptedException
     {
-
+        moveForward(0, 0.5, 4000);
+        // 1440 ticks for 100 mm/3.937 inches
     }
 
     public void moveToFoundation()
@@ -30,9 +33,9 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
     public void pullFoundation()
     {
-        found.extendHooks();
+        //found.extendHooks();
         // hook on and pull back
-        found.retractHooks();
+        //found.retractHooks();
     }
 
     public void park() {

@@ -13,10 +13,13 @@ public class SkystoneLinearOpMode extends BaseLinearOpMode
     protected VuforiaLocalizer vuforia;
     protected TFObjectDetector tfod;
 
-    OutputController output = new OutputController();
-
     ElapsedTime eTime;
     protected ElapsedTime time = new ElapsedTime();
+
+    @Override
+    public void initialize() {
+        super.initialize();
+    }
 
     @Override
     public void runOpMode() throws InterruptedException
