@@ -73,6 +73,16 @@ public class MecanumDriveController
         {
             m.setPower(0);
         }
+
+
+        public void setHaltModeCoast(boolean coastModeOn = true){
+        DcMotor.ZeroPowerBehavior behavior;
+        if(coastModeOn)behavior = DcMotor.ZeroPowerBehavior.FLOAT;
+        else behavior = DcMotor.ZeroPowerBehavior.BRAKE;
+    }
+
+
+
     }
 
     public void arcadeDrive(double forward, double strafe, double rotate)

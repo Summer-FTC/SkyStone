@@ -9,8 +9,6 @@ public class FoundationHookController
 {
     public Servo leftHook;
     public Servo rightHook;
-    public Servo servoHookL;
-    public Servo servoHookR;
 
     HardwareMap hwMap = null;
     Telemetry telemetry = null;
