@@ -19,10 +19,8 @@ public class VenomRobot
     IntakeController intake;
 
 
-
-    public VenomRobot(MecanumDriveController drive)
+    public VenomRobot()
     {
-        this.driveTrain = drive;
     }
 
 
@@ -32,6 +30,9 @@ public class VenomRobot
         this.telemetry = telemetry;
         this.isAuto = isAuto;
 
+        telemetry.addData("Robot initialized", "");
+        telemetry.update();
+        driveTrain = new MecanumDriveController();
         driveTrain.init(hwMap, telemetry);
 
         imu = new IMU(hwMap.get(BNO055IMU.class, "imu"));

@@ -8,6 +8,8 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 {
     @Override
     public void initialize() {
+        telemetry.addData("Before initializing?", "");
+        telemetry.update();
         super.initialize();
     }
 
