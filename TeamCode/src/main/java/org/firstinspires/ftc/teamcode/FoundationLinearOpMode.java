@@ -3,13 +3,11 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous
+@Autonomous(name = "FoundationLinearOpMode", group = "6209")
 public class FoundationLinearOpMode extends BaseLinearOpMode
 {
     @Override
     public void initialize() {
-        telemetry.addData("Before initializing?", "");
-        telemetry.update();
         super.initialize();
     }
 
@@ -19,6 +17,7 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
     @Override
     public void runOpMode() throws InterruptedException
     {
+        initialize();
         telemetry.addData("Before moving", "");
         telemetry.update();
         moveForward(0, 0.5, 3000);

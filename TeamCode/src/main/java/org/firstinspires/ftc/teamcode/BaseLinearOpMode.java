@@ -4,11 +4,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 public abstract class BaseLinearOpMode extends LinearOpMode
 {
-    VenomRobot robot;
+    VenomRobot robot = new VenomRobot();
+    double newPower;
 
     public void initialize()
     {
-        robot = new VenomRobot();
         robot.init(hardwareMap, telemetry, true);
         telemetry.addData("Super initialized", "");
         telemetry.update();
@@ -37,9 +37,10 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     public void moveForward(double angle, double power, double encoderTicks)
     {
         robot.driveTrain.resetEncoders();
+        telemetry.addData("Encoder value: ", robot.getEncoderTicks() + "");
         while (robot.getEncoderTicks() < encoderTicks && opModeIsActive())
         {
-            double newPower = power * ((encoderTicks - robot.getEncoderTicks())/encoderTicks);
+            newPower = power * ((encoderTicks - robot.getEncoderTicks())/encoderTicks);
             double PIDchange = PID(angle);
 
             if (newPower < 0.1)
@@ -64,7 +65,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         while (robot.getEncoderTicks() < encoderTicks && opModeIsActive())
         {
             // try to change to scale down at the end
-            double newPower = power * ((encoderTicks - robot.getEncoderTicks())/encoderTicks);
+            newPower = power * ((encoderTicks - robot.getEncoderTicks())/encoderTicks);
             double PIDchange = PID(angle);
 
             if (newPower < 0.1)
@@ -86,7 +87,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         robot.driveTrain.resetEncoders();
         while (robot.getEncoderTicks() < encoderTicks && opModeIsActive())
         {
-            double newPower = power * ((encoderTicks - robot.getEncoderTicks())/encoderTicks);
+            newPower = power * ((encoderTicks - robot.getEncoderTicks())/encoderTicks);
             double PIDchange = PID(angle);
 
             if (newPower < 0.1)
@@ -109,7 +110,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         robot.driveTrain.resetEncoders();
         while (robot.getEncoderTicks() < encoderTicks && opModeIsActive())
         {
-            double newPower = power * ((encoderTicks - robot.getEncoderTicks())/encoderTicks);
+            newPower = power * ((encoderTicks - robot.getEncoderTicks())/encoderTicks);
             double PIDchange = PID(angle);
 
             if (newPower < 0.1)

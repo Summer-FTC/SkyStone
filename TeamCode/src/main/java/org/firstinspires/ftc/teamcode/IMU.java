@@ -109,7 +109,7 @@ public class IMU extends LinearOpMode
     public double getTrueDiff(double origAngle)
     {
         double currAngle = getYaw();
-        if (currAngle >= 0 && origAngle >= 0 || currAngle <= 0 && origAngle <= 0)
+        if (((currAngle >= 0) && (origAngle >= 0) )|| ((currAngle <= 0) && (origAngle <= 0)))
             return currAngle - origAngle;
         else if (Math.abs(currAngle - origAngle) <= 180)
             return currAngle - origAngle;

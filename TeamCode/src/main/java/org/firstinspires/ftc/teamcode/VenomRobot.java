@@ -32,6 +32,7 @@ public class VenomRobot
 
         telemetry.addData("Robot initialized", "");
         telemetry.update();
+
         driveTrain = new MecanumDriveController();
         driveTrain.init(hwMap, telemetry);
 

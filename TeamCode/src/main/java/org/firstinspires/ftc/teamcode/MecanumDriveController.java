@@ -59,7 +59,7 @@ public class MecanumDriveController
         telemetry.addData("Motor Initialization Complete", "");
     }
 
-    public void setPowers(int power)
+    public void setPowers(double power)
     {
         for (DcMotor m : motors)
         {
@@ -146,10 +146,10 @@ public class MecanumDriveController
 
     public void resetEncoders()
     {
-        for(DcMotor m : motors)
-        {
-            m.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        }
+        motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
 

@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 @TeleOp(name = "VenomTeleOp", group = "6209")
 public class VenomTeleOp extends OpMode
 {
-    VenomRobot robot = new VenomRobot(new MecanumDriveController());
+    VenomRobot robot = new VenomRobot();
     double intakePower = 1;
 
     @Override
