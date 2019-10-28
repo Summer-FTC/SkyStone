@@ -48,6 +48,7 @@ public class VenomTeleOp extends OpMode
 
 
         robot.driveTrain.arcadeDrive(forward, strafe, rotate);
+        robot.driveTrain.arcadeDrive(forward, strafe, rotate);
 
 
 

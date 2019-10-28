@@ -9,7 +9,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     public void initialize()
     {
         MecanumDriveController drive = new MecanumDriveController("red");
-        VenomRobot robot = new VenomRobot(drive);
+        robot = new VenomRobot(drive);
         robot.init(hardwareMap, telemetry, true);
     }
 

@@ -67,14 +67,13 @@ public class MecanumDriveController
         }
     }
 
-    public void stopDriveMotors()
-    {
-        for(DcMotor m : motors)
-        {
+    public void stopDriveMotors() {
+        for (DcMotor m : motors) {
             m.setPower(0);
         }
 
     }
+
 
 //        public void setHaltModeCoast(boolean coastModeOn = true){
 //        DcMotor.ZeroPowerBehavior behavior;
@@ -82,6 +81,22 @@ public class MecanumDriveController
 //        else behavior = DcMotor.ZeroPowerBehavior.BRAKE;
 //    }
 //
+
+
+    public void setHaltModeCoast(boolean coastModeOn){
+        DcMotor.ZeroPowerBehavior behavior;
+        if(coastModeOn) {
+            behavior = DcMotor.ZeroPowerBehavior.FLOAT;
+        }
+        else {
+            behavior = DcMotor.ZeroPowerBehavior.BRAKE;
+        }
+
+        for (DcMotor m : motors) {
+            m.setZeroPowerBehavior(behavior);
+        }
+    }
+
 
 
     public void arcadeDrive(double forward, double strafe, double rotate)
@@ -119,13 +134,14 @@ public class MecanumDriveController
 
         else
         {
+            // setHaltModeCoast(false);
             stopDriveMotors();
         }
 
-        motorFL.setPower(FL);
+        motorFL.setPower(FL*.95);
         motorBL.setPower(BL);
         motorFR.setPower(FR);
-        motorBR.setPower(BR);
+        motorBR.setPower(BR*1.03);
     }
 
     public void resetEncoders()
