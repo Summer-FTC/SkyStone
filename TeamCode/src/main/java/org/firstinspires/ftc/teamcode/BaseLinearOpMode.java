@@ -7,6 +7,8 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 {
     VenomRobot robot = new VenomRobot();
     double newPower;
+    DcMotor[] motors = new DcMotor[]{robot.driveTrain.motorFL, robot.driveTrain.motorFR,
+            robot.driveTrain.motorBR, robot.driveTrain.motorBL};
 
     public void initialize()
     {
@@ -35,11 +37,8 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
     public void moveForward(double angle, double power, double encoderTicks)
     {
-        DcMotor[] motors = new DcMotor[]{robot.driveTrain.motorFL, robot.driveTrain.motorFR,
-                robot.driveTrain.motorBR, robot.driveTrain.motorBL};
-
         robot.driveTrain.resetEncoders();
-        robot.driveTrain.run();
+        robot.driveTrain.runWithoutEncoders();
 
         boolean active = true;
 
@@ -53,7 +52,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                 if (m.getCurrentPosition() < encoderTicks) {
                     message.append("Setting power to " + power + " since m.getCurrentPosition()=" + m.getCurrentPosition() + " encoderTicks=" + encoderTicks + "\n");
                     m.setPower(power);
-                    sleep(5000);
+                    sleep(50);
 
                     active = true;
                 }
@@ -73,8 +72,8 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         robot.log("Loop is done.");
 
         // Why reset here?
-        robot.driveTrain.run();
         robot.driveTrain.resetEncoders();
+        robot.driveTrain.runWithoutEncoders();
     }
 
     // Old moveForward method:
@@ -112,7 +111,48 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     public void moveBackward(double angle, double power, double encoderTicks)
     {
         robot.driveTrain.resetEncoders();
-        robot.driveTrain.run();
+        robot.driveTrain.runWithoutEncoders();
+
+        boolean active = true;
+
+        robot.log("Starting loop.");
+
+        while (active && opModeIsActive()){
+            active = false;
+            StringBuilder message = new StringBuilder();
+
+            for(DcMotor m : motors) {
+                if (m.getCurrentPosition() < encoderTicks) {
+                    message.append("Setting power to " + power + " since m.getCurrentPosition()=" + m.getCurrentPosition() + " encoderTicks=" + encoderTicks + "\n");
+                    m.setPower(-power);
+                    sleep(50);
+
+                    active = true;
+                }
+                else {
+                    m.setPower(0);
+                }
+            }
+            robot.log(message.toString());
+
+            try {
+                Thread.sleep(100);
+
+            } catch (Exception e) {
+            }
+        }
+
+        robot.log("Loop is done.");
+
+        // Why reset here?
+        robot.driveTrain.resetEncoders();
+        robot.driveTrain.runWithoutEncoders();
+    }
+
+    /**public void moveBackward(double angle, double power, double encoderTicks)
+    {
+        robot.driveTrain.resetEncoders();
+        robot.driveTrain.runWithoutEncoders();
         while (robot.driveTrain.getEncoderTicks() < encoderTicks && opModeIsActive())
         {
             // try to change to scale down at the end
@@ -131,12 +171,13 @@ public abstract class BaseLinearOpMode extends LinearOpMode
             robot.setMotorFR(-PIDchange - newPower);
         }
     }
+     **/
 
     // pass in current angle as the parameter
     public void strafeRight(double angle, double power, double encoderTicks)
     {
         robot.driveTrain.resetEncoders();
-        robot.driveTrain.run();
+        robot.driveTrain.runWithoutEncoders();
         while (robot.driveTrain.getEncoderTicks() < encoderTicks && opModeIsActive())
         {
             newPower = power * ((encoderTicks - robot.driveTrain.getEncoderTicks())/encoderTicks);
@@ -160,7 +201,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     public void strafeLeft(double angle, double power, double encoderTicks)
     {
         robot.driveTrain.resetEncoders();
-        robot.driveTrain.run();
+        robot.driveTrain.runWithoutEncoders();
         while (robot.driveTrain.getEncoderTicks() < encoderTicks && opModeIsActive())
         {
             newPower = power * ((encoderTicks - robot.driveTrain.getEncoderTicks())/encoderTicks);
