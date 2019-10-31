@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 public abstract class BaseLinearOpMode extends LinearOpMode
 {
@@ -13,7 +14,6 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         telemetry.addData("Super initialized", "");
         telemetry.update();
     }
-
 
     // add time out later?
     public double PID(double angle)
@@ -33,16 +33,61 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         return PIDchange;
     }
 
-
     public void moveForward(double angle, double power, double encoderTicks)
     {
-        telemetry.addData("Encoder value: ", robot.getEncoderTicks() + "");
-        //robot.driveTrain.resetEncoders();
-        telemetry.addData("Encoder value: ", robot.getEncoderTicks() + "");
-        while (robot.getEncoderTicks() < encoderTicks && opModeIsActive())
+        DcMotor[] motors = new DcMotor[]{robot.driveTrain.motorFL, robot.driveTrain.motorFR,
+                robot.driveTrain.motorBR, robot.driveTrain.motorBL};
+
+        robot.driveTrain.resetEncoders();
+        robot.driveTrain.run();
+
+        boolean active = true;
+
+        robot.log("Starting loop.");
+
+        while (active && opModeIsActive()){
+            active = false;
+            StringBuilder message = new StringBuilder();
+
+            for(DcMotor m : motors) {
+                if (m.getCurrentPosition() < encoderTicks) {
+                    message.append("Setting power to " + power + " since m.getCurrentPosition()=" + m.getCurrentPosition() + " encoderTicks=" + encoderTicks + "\n");
+                    m.setPower(power);
+                    sleep(5000);
+
+                    active = true;
+                }
+                else {
+                    m.setPower(0);
+                }
+            }
+            robot.log(message.toString());
+
+            try {
+                Thread.sleep(100);
+
+            } catch (Exception e) {
+            }
+        }
+
+        robot.log("Loop is done.");
+
+        // Why reset here?
+        robot.driveTrain.run();
+        robot.driveTrain.resetEncoders();
+    }
+
+    // Old moveForward method:
+    /** public void moveForward(double angle, double power, double encoderTicks)
+    {
+        telemetry.addData("Encoder value: ", robot.driveTrain.getEncoderTicks() + "");
+        robot.driveTrain.resetEncoders();
+        robot.driveTrain.run();
+        telemetry.addData("Encoder value: ", robot.driveTrain.getEncoderTicks() + "");
+        while (robot.driveTrain.getEncoderTicks() < encoderTicks && opModeIsActive())
         {
             // change: scale down only last 1000 ticks
-            newPower = power * ((encoderTicks - robot.getEncoderTicks())/encoderTicks);
+            newPower = power * ((encoderTicks - robot.driveTrain.getEncoderTicks())/encoderTicks);
             double PIDchange = PID(angle);
 
             if (newPower < 0.1)
@@ -58,18 +103,20 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
             robot.setMotorBL(PIDchange + newPower);
             robot.setMotorBR(-PIDchange + newPower);
-             robot.setMotorFL(PIDchange + newPower);
+            robot.setMotorFL(PIDchange + newPower);
             robot.setMotorFR(-PIDchange + newPower);
         }
     }
+     **/
 
     public void moveBackward(double angle, double power, double encoderTicks)
     {
-        // robot.driveTrain.resetEncoders();
-        while (robot.getEncoderTicks() < encoderTicks && opModeIsActive())
+        robot.driveTrain.resetEncoders();
+        robot.driveTrain.run();
+        while (robot.driveTrain.getEncoderTicks() < encoderTicks && opModeIsActive())
         {
             // try to change to scale down at the end
-            newPower = power * ((encoderTicks - robot.getEncoderTicks())/encoderTicks);
+            newPower = power * ((encoderTicks - robot.driveTrain.getEncoderTicks())/encoderTicks);
             double PIDchange = PID(angle);
 
             if (newPower < 0.1)
@@ -88,10 +135,11 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     // pass in current angle as the parameter
     public void strafeRight(double angle, double power, double encoderTicks)
     {
-        //robot.driveTrain.resetEncoders();
-        while (robot.getEncoderTicks() < encoderTicks && opModeIsActive())
+        robot.driveTrain.resetEncoders();
+        robot.driveTrain.run();
+        while (robot.driveTrain.getEncoderTicks() < encoderTicks && opModeIsActive())
         {
-            newPower = power * ((encoderTicks - robot.getEncoderTicks())/encoderTicks);
+            newPower = power * ((encoderTicks - robot.driveTrain.getEncoderTicks())/encoderTicks);
             double PIDchange = PID(angle);
 
             if (newPower < 0.1)
@@ -101,8 +149,8 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
             // TODO: figure out + and -
             // Test
-            robot.setMotorBL(-PIDchange - newPower);
-            robot.setMotorBR(PIDchange + newPower);
+            robot.setMotorBL(PIDchange - newPower);
+            robot.setMotorBR(-PIDchange + newPower);
             robot.setMotorFL(PIDchange + newPower);
             robot.setMotorFR(-PIDchange - newPower);
 
@@ -111,10 +159,11 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
     public void strafeLeft(double angle, double power, double encoderTicks)
     {
-        //robot.driveTrain.resetEncoders();
-        while (robot.getEncoderTicks() < encoderTicks && opModeIsActive())
+        robot.driveTrain.resetEncoders();
+        robot.driveTrain.run();
+        while (robot.driveTrain.getEncoderTicks() < encoderTicks && opModeIsActive())
         {
-            newPower = power * ((encoderTicks - robot.getEncoderTicks())/encoderTicks);
+            newPower = power * ((encoderTicks - robot.driveTrain.getEncoderTicks())/encoderTicks);
             double PIDchange = PID(angle);
 
             if (newPower < 0.1)

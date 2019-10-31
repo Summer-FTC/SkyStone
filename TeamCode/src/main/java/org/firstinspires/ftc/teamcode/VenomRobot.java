@@ -70,17 +70,9 @@ public class VenomRobot
         driveTrain.motorBR.setPower(power);
     }
 
-    // TODO: FIX
-    public double getEncoderTicks()
+    public void log(String message)
     {
-        double avg = 0.0;
-        avg += driveTrain.motorFL.getCurrentPosition();
-        avg += driveTrain.motorFR.getCurrentPosition();
-        avg += driveTrain.motorBL.getCurrentPosition();
-        avg += driveTrain.motorBR.getCurrentPosition();
-        avg /= 4;
-
-        return avg;
+        telemetry.addData(message, "");
+        telemetry.update();
     }
-
 }

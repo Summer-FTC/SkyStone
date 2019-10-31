@@ -6,8 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class MecanumDriveController
-{
+public class MecanumDriveController {
     DcMotor motorFR;
     DcMotor motorFL;
     DcMotor motorBR;
@@ -19,18 +18,16 @@ public class MecanumDriveController
 
     public DcMotor[] motors = null;
 
-    public MecanumDriveController()
-    {
+    public MecanumDriveController() {
         // default to red i guess
         this.color = "red";
     }
-    public MecanumDriveController(String color)
-    {
-       this.color = color;
+
+    public MecanumDriveController(String color) {
+        this.color = color;
     }
 
-    public void init(HardwareMap hwMap, Telemetry telemetry)
-    {
+    public void init(HardwareMap hwMap, Telemetry telemetry) {
         this.hwMap = hwMap;
         this.telemetry = telemetry;
 
@@ -41,15 +38,8 @@ public class MecanumDriveController
 
         motors = new DcMotor[]{motorFL, motorBL, motorBR, motorFR};
 
-        motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        motorBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        resetEncoders();
+        run();
 
         motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -59,10 +49,8 @@ public class MecanumDriveController
         telemetry.addData("Motor Initialization Complete", "");
     }
 
-    public void setPowers(double power)
-    {
-        for (DcMotor m : motors)
-        {
+    public void setPowers(double power) {
+        for (DcMotor m : motors) {
             m.setPower(power);
         }
     }
@@ -83,12 +71,11 @@ public class MecanumDriveController
 //
 
 
-    public void setHaltModeCoast(boolean coastModeOn){
+    public void setHaltModeCoast(boolean coastModeOn) {
         DcMotor.ZeroPowerBehavior behavior;
-        if(coastModeOn) {
+        if (coastModeOn) {
             behavior = DcMotor.ZeroPowerBehavior.FLOAT;
-        }
-        else {
+        } else {
             behavior = DcMotor.ZeroPowerBehavior.BRAKE;
         }
 
@@ -98,9 +85,7 @@ public class MecanumDriveController
     }
 
 
-
-    public void arcadeDrive(double forward, double strafe, double rotate)
-    {
+    public void arcadeDrive(double forward, double strafe, double rotate) {
         double FL = 0.0;
         double FR = 0.0;
         double BL = 0.0;
@@ -130,10 +115,7 @@ public class MecanumDriveController
                 FR /= Math.max(Math.max(Math.abs(FL), Math.abs(FR)), Math.max(Math.abs(BL), Math.abs(BR)));
                 BR /= Math.max(Math.max(Math.abs(FL), Math.abs(FR)), Math.max(Math.abs(BL), Math.abs(BR)));
             }
-        }
-
-        else
-        {
+        } else {
             // setHaltModeCoast(false);
             stopDriveMotors();
         }
@@ -144,36 +126,42 @@ public class MecanumDriveController
         motorBR.setPower(BR);
     }
 
-    public void resetEncoders()
-    {
+    public void resetEncoders() {
         motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
+    public void run() {
+        motorBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
 
-    public void runUsingEncoders()
-    {
-        for (DcMotor m : motors)
-        {
+
+    public void runUsingEncoders() {
+        for (DcMotor m : motors) {
             m.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
 
-    public double getEncoderTicks() {
-        double ticks = motorBL.getCurrentPosition();
-        telemetry.addData("encoderBL", ticks);
-        return ticks;
-    }
-
-    public void runToPosition()
-    {
-        for (DcMotor m : motors)
-        {
+    public void runToPosition() {
+        for (DcMotor m : motors) {
             m.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
     }
 
+    public double getEncoderTicks() {
+        double avg = 0.0;
+        avg += motorFL.getCurrentPosition();
+        avg += motorFR.getCurrentPosition();
+        avg += motorBL.getCurrentPosition();
+        avg += motorBR.getCurrentPosition();
+        avg /= 4;
+
+        return avg;
+    }
 }
 
