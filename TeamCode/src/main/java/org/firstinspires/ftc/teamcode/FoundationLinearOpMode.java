@@ -19,9 +19,13 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
     {
         initialize();
         telemetry.addData("Before moving", "");
-        moveForward(0, 0.5, 3000);
+      //  moveForward(0, 0.1, 3000);
+      //  moveBackward(0, 0.1, 1500);
+        moveForwardWithEncoders(0, 0.5, 3000);
+
+
         // strafeLeft(0, 0.5, 6000);
-        moveBackward(0, 0.5, 3000);
+        // moveBackward(0, 0.5, 3000);
 
         // strafeRight(0, 0.5, 12000);
         // 1440 ticks for 100 mm/3.937 inches

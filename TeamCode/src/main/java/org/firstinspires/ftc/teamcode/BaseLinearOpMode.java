@@ -7,8 +7,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 {
     VenomRobot robot = new VenomRobot();
     double newPower;
-    DcMotor[] motors = new DcMotor[]{robot.driveTrain.motorFL, robot.driveTrain.motorFR,
-            robot.driveTrain.motorBR, robot.driveTrain.motorBL};
+
 
     public void initialize()
     {
@@ -35,6 +34,63 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         return PIDchange;
     }
 
+    public void moveBackward(double angle, double power, double encoderTicks)
+    {
+        moveForward(angle, -power, -encoderTicks);
+    }
+
+
+
+    public void moveForwardWithEncoders(double angle, double power, double encoderTicks)
+    {
+        robot.driveTrain.resetEncoders();
+       // robot.driveTrain.runWithoutEncoders();
+        robot.driveTrain.runUsingEncoders();
+
+        boolean active = true;
+
+        robot.log("Starting loop.");
+
+        for (DcMotor m : robot.driveTrain.motors)
+        {
+            m.setTargetPosition((int)encoderTicks);
+            m.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            m.setPower(power);
+        }
+
+        while (active && opModeIsActive())
+        {
+            active = false;
+            StringBuilder message = new StringBuilder();
+
+            for(DcMotor m : robot.driveTrain.motors)
+            {
+                if(m.isBusy())
+                {
+                    active = true;
+                }
+
+                if (((encoderTicks < 0) && (m.getCurrentPosition() > encoderTicks)) ||
+                        ((encoderTicks > 0) && (m.getCurrentPosition() < encoderTicks))) {
+                    message.append("Setting power to " + power + " since m.getCurrentPosition()=" + m.getCurrentPosition() + " encoderTicks=" + encoderTicks + "\n");
+
+                    active = true;
+                }
+
+                else {
+                    m.setPower(0);
+                }
+
+            }
+            robot.log(message.toString());
+        }
+
+        robot.log("Loop is done.");
+
+        // Why reset here?
+        robot.driveTrain.resetEncoders();
+        robot.driveTrain.runWithoutEncoders();
+    }
     public void moveForward(double angle, double power, double encoderTicks)
     {
         robot.driveTrain.resetEncoders();
@@ -48,25 +104,22 @@ public abstract class BaseLinearOpMode extends LinearOpMode
             active = false;
             StringBuilder message = new StringBuilder();
 
-            for(DcMotor m : motors) {
-                if (m.getCurrentPosition() < encoderTicks) {
+            for(DcMotor m : robot.driveTrain.motors) {
+                if (((encoderTicks < 0) && (m.getCurrentPosition() > encoderTicks)) ||
+                        ((encoderTicks > 0) && (m.getCurrentPosition() < encoderTicks))) {
                     message.append("Setting power to " + power + " since m.getCurrentPosition()=" + m.getCurrentPosition() + " encoderTicks=" + encoderTicks + "\n");
                     m.setPower(power);
-                    sleep(50);
 
                     active = true;
+                 //   sleep(50);
+
                 }
                 else {
                     m.setPower(0);
                 }
+
             }
             robot.log(message.toString());
-
-            try {
-                Thread.sleep(100);
-
-            } catch (Exception e) {
-            }
         }
 
         robot.log("Loop is done.");
@@ -108,46 +161,46 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     }
      **/
 
-    public void moveBackward(double angle, double power, double encoderTicks)
-    {
-        robot.driveTrain.resetEncoders();
-        robot.driveTrain.runWithoutEncoders();
-
-        boolean active = true;
-
-        robot.log("Starting loop.");
-
-        while (active && opModeIsActive()){
-            active = false;
-            StringBuilder message = new StringBuilder();
-
-            for(DcMotor m : motors) {
-                if (m.getCurrentPosition() < encoderTicks) {
-                    message.append("Setting power to " + power + " since m.getCurrentPosition()=" + m.getCurrentPosition() + " encoderTicks=" + encoderTicks + "\n");
-                    m.setPower(-power);
-                    sleep(50);
-
-                    active = true;
-                }
-                else {
-                    m.setPower(0);
-                }
-            }
-            robot.log(message.toString());
-
-            try {
-                Thread.sleep(100);
-
-            } catch (Exception e) {
-            }
-        }
-
-        robot.log("Loop is done.");
-
-        // Why reset here?
-        robot.driveTrain.resetEncoders();
-        robot.driveTrain.runWithoutEncoders();
-    }
+//    public void moveBackward(double angle, double power, double encoderTicks)
+//    {
+//        robot.driveTrain.resetEncoders();
+//        robot.driveTrain.runWithoutEncoders();
+//
+//        boolean active = true;
+//
+//        robot.log("Starting loop.");
+//
+//        while (active && opModeIsActive()){
+//            active = false;
+//            StringBuilder message = new StringBuilder();
+//
+//            for(DcMotor m : robot.driveTrain.motors) {
+//                if (m.getCurrentPosition() < encoderTicks) {
+//                    message.append("Setting power to " + power + " since m.getCurrentPosition()=" + m.getCurrentPosition() + " encoderTicks=" + encoderTicks + "\n");
+//                    m.setPower(-power);
+//                    sleep(50);
+//
+//                    active = true;
+//                }
+//                else {
+//                    m.setPower(0);
+//                }
+//            }
+//            robot.log(message.toString());
+//
+//            try {
+//                Thread.sleep(100);
+//
+//            } catch (Exception e) {
+//            }
+//        }
+//
+//        robot.log("Loop is done.");
+//
+//        // Why reset here?
+//        robot.driveTrain.resetEncoders();
+//        robot.driveTrain.runWithoutEncoders();
+//    }
 
     /**public void moveBackward(double angle, double power, double encoderTicks)
     {
@@ -188,25 +241,23 @@ public abstract class BaseLinearOpMode extends LinearOpMode
             StringBuilder message = new StringBuilder();
 
             // change for strafeRight
-            for(DcMotor m : motors) {
+            for(DcMotor m : robot.driveTrain.motors) {
                 if (m.getCurrentPosition() < encoderTicks) {
                     message.append("Setting power to " + power + " since m.getCurrentPosition()=" + m.getCurrentPosition() + " encoderTicks=" + encoderTicks + "\n");
                     m.setPower(-power);
-                    sleep(50);
 
                     active = true;
                 }
                 else {
                     m.setPower(0);
                 }
+
             }
+
+            sleep(50);
+
             robot.log(message.toString());
 
-            try {
-                Thread.sleep(100);
-
-            } catch (Exception e) {
-            }
         }
 
         robot.log("Loop is done.");
@@ -256,7 +307,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
             StringBuilder message = new StringBuilder();
 
             // change for strafeLeft
-            for(DcMotor m : motors) {
+            for(DcMotor m : robot.driveTrain.motors) {
                 if (m.getCurrentPosition() < encoderTicks) {
                     message.append("Setting power to " + power + " since m.getCurrentPosition()=" + m.getCurrentPosition() + " encoderTicks=" + encoderTicks + "\n");
                     m.setPower(-power);
