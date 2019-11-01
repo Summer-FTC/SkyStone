@@ -22,7 +22,7 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
       //  moveForward(0, 0.1, 3000);
       //  moveBackward(0, 0.1, 1500);
         moveForwardWithEncoders(0, 0.5, 3000);
-
+        moveBackwardWithEncoders(0, 0.5, 1500);
 
         // strafeLeft(0, 0.5, 6000);
         // moveBackward(0, 0.5, 3000);

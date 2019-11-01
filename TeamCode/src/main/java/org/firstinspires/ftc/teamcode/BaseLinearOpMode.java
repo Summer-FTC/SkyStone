@@ -37,9 +37,13 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     public void moveBackward(double angle, double power, double encoderTicks)
     {
         moveForward(angle, -power, -encoderTicks);
+
     }
 
-
+    public void moveBackwardWithEncoders(double angle, double power, double encoderTicks)
+    {
+        moveForwardWithEncoders(angle, -power, -encoderTicks);
+    }
 
     public void moveForwardWithEncoders(double angle, double power, double encoderTicks)
     {
@@ -55,26 +59,27 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         {
             m.setTargetPosition((int)encoderTicks);
             m.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            m.setPower(power);
+            m.setPower(Math.abs(power));
         }
 
         while (active && opModeIsActive())
         {
-            active = false;
+//            active = false;
             StringBuilder message = new StringBuilder();
 
+            active = true;
             for(DcMotor m : robot.driveTrain.motors)
             {
-                if(m.isBusy())
+                if (m.isBusy())
                 {
-                    active = true;
+                    active = false;
                 }
 
                 if (((encoderTicks < 0) && (m.getCurrentPosition() > encoderTicks)) ||
                         ((encoderTicks > 0) && (m.getCurrentPosition() < encoderTicks))) {
                     message.append("Setting power to " + power + " since m.getCurrentPosition()=" + m.getCurrentPosition() + " encoderTicks=" + encoderTicks + "\n");
 
-                    active = true;
+//                    active = true;
                 }
 
                 else {
@@ -91,6 +96,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         robot.driveTrain.resetEncoders();
         robot.driveTrain.runWithoutEncoders();
     }
+
     public void moveForward(double angle, double power, double encoderTicks)
     {
         robot.driveTrain.resetEncoders();

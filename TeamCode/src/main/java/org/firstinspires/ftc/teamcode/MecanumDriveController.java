@@ -44,7 +44,7 @@ public class MecanumDriveController {
         motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        stopDriveMotors();
+//        stopDriveMotors();
 
         telemetry.addData("Motor Initialization Complete", "");
     }
