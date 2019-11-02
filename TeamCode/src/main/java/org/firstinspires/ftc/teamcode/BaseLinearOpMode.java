@@ -95,7 +95,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                 // Sometimes the motor is not busy at the very start.
                 // If any motor is not busy and we have covered half of the distance, then
                 // we should stop.
-                if (!m.isBusy() && ticksRemaining < (encoderTicks / 2))
+                if (!m.isBusy() && ticksRemaining < Math.abs(encoderTicks / 2))
                 {
                     active = false;
                 }
@@ -115,7 +115,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                     }
                 }
 
-                message.append("etting power to " + power + " since m.getCurrentPosition()=" +
+                message.append("etting power to " + powerToSet + " since m.getCurrentPosition()=" +
                         m.getCurrentPosition() + " encoderTicks=" + encoderTicks + "\n");
 
                 m.setPower(powerToSet);
