@@ -18,16 +18,17 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
     public void runOpMode() throws InterruptedException
     {
         initialize();
+
+        waitForStart();
+
         telemetry.addData("Before moving", "");
-      //  moveForward(0, 0.1, 3000);
-      //  moveBackward(0, 0.1, 1500);
-        moveForwardWithEncoders(0, 0.5, 3000);
-        moveBackwardWithEncoders(0, 0.5, 1500);
 
-        // strafeLeft(0, 0.5, 6000);
-        // moveBackward(0, 0.5, 3000);
+        moveForwardWithEncoders(1.0, 3000);
+        moveBackwardWithEncoders(1.0, 1500);
 
-        // strafeRight(0, 0.5, 12000);
+        moveForwardWithEncoders(0.5, 1500);
+        moveBackwardWithEncoders(0.5, 3000);
+
         // 1440 ticks for 100 mm/3.937 inches
         telemetry.addData("After moving", "");
         telemetry.update();

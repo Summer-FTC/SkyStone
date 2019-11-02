@@ -27,9 +27,22 @@ public class MecanumDriveController {
         this.color = color;
     }
 
+
+    public void log(String message)
+    {
+        if (telemetry != null)
+        {
+            telemetry.addData(message, "");
+            telemetry.update();
+        }
+    }
+
     public void init(HardwareMap hwMap, Telemetry telemetry) {
         this.hwMap = hwMap;
         this.telemetry = telemetry;
+
+        log("MecanumDriveController::init");
+
 
         motorFR = hwMap.dcMotor.get("motorFR");
         motorFL = hwMap.dcMotor.get("motorFL");
@@ -46,7 +59,7 @@ public class MecanumDriveController {
 
 //        stopDriveMotors();
 
-        telemetry.addData("Motor Initialization Complete", "");
+        log("Motor Initialization Complete");
     }
 
     public void setPowers(double power) {
@@ -127,6 +140,7 @@ public class MecanumDriveController {
     }
 
     public void resetEncoders() {
+        log("Resetting encoders");
 
         for (DcMotor m : motors) {
             m.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -134,6 +148,7 @@ public class MecanumDriveController {
     }
 
     public void runWithoutEncoders() {
+        log("Run without encoders");
 
         for (DcMotor m : motors) {
             m.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -142,6 +157,8 @@ public class MecanumDriveController {
 
 
     public void runUsingEncoders() {
+        log("Run using encoders");
+
         for (DcMotor m : motors) {
             m.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }

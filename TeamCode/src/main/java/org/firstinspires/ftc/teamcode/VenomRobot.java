@@ -30,8 +30,7 @@ public class VenomRobot
         this.telemetry = telemetry;
         this.isAuto = isAuto;
 
-        telemetry.addData("Robot initialized", "");
-        telemetry.update();
+        log("VenomRobot::init");
 
         driveTrain = new MecanumDriveController();
         driveTrain.init(hwMap, telemetry);
@@ -72,7 +71,10 @@ public class VenomRobot
 
     public void log(String message)
     {
-        telemetry.addData(message, "");
-        telemetry.update();
+        if (telemetry != null)
+        {
+            telemetry.addData(message, "");
+            telemetry.update();
+        }
     }
 }

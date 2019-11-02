@@ -9,11 +9,20 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     double newPower;
 
 
+    public void log(String message)
+    {
+        if (telemetry != null)
+        {
+            telemetry.addData(message, "");
+            telemetry.update();
+        }
+    }
+
     public void initialize()
     {
         robot.init(hardwareMap, telemetry, true);
-        telemetry.addData("Super initialized", "");
-        telemetry.update();
+
+        log("BaseLinearOpMode::initialize complete");
     }
 
     // add time out later?
@@ -40,51 +49,76 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
     }
 
-    public void moveBackwardWithEncoders(double angle, double power, double encoderTicks)
+    public void moveBackwardWithEncoders(double power, double encoderTicks)
     {
-        moveForwardWithEncoders(angle, -power, -encoderTicks);
+        moveForwardWithEncoders(power, -encoderTicks);
     }
 
-    public void moveForwardWithEncoders(double angle, double power, double encoderTicks)
+    // TODO: Add a timeout.
+    public void moveForwardWithEncoders(double power, double encoderTicks)
     {
+        String direction = (encoderTicks > 0) ? "FORWARD" : "BACKWARD";
+        power = Math.abs(power);
+
         robot.driveTrain.resetEncoders();
-       // robot.driveTrain.runWithoutEncoders();
         robot.driveTrain.runUsingEncoders();
 
         boolean active = true;
 
-        robot.log("Starting loop.");
+        robot.log("Starting loop to move " + direction);
 
         for (DcMotor m : robot.driveTrain.motors)
         {
             m.setTargetPosition((int)encoderTicks);
             m.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            m.setPower(Math.abs(power));
+            m.setPower(power);
         }
 
         while (active && opModeIsActive())
         {
-//            active = false;
+            active = false;
             StringBuilder message = new StringBuilder();
+            message.append("Moving " + direction + "\n");
 
             active = true;
             for(DcMotor m : robot.driveTrain.motors)
             {
-                if (m.isBusy())
+//                if (m.isBusy())
+//                {
+//                    active = false;
+//                }
+                // Sometimes the motor is not busy right at the start, so assume we are
+                // busy if we haven't moved half of the encoder ticks.
+                // Stop when we get close.
+                double ticksRemaining = Math.abs(encoderTicks - m.getCurrentPosition());
+
+                // Sometimes the motor is not busy at the very start.
+                // If any motor is not busy and we have covered half of the distance, then
+                // we should stop.
+                if (!m.isBusy() && ticksRemaining < (encoderTicks / 2))
                 {
                     active = false;
                 }
 
+                double powerToSet = 0;
                 if (((encoderTicks < 0) && (m.getCurrentPosition() > encoderTicks)) ||
                         ((encoderTicks > 0) && (m.getCurrentPosition() < encoderTicks))) {
-                    message.append("Setting power to " + power + " since m.getCurrentPosition()=" + m.getCurrentPosition() + " encoderTicks=" + encoderTicks + "\n");
 
-//                    active = true;
+
+                    // Start slowing down when we are within this distance.
+                    int startScalingTicks = 500;
+                    if (ticksRemaining > startScalingTicks) {
+                        powerToSet = power;
+                    } else {
+                        powerToSet = Math.max(0.125,
+                                power * (ticksRemaining / startScalingTicks));
+                    }
                 }
 
-                else {
-                    m.setPower(0);
-                }
+                message.append("etting power to " + power + " since m.getCurrentPosition()=" +
+                        m.getCurrentPosition() + " encoderTicks=" + encoderTicks + "\n");
+
+                m.setPower(powerToSet);
 
             }
             robot.log(message.toString());
