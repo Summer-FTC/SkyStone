@@ -214,6 +214,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
     }
 
+    // positive is left, negative is right
     public void rotate(double degrees)
     {
         // Flip the direction of the encoders if degrees is negative.
@@ -230,6 +231,41 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
     }
 
+    public void strafeRightByInches(double power, int msTimeOut, double inches)
+    {
+        int encoderTicks = strafeInchtoEnc(inches);
+        strafeRightWithEncoders(power, msTimeOut, encoderTicks);
+    }
+
+    public void strafeLeftByInches(double power, int msTimeOut, double inches)
+    {
+        int encoderTicks = strafeInchtoEnc(inches);
+        strafeLeftWithEncoders(power, msTimeOut, encoderTicks);
+    }
+
+    public void moveForwardByInches(double power, int msTimeOut, double inches)
+    {
+        int encoderTicks = moveInchtoEnc(inches);
+        moveForwardWithEncoders(power, msTimeOut, encoderTicks);
+    }
+
+    public void moveBackwardByInches(double power, int msTimeOut, double inches)
+    {
+        int encoderTicks = moveInchtoEnc(inches);
+        moveBackwardWithEncoders(power, msTimeOut, encoderTicks);
+    }
+
+    // left or right
+    private int strafeInchtoEnc(double inches)
+    {
+        return (int)(inches*(1500/26.0));
+    }
+
+    // forwards or backwards
+    private int moveInchtoEnc(double inches)
+    {
+        return (int)(inches*(1500/26.0));
+    }
 
     public void displayIMU(int msTimeOut)
     {

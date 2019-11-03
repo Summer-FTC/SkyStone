@@ -21,6 +21,7 @@ public class VenomRobot
 
     public VenomRobot()
     {
+
     }
 
 
@@ -41,14 +42,14 @@ public class VenomRobot
         imu = new IMU(hwMap.get(BNO055IMU.class, "imu"));
         imu.IMUinit(hwMap);
 
-        //intake = new IntakeController();
-        //intake.init(hwMap, telemetry);
-//
-//        output = new OutputController();
-//        output.init(hwMap,telemetry);
-//
-//        hooks = new FoundationHookController();
-//        hooks.init(hwMap,telemetry);
+        // intake = new IntakeController();
+        // intake.init(hwMap, telemetry);
+        //
+        // output = new OutputController();
+        // output.init(hwMap,telemetry);
+        //
+        // hooks = new FoundationHookController();
+        // hooks.init(hwMap,telemetry);
   }
 
 

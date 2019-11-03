@@ -54,8 +54,8 @@ public class MecanumDriveController {
         resetEncoders();
         runWithoutEncoders();
 
-        motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
-        motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorFR.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorBR.setDirection(DcMotorSimple.Direction.REVERSE);
 
 //        stopDriveMotors();
 
@@ -76,12 +76,6 @@ public class MecanumDriveController {
     }
 
 
-//        public void setHaltModeCoast(boolean coastModeOn = true){
-//        DcMotor.ZeroPowerBehavior behavior;
-//        if(coastModeOn)behavior = DcMotor.ZeroPowerBehavior.FLOAT;
-//        else behavior = DcMotor.ZeroPowerBehavior.BRAKE;
-//    }
-//
 
 
     public void setHaltModeCoast(boolean coastModeOn) {
