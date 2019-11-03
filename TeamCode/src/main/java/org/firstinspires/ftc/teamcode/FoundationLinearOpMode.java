@@ -63,9 +63,9 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
     public void pullFoundation()
     {
-        //found.extendHooks();
-        // hook on and pull back
-        //found.retractHooks();
+        robot.hooks.lowerHooks(true);
+        // pull back
+        robot.hooks.lowerHooks(false);
     }
 
     public void park() {

@@ -26,7 +26,10 @@ public class VenomHardwareMap extends OpMode{
     DcMotor motorFL;
     DcMotor motorBR;
     DcMotor motorBL;
+    Servo rightHook;
+    Servo leftHook;
     IMU imu;
+
 
     //just had to put these to run the code dw about it
     public void init()
@@ -38,7 +41,7 @@ public class VenomHardwareMap extends OpMode{
 
     }
 
-    // initzialization method
+    // initialization method
     public void initialize ()
     {
         motorFR = hardwareMap.dcMotor.get("motorFR");
@@ -64,6 +67,8 @@ public class VenomHardwareMap extends OpMode{
 
         telemetry.addData("Motor Initialization Complete", "");
 
+        rightHook = hardwareMap.servo.get("rightHook");
+        //leftHook = hardwareMap.servo.get("leftHook");
 
         telemetry.addData("Servo Initialization Complete", "");
 
