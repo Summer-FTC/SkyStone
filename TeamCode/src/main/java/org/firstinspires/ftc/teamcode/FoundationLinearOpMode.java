@@ -22,7 +22,7 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         waitForStart();
 
         telemetry.addData("Before moving", "");
-
+/**
         moveForwardWithEncoders(0.5, 5000, 1500);
         strafeRightWithEncoders(0.5, 5000, 1500);
         moveBackwardWithEncoders(0.5, 5000, 1500);
@@ -45,7 +45,11 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
         rotate(-180);
         sleep(1000);
+ **/
+
 //        displayIMU(30000);
+
+        pullFoundation();
 
         // 1440 ticks for 100 mm/3.937 inches
         telemetry.addData("After moving", "");
@@ -65,6 +69,7 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
     {
         robot.hooks.lowerHooks(true);
         // pull back
+        sleep(2500);
         robot.hooks.lowerHooks(false);
     }
 
