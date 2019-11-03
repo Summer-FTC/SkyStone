@@ -23,11 +23,8 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
         telemetry.addData("Before moving", "");
 
-        moveForwardWithEncoders(1.0, 3000);
-        moveBackwardWithEncoders(1.0, 1500);
 
-        moveForwardWithEncoders(0.5, 1500);
-        moveBackwardWithEncoders(0.5, 3000);
+        strafeRightWithEncoders(0.5, 3000);
 
         // 1440 ticks for 100 mm/3.937 inches
         telemetry.addData("After moving", "");
@@ -41,7 +38,6 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
             // use tele op to figure out
         // We can also use the distance in inches to find out how far we need to go.
         // I think encoders would be a little inaccurate.
-        strafeRight(0, 0.5, 3000);
     }
 
     public void pullFoundation()
