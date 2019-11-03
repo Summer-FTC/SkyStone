@@ -134,7 +134,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                         active = false;
                     }
 
-                    // Scale with PID within 20 degrees.
+                    // Scale with PID within 30 degrees.
                     double absYawRemaining = Math.abs(targetYawChange) - Math.abs(currentYawChange);
                     double scaleAtYawRemaining = 30;
                     if (absYawRemaining < scaleAtYawRemaining) {
