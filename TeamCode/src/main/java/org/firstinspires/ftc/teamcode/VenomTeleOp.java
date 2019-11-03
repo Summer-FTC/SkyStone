@@ -77,12 +77,10 @@ public class VenomTeleOp extends OpMode
 
     public void doFoundation(){
         if(gamepad2.dpad_down){
-            robot.hooks.leftHook.setPosition(1);
-            robot.hooks.rightHook.setPosition(1);
+            robot.hooks.lowerHooks(true);
         }
         if(gamepad2.dpad_up){
-            robot.hooks.leftHook.setPosition(0);
-            robot.hooks.rightHook.setPosition(0);
+            robot.hooks.lowerHooks(false);
         }
     }
 }
