@@ -8,7 +8,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class ParkLinearOpMode extends BaseLinearOpMode
 {
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() throws InterruptedException
+    {
 
     }
 }

@@ -7,7 +7,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class DemoLinearOpMode extends BaseLinearOpMode
 {
     @Override
-    public void initialize() {
+    public void initialize()
+    {
         super.initialize();
     }
 
@@ -34,17 +35,17 @@ public class DemoLinearOpMode extends BaseLinearOpMode
         strafeRightWithEncoders(0.5, 5000, 5000);
         sleep(5000);
 
-//        rotate(90);
-//        sleep(1000);
-//
-//        rotate(-90);
-//        sleep(1000);
-//
-//        rotate(180);
-//        sleep(1000);
-//
-//        rotate(-180);
-//        sleep(1000);
+        //  rotate(90);
+        //        sleep(1000);
+        //
+        //        rotate(-90);
+        //        sleep(1000);
+        //
+        //        rotate(180);
+        //        sleep(1000);
+        //
+        //        rotate(-180);
+        //        sleep(1000);
 
         // Lower hooks
         // Raise hooks

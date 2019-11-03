@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 public abstract class BaseLinearOpMode extends LinearOpMode
 {
@@ -43,7 +42,8 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                                   // null means that we don't stop when the yaw changes.
                                   Double targetYawChange)
     {
-        if (targetYawChange != null) {
+        if (targetYawChange != null)
+        {
             if ((targetYawChange < -180) || (targetYawChange > 180)) {
                 throw new IllegalArgumentException("targetYawChange=" + targetYawChange + " must be between -180 and 180");
             }

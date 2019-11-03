@@ -6,7 +6,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class MecanumDriveController {
+public class MecanumDriveController
+{
     DcMotor motorFR;
     DcMotor motorFL;
     DcMotor motorBR;
@@ -18,15 +19,16 @@ public class MecanumDriveController {
 
     public DcMotor[] motors = null;
 
-    public MecanumDriveController() {
+    public MecanumDriveController()
+    {
         // default to red i guess
         this.color = "red";
     }
 
-    public MecanumDriveController(String color) {
+    public MecanumDriveController(String color)
+    {
         this.color = color;
     }
-
 
     public void log(String message)
     {
@@ -37,12 +39,12 @@ public class MecanumDriveController {
         }
     }
 
-    public void init(HardwareMap hwMap, Telemetry telemetry) {
+    public void init(HardwareMap hwMap, Telemetry telemetry)
+    {
         this.hwMap = hwMap;
         this.telemetry = telemetry;
 
         log("MecanumDriveController::init");
-
 
         motorFR = hwMap.dcMotor.get("motorFR");
         motorFL = hwMap.dcMotor.get("motorFL");
@@ -57,42 +59,47 @@ public class MecanumDriveController {
         motorFR.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBR.setDirection(DcMotorSimple.Direction.REVERSE);
 
-//        stopDriveMotors();
+        // stopDriveMotors();
 
         log("Motor Initialization Complete");
     }
 
-    public void setPowers(double power) {
+    public void setPowers(double power)
+    {
         for (DcMotor m : motors) {
             m.setPower(power);
         }
     }
 
-    public void stopDriveMotors() {
+    public void stopDriveMotors()
+    {
         for (DcMotor m : motors) {
             m.setPower(0);
         }
 
     }
 
-
-
-
-    public void setHaltModeCoast(boolean coastModeOn) {
+    public void setHaltModeCoast(boolean coastModeOn)
+    {
         DcMotor.ZeroPowerBehavior behavior;
-        if (coastModeOn) {
+        if (coastModeOn)
+        {
             behavior = DcMotor.ZeroPowerBehavior.FLOAT;
-        } else {
-            behavior = DcMotor.ZeroPowerBehavior.BRAKE;
         }
+        else
+         {
+            behavior = DcMotor.ZeroPowerBehavior.BRAKE;
+         }
 
-        for (DcMotor m : motors) {
+        for (DcMotor m : motors)
+        {
             m.setZeroPowerBehavior(behavior);
         }
     }
 
 
-    public void arcadeDrive(double forward, double strafe, double rotate) {
+    public void arcadeDrive(double forward, double strafe, double rotate)
+    {
         double FL = 0.0;
         double FR = 0.0;
         double BL = 0.0;
@@ -100,8 +107,8 @@ public class MecanumDriveController {
 
         // change tolerance, maybe make stop method so that brakes as approaching zero speed
         if (((Math.abs(Math.hypot(strafe, forward))) > 0.1) ||
-                Math.abs(Math.atan2(forward, strafe) - Math.PI / 4) > .1) {
-
+                Math.abs(Math.atan2(forward, strafe) - Math.PI / 4) > .1)
+        {
             // r can be sqrt(2)/2
             double r = Math.hypot(strafe, forward);
             double theta = Math.atan2(forward, -strafe) - Math.PI / 4;
@@ -122,10 +129,13 @@ public class MecanumDriveController {
                 FR /= Math.max(Math.max(Math.abs(FL), Math.abs(FR)), Math.max(Math.abs(BL), Math.abs(BR)));
                 BR /= Math.max(Math.max(Math.abs(FL), Math.abs(FR)), Math.max(Math.abs(BL), Math.abs(BR)));
             }
-        } else {
+        }
+
+        else
+         {
             // setHaltModeCoast(false);
             stopDriveMotors();
-        }
+         }
 
         motorFL.setPower(FL);
         motorBL.setPower(BL);
@@ -133,38 +143,46 @@ public class MecanumDriveController {
         motorBR.setPower(BR);
     }
 
-    public void resetEncoders() {
+    public void resetEncoders()
+    {
         log("Resetting encoders");
 
-        for (DcMotor m : motors) {
+        for (DcMotor m : motors)
+        {
             m.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         }
     }
 
-    public void runWithoutEncoders() {
+    public void runWithoutEncoders()
+    {
         log("Run without encoders");
 
-        for (DcMotor m : motors) {
+        for (DcMotor m : motors)
+        {
             m.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
     }
-
-
-    public void runUsingEncoders() {
+    
+    public void runUsingEncoders()
+    {
         log("Run using encoders");
 
-        for (DcMotor m : motors) {
+        for (DcMotor m : motors)
+        {
             m.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
 
-    public void runToPosition() {
-        for (DcMotor m : motors) {
+    public void runToPosition()
+    {
+        for (DcMotor m : motors)
+        {
             m.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
     }
 
-    public double getEncoderTicks() {
+    public double getEncoderTicks()
+    {
         double avg = 0.0;
         avg += motorFL.getCurrentPosition();
         avg += motorFR.getCurrentPosition();
