@@ -23,10 +23,10 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
         telemetry.addData("Before moving", "");
 
-//        moveForwardWithEncoders(0.5, 5000, 1500);
-//        strafeRightWithEncoders(0.5, 5000, 1500);
-//        moveBackwardWithEncoders(0.5, 5000, 1500);
-//        strafeLeftWithEncoders(0.5, 5000, 1500);
+        moveForwardWithEncoders(0.5, 5000, 1500);
+        strafeRightWithEncoders(0.5, 5000, 1500);
+        moveBackwardWithEncoders(0.5, 5000, 1500);
+        strafeLeftWithEncoders(0.5, 5000, 1500);
 
         rotate(90);
         sleep(1000);
