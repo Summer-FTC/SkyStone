@@ -23,8 +23,29 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
         telemetry.addData("Before moving", "");
 
+//        moveForwardWithEncoders(0.5, 5000, 1500);
+//        strafeRightWithEncoders(0.5, 5000, 1500);
+//        moveBackwardWithEncoders(0.5, 5000, 1500);
+//        strafeLeftWithEncoders(0.5, 5000, 1500);
 
-        strafeRightWithEncoders(0.5, 3000);
+        rotate(90);
+        sleep(1000);
+
+        rotate(-90);
+        sleep(1000);
+
+        rotate(135);
+        sleep(1000);
+
+        rotate(-45);
+        sleep(1000);
+
+        rotate(180);
+        sleep(1000);
+
+        rotate(-180);
+        sleep(1000);
+//        displayIMU(30000);
 
         // 1440 ticks for 100 mm/3.937 inches
         telemetry.addData("After moving", "");
