@@ -162,7 +162,7 @@ public class MecanumDriveController
             m.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
     }
-    
+
     public void runUsingEncoders()
     {
         log("Run using encoders");
