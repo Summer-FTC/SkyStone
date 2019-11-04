@@ -12,16 +12,6 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 //
 //    // Boolean Values for input
     boolean isStartingBlue = true;
-//
-//    @Autonomous(name = "FoundationConfig", group = "6209")
-//    public static class FoundationConfig extends FoundationLinearOpMode {
-//        public FoundationConfig () {configOnly = true;}
-//    }
-//
-//    @Autonomous(name = "Foundation Run", group = "6209")
-//    public static class FoundationRun extends FoundationLinearOpMode {
-//        public FoundationRun () {configOnly = true;}
-//    }
 
     @Override
     public void initialize() {
@@ -77,7 +67,8 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
 //        displayIMU(30000);
 
-            doTestRun();
+            //doTestRunSide();
+            doTestRunCenter();
       //      pullFoundation();
 
             // 1440 ticks for 100 mm/3.937 inches
@@ -86,26 +77,45 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
 
        // }
-        // What does this initialize do??
+
 
 
 
     }
 
-    public void doTestRun() {
+    public void doTestRunSide() {
         moveForwardByInches(0.5, 3000, 1);
-        strafeRightByInches(0.5, 3000, 36);
-        moveForwardByInches(0.5, 3000, 16);
+        strafeRightByInches(0.5, 3000, 30);
+        moveForwardByInches(0.5, 3000, 27);
 
         // deploy hooks
 
-        moveBackwardByInches(0.5, 3000, 17);
+        moveBackwardByInches(0.5, 3500, 28);
+
+        // maybe turn to horizontal
 
         // release hooks
 
-        strafeLeftByInches(0.5, 3000, 54);
+        strafeLeftByInches(0.5, 10000, 70);
 
     }
+
+    public void doTestRunCenter() {
+        moveForwardByInches(0.5, 3000, 1);
+        strafeRightByInches(0.5, 3000, 30);
+        moveForwardByInches(0.5, 3000, 27);
+
+        // deploy hooks
+
+        moveBackwardByInches(0.5, 3000, 28);
+
+        // release hooks
+
+        strafeLeftByInches(0.5, 8000, 45);
+        moveForwardByInches(0.5, 5000, 22);
+        strafeLeftByInches(0.5, 5000, 25);
+    }
+
 
     public void moveToFoundation()
     {
