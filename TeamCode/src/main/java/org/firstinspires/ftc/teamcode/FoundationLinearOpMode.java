@@ -12,6 +12,7 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 //
 //    // Boolean Values for input
     boolean isStartingBlue = true;
+    boolean parkOnSide = true;
 
     @Override
     public void initialize() {
@@ -60,7 +61,8 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 //
             telemetry.addData("Status", "Running Autonomous!");
             telemetry.update();
-             initialize();
+            initialize();
+            configMode();
             waitForStart();
 
 //            telemetry.addData("Before moving", "");
@@ -140,15 +142,24 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
     public void configMode() {
         String lastModes = "";
+        telemetry.addData("Entering " , "ConfigMode");
+        telemetry.update();
         do {
             if (VenomUtilities.isValueChangedAndEqualTo("1.y", gamepad1.y, true))
                 isStartingBlue = !isStartingBlue;
-        } while (!gamepad1.right_bumper && !isStarted() &&  !isStopRequested());
+
+            if (VenomUtilities.isValueChangedAndEqualTo("1.a", gamepad1.a, true))
+                parkOnSide = !parkOnSide;
+
+            logConfigModes(true);
+        }
+
+        while (!gamepad1.right_bumper && !isStarted() &&  !isStopRequested());
         telemetry.addData("ConfigMode" , lastModes);
         telemetry.update();
 
         RobotLog.i("configMode() stop");
-        logConfigModes(true);
+
     }
 
     private String lastModes="";
@@ -156,9 +167,11 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         String modes="";
         //  modes+="Alliance="+(isRedAlliance?"Red":"Blue");
         modes+=", Starting="+(isStartingBlue?"Blue":"Red");
+        modes+=", Starting="+(parkOnSide?"Side":"Center");
 
 
-        telemetry.addData("Alliance (X)", isStartingBlue?"Blue":"Red");
+        telemetry.addData("Alliance (Y)", isStartingBlue?"Blue":"Red");
+        telemetry.addData("Park Location (A)", parkOnSide?"Side":"Center");
 
         if (configOnly) telemetry.addData("ConfigMode" , "Press right bumper to leave config mode.");
         if (update) telemetry.update();
@@ -171,20 +184,6 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
     }
 
-    void readConfigValues(){
-
-        VenomUtilities.readProperties();
-        isStartingBlue = VenomUtilities.getPropBoolean("isStartingingBlue", isStartingBlue);
-
-    }
-
-    void writeConfigValues(){
-
-        VenomUtilities.setPropBoolean("isStartingBlue", isStartingBlue);
-
-        VenomUtilities.writeProperties();
-
-    }
 
 
 }
