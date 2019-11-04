@@ -258,13 +258,13 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     // left or right
     private int strafeInchtoEnc(double inches)
     {
-        return (int)(inches*(1500/26.0));
+        return (int)(inches*(4000/78.13));
     }
 
     // forwards or backwards
     private int moveInchtoEnc(double inches)
     {
-        return (int)(inches*(1500/26.0));
+        return (int)(inches*(4000/65.8));
     }
 
     public void displayIMU(int msTimeOut)
