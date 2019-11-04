@@ -89,7 +89,6 @@ public class ParkLinearOpMode extends BaseLinearOpMode
         telemetry.update();
 
         RobotLog.i("configMode() stop");
-
     }
 
     private String lastModes="";
