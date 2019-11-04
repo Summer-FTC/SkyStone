@@ -31,8 +31,8 @@ public class VenomTeleOp extends OpMode
     public void loop()
     {
         doDrive();
-        doIntake();
-        doOutake();
+//        doIntake();
+//        doOutake();
         doFoundation();
 
         // add other methods such as DoLift or DoIntake
