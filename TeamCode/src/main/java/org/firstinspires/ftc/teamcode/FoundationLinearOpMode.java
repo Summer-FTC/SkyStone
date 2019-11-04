@@ -8,9 +8,8 @@ import com.qualcomm.robotcore.util.RobotLog;
 public class FoundationLinearOpMode extends BaseLinearOpMode
 {
     boolean configOnly = false;
-//
-//
-//    // Boolean Values for input
+
+    // Boolean Values for input
     boolean isStartingBlue = true;
     boolean parkOnSide = true;
 
@@ -65,27 +64,20 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
             configMode();
             waitForStart();
 
-//            telemetry.addData("Before moving", "");
+            if (!isStartingBlue && parkOnSide)
+                runSideRed();
+            else if (!isStartingBlue && !parkOnSide)
+                runCenterRed();
+            else if (isStartingBlue && parkOnSide)
+                runSideBlue();
+            else if (isStartingBlue && !parkOnSide)
+                runCenterBlue();
 
-//        displayIMU(30000);
-
-            //doTestRunSide();
-            doTestRunCenter();
-      //      pullFoundation();
-
-            // 1440 ticks for 100 mm/3.937 inches
-            telemetry.addData("After moving", "");
+            telemetry.addData("After running", "");
             telemetry.update();
-
-
-       // }
-
-
-
-
     }
 
-    public void doTestRunSide() {
+    public void runSideRed() {
         moveForwardByInches(0.5, 3000, 1);
         strafeRightByInches(0.5, 3000, 30);
         moveForwardByInches(0.5, 3000, 27);
@@ -102,7 +94,7 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
     }
 
-    public void doTestRunCenter() {
+    public void runCenterRed() {
         moveForwardByInches(0.5, 3000, 1);
         strafeRightByInches(0.5, 3000, 30);
         moveForwardByInches(0.5, 3000, 27);
@@ -118,14 +110,37 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         strafeLeftByInches(0.5, 5000, 25);
     }
 
+    public void runSideBlue() {
+        moveForwardByInches(0.5, 3000, 1);
+        strafeLeftByInches(0.5, 3000, 30);
+        moveForwardByInches(0.5, 3000, 27);
 
-    public void moveToFoundation()
-    {
-        // if red
-        // test # of encoder ticks
-            // use tele op to figure out
-        // We can also use the distance in inches to find out how far we need to go.
-        // I think encoders would be a little inaccurate.
+        // deploy hooks
+
+        moveBackwardByInches(0.5, 3500, 28);
+
+        // maybe turn to horizontal
+
+        // release hooks
+
+        strafeRightByInches(0.5, 10000, 70);
+
+    }
+
+    public void runCenterBlue() {
+        moveForwardByInches(0.5, 3000, 1);
+        strafeLeftByInches(0.5, 3000, 30);
+        moveForwardByInches(0.5, 3000, 27);
+
+        // deploy hooks
+
+        moveBackwardByInches(0.5, 3000, 28);
+
+        // release hooks
+
+        strafeRightByInches(0.5, 8000, 45);
+        moveForwardByInches(0.5, 5000, 22);
+        strafeRightByInches(0.5, 5000, 25);
     }
 
     public void pullFoundation()
@@ -134,10 +149,6 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         // pull back
         sleep(2500);
         robot.hooks.lowerHooks(false);
-    }
-
-    public void park() {
-        // park robot on line: center or side?
     }
 
     public void configMode() {
@@ -181,9 +192,5 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
             lastModes=modes;
         }
 
-
     }
-
-
-
 }
