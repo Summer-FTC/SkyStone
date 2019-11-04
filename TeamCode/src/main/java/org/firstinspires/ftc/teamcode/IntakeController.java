@@ -20,7 +20,7 @@ public class IntakeController
         this.hwMap = hwMap;
         this.telemetry = telemetry;
 
-        motorIntake = hwMap.dcMotor.get("motorIntake");
+        //motorIntake = hwMap.dcMotor.get("motorIntake");
         leftClamp = hwMap.servo.get("leftClamp");
         rightClamp = hwMap.servo.get("rightClamp");
     }
