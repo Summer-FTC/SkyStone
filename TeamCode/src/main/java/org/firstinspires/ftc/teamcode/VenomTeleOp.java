@@ -31,11 +31,9 @@ public class VenomTeleOp extends OpMode
     public void loop()
     {
         doDrive();
-//        doIntake();
-//        doOutake();
         doFoundation();
-
-        // add other methods such as DoLift or DoIntake
+        doIntake();
+        // doOutake();
     }
 
     void doDrive()
@@ -49,20 +47,14 @@ public class VenomTeleOp extends OpMode
 
         robot.driveTrain.arcadeDrive(forward, strafe, rotate);
         robot.driveTrain.arcadeDrive(forward, strafe, rotate);
-
-
-
-
     }
 
     public void doIntake()
     {
         if(gamepad2.right_bumper)
-        {
             robot.intake.setPower(intakePower);
-        } if (gamepad2.left_bumper){
+        if (gamepad2.left_bumper)
             robot.intake.setPower(-intakePower);
-        }
     }
 
     public void doOutake(){
