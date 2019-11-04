@@ -11,8 +11,7 @@ public class VenomRobot
     public Telemetry telemetry = null;
     boolean isAuto = false;
 
-    IMU imu ;
-
+    IMU imu;
     MecanumDriveController driveTrain;
     OutputController output;
     FoundationHookController hooks;
@@ -47,9 +46,6 @@ public class VenomRobot
         //
         // output = new OutputController();
         // output.init(hwMap,telemetry);
-        //
-        // hooks = new FoundationHookController();
-        // hooks.init(hwMap,telemetry);
   }
 
 
