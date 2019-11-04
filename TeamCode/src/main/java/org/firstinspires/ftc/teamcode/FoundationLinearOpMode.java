@@ -91,7 +91,6 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         // release hooks
 
         strafeLeftByInches(0.5, 10000, 70);
-
     }
 
     public void runCenterRed() {
@@ -124,7 +123,6 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         // release hooks
 
         strafeRightByInches(0.5, 10000, 70);
-
     }
 
     public void runCenterBlue() {
