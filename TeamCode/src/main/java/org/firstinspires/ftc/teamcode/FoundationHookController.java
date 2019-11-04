@@ -17,7 +17,7 @@ public class FoundationHookController
         this.hwMap = hardwareMap;
         this.telemetry = telemetry;
 
-        //leftHook = hwMap.servo.get("leftHook");
+        leftHook = hwMap.servo.get("leftHook");
         rightHook = hwMap.servo.get("rightHook");
 
         telemetry.addData("Hook Servo Initialization Complete", "");
@@ -25,10 +25,10 @@ public class FoundationHookController
 
     public void lowerHooks(boolean lower){
         if(lower){
-            //leftHook.setPosition(1);
+            leftHook.setPosition(1);
             rightHook.setPosition(1);
         } else {
-            //leftHook.setPosition(0);
+            leftHook.setPosition(0);
             rightHook.setPosition(0);
         }
     }
