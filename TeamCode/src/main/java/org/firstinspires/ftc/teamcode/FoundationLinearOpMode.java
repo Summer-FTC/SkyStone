@@ -7,6 +7,16 @@ import com.qualcomm.robotcore.util.RobotLog;
 @Autonomous(name = "Foundation Run", group = "6209")
 public class FoundationLinearOpMode extends BaseLinearOpMode
 {
+
+    private static final int STEP_1_MOVE_FORWARD_INCHES = 2;
+    private static final int STEP_2_STRAFE_INCHES = 30;
+    private static final int STEP_3_MOVE_FORWARD_INCHES = 29;
+    private static final int STEP_4_MOVE_BACKWARD_INCHES = 33;
+    private static final int STEP_5_STRAFE_TO_SIDE_PARK_INCHES = 70;
+    private static final int STEP_5_STRAFE_TO_CENTER_PARK_INCHES = 45;
+    private static final int STEP_6_MOVE_FORWARD_TO_CENTER_PARK_INCHES = 22;
+    private static final int STEP_7_STRAFE_LEFT_TO_CENTER_PARK_INCHES = 25;
+
     boolean configOnly = false;
 
     // Boolean Values for input
@@ -14,9 +24,10 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
     boolean parkOnSide = true;
 
     @Override
-    public void initialize() {
+    public void initialize()
+    {
         super.initialize();
-        robot.hooks.lowerHooks(false);
+        robot.hooks.raiseHooks();
     }
 
     ElapsedTime eTime;
@@ -25,7 +36,6 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
     @Override
     public void runOpMode() throws InterruptedException
     {
-
 //        if (configOnly) {
 //            readConfigValues();
 //            configMode();
@@ -78,6 +88,33 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
             telemetry.update();
     }
 
+    private void moveRedFoundation()
+    {
+        moveForwardByInches(0.5, 3000, STEP_1_MOVE_FORWARD_INCHES);
+        strafeRightByInches(0.5, 3000, STEP_2_STRAFE_INCHES);
+        moveForwardByInches(0.5, 3000, STEP_3_MOVE_FORWARD_INCHES);
+
+        robot.hooks.lowerHooks();
+        sleep(1000);
+        moveBackwardByInches(0.5, 3000, STEP_4_MOVE_BACKWARD_INCHES);
+        // maybe turn sideways
+        robot.hooks.raiseHooks();
+        sleep(1000);
+    }
+
+    public void runSideRed()
+    {
+        log("runSideRed");
+        sleep(1000);
+
+        moveRedFoundation();
+
+        // wait before parking?
+
+        strafeLeftByInches(0.5, 10000, STEP_5_STRAFE_TO_SIDE_PARK_INCHES);
+    }
+
+    // Attempt rotate.
 //    public void runSideRed() {
 //        moveForwardByInches(0.5, 3000, 2);
 //        strafeRightByInches(0.5, 3000, 30);
@@ -85,80 +122,65 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 //
 //        robot.hooks.lowerHooks(true);
 //        sleep(2000);
-//        moveBackwardByInches(0.5, 3000, 33);
+//        strafeLeftByInches(0.5, 3000, 20);
+//        rotate(180);
+//
+//        moveForwardByInches(0.5, 3000, 6);
+//
 //        // maybe turn sideways
 //        robot.hooks.lowerHooks(false);
 //        sleep(2000);
 //
 //        // wait before parking
-//
-//        strafeLeftByInches(0.5, 10000, 70);
+//        moveBackwardByInches(0.25, 3000, 3);
+//        strafeRightByInches(0.5, 10000, 70);
 //    }
 
-    public void runSideRed() {
-        moveForwardByInches(0.5, 3000, 2);
-        strafeRightByInches(0.5, 3000, 30);
-        moveForwardByInches(0.5, 3000, 29);
 
-        robot.hooks.lowerHooks(true);
-        sleep(2000);
-        strafeLeftByInches(0.5, 3000, 20);
-        rotate(180);
-
-        moveForwardByInches(0.5, 3000, 6);
-
-        // maybe turn sideways
-        robot.hooks.lowerHooks(false);
-        sleep(2000);
-
-        // wait before parking
-        moveBackwardByInches(0.25, 3000, 3);
-        strafeRightByInches(0.5, 10000, 70);
-    }
 
     public void runCenterRed() {
-        moveForwardByInches(0.5, 3000, 1);
-        strafeRightByInches(0.5, 3000, 30);
-        moveForwardByInches(0.5, 3000, 27);
+        log("runCenterRed");
+        sleep(1000);
 
-        robot.hooks.lowerHooks(true);
-        sleep(2000);
-        moveBackwardByInches(0.5, 3000, 30);
-        // maybe turn horizontal
-        robot.hooks.lowerHooks(false);
-        sleep(2000);
+        moveRedFoundation();
 
-        strafeLeftByInches(0.5, 8000, 45);
-        moveForwardByInches(0.5, 5000, 22);
-        strafeLeftByInches(0.5, 5000, 25);
+        strafeLeftByInches(0.5, 8000, STEP_5_STRAFE_TO_CENTER_PARK_INCHES);
+        moveForwardByInches(0.5, 5000, STEP_6_MOVE_FORWARD_TO_CENTER_PARK_INCHES);
+        strafeLeftByInches(0.5, 5000, STEP_7_STRAFE_LEFT_TO_CENTER_PARK_INCHES);
     }
 
     public void runSideBlue() {
+        log("runSideBlue");
+        sleep(1000);
+
         moveForwardByInches(0.5, 3000, 1);
         strafeLeftByInches(0.5, 3000, 30);
         moveForwardByInches(0.5, 3000, 27);
 
-        robot.hooks.lowerHooks(true);
-        sleep(2000);
+        robot.hooks.lowerHooks();
+        sleep(1000);
         moveBackwardByInches(0.5, 3000, 30);
         // maybe turn sideways
-        robot.hooks.lowerHooks(false);
-        sleep(2000);
+        robot.hooks.raiseHooks();
+        sleep(1000);
 
         strafeRightByInches(0.5, 10000, 70);
     }
 
     public void runCenterBlue() {
+        log("runCenterBlue");
+        sleep(1000);
+
         moveForwardByInches(0.5, 3000, 1);
         strafeLeftByInches(0.5, 3000, 30);
         moveForwardByInches(0.5, 3000, 27);
 
-        robot.hooks.lowerHooks(true);
-        sleep(2000);
+        robot.hooks.lowerHooks();
+        sleep(1000);
         moveBackwardByInches(0.5, 3000, 30);
         // maybe turn sideways
-        robot.hooks.lowerHooks(false);
-        sleep(2000);
+        robot.hooks.raiseHooks();
+        sleep(1000);
 
         strafeRightByInches(0.5, 8000, 45);
         moveForwardByInches(0.5, 5000, 22);
@@ -167,10 +189,10 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
     public void pullFoundation()
     {
-        robot.hooks.lowerHooks(true);
+        robot.hooks.lowerHooks();
         moveBackwardByInches(0.5, 3000, 28);
         // maybe turn sideways
-        robot.hooks.lowerHooks(false);
+        robot.hooks.raiseHooks();
     }
 
     public void configMode() {

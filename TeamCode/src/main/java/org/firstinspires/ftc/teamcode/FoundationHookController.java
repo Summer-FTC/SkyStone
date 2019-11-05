@@ -23,13 +23,33 @@ public class FoundationHookController
         telemetry.addData("Hook Servo Initialization Complete", "");
     }
 
-    public void lowerHooks(boolean lower){
-        if(lower){
-            leftHook.setPosition(0);
-            rightHook.setPosition(1);
-        } else {
-            leftHook.setPosition(1);
-            rightHook.setPosition(0);
+
+    public void raiseHooks()
+    {
+        leftHook.setPosition(1);
+        rightHook.setPosition(0);
+
+        // Wait for the hooks to raise.
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e)
+        {
+
         }
     }
+
+    public void lowerHooks()
+    {
+        leftHook.setPosition(0);
+        rightHook.setPosition(1);
+
+        // Wait for the hooks to raise.
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e)
+        {
+
+        }
+    }
+
 }

@@ -67,13 +67,13 @@ public class VenomTeleOp extends OpMode
 
     public void doFoundation(){
         if(gamepad2.dpad_down){
-            robot.hooks.lowerHooks(true);
+            robot.hooks.lowerHooks();
             telemetry.addData("After lowering", "");
             telemetry.update();
         }
 
         if(gamepad2.dpad_up){
-            robot.hooks.lowerHooks(false);
+            robot.hooks.raiseHooks();
         }
     }
 }
