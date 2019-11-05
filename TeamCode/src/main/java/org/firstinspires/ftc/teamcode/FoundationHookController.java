@@ -25,11 +25,11 @@ public class FoundationHookController
 
     public void lowerHooks(boolean lower){
         if(lower){
-            leftHook.setPosition(1);
-            rightHook.setPosition(0);
-        } else {
             leftHook.setPosition(0);
             rightHook.setPosition(1);
+        } else {
+            leftHook.setPosition(1);
+            rightHook.setPosition(0);
         }
     }
 }

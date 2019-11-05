@@ -224,7 +224,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         }
 
         int maxEncoder = 5000;
-        moveWithEncoders("CLOCKWISE", 0.3, 10000,
+        moveWithEncoders("ROTATE", 0.3, 10000,
                 encoderSign * maxEncoder, encoderSign * -maxEncoder,
                 encoderSign * maxEncoder, encoderSign * -maxEncoder,
                 degrees);

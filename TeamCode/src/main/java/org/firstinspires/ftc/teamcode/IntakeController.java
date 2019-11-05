@@ -21,7 +21,7 @@ public class IntakeController
         this.telemetry = telemetry;
 
         //motorIntake = hwMap.dcMotor.get("motorIntake");
-        leftClamp = hwMap.servo.get("leftClamp");
+        //leftClamp = hwMap.servo.get("leftClamp");
         rightClamp = hwMap.servo.get("rightClamp");
     }
 
@@ -33,10 +33,10 @@ public class IntakeController
     public void clampPositions(boolean clamp)
     {
         if(clamp){
-            leftClamp.setPosition(1);
+            //leftClamp.setPosition(1);
             rightClamp.setPosition(1);
         } else {
-            leftClamp.setPosition(0);
+            //leftClamp.setPosition(0);
             rightClamp.setPosition(0);
         }
 

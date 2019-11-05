@@ -16,6 +16,7 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
     @Override
     public void initialize() {
         super.initialize();
+        robot.hooks.lowerHooks(false);
     }
 
     ElapsedTime eTime;
@@ -77,17 +78,42 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
             telemetry.update();
     }
 
+//    public void runSideRed() {
+//        moveForwardByInches(0.5, 3000, 2);
+//        strafeRightByInches(0.5, 3000, 30);
+//        moveForwardByInches(0.5, 3000, 29);
+//
+//        robot.hooks.lowerHooks(true);
+//        sleep(2000);
+//        moveBackwardByInches(0.5, 3000, 33);
+//        // maybe turn sideways
+//        robot.hooks.lowerHooks(false);
+//        sleep(2000);
+//
+//        // wait before parking
+//
+//        strafeLeftByInches(0.5, 10000, 70);
+//    }
+
     public void runSideRed() {
-        moveForwardByInches(0.5, 3000, 1);
+        moveForwardByInches(0.5, 3000, 2);
         strafeRightByInches(0.5, 3000, 30);
-        moveForwardByInches(0.5, 3000, 27);
+        moveForwardByInches(0.5, 3000, 29);
 
         robot.hooks.lowerHooks(true);
-        moveBackwardByInches(0.5, 3000, 30);
+        sleep(2000);
+        strafeLeftByInches(0.5, 3000, 20);
+        rotate(180);
+
+        moveForwardByInches(0.5, 3000, 6);
+
         // maybe turn sideways
         robot.hooks.lowerHooks(false);
+        sleep(2000);
 
-        strafeLeftByInches(0.5, 10000, 70);
+        // wait before parking
+        moveBackwardByInches(0.25, 3000, 3);
+        strafeRightByInches(0.5, 10000, 70);
     }
 
     public void runCenterRed() {
@@ -96,9 +122,11 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         moveForwardByInches(0.5, 3000, 27);
 
         robot.hooks.lowerHooks(true);
+        sleep(2000);
         moveBackwardByInches(0.5, 3000, 30);
         // maybe turn horizontal
         robot.hooks.lowerHooks(false);
+        sleep(2000);
 
         strafeLeftByInches(0.5, 8000, 45);
         moveForwardByInches(0.5, 5000, 22);
@@ -111,9 +139,11 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         moveForwardByInches(0.5, 3000, 27);
 
         robot.hooks.lowerHooks(true);
+        sleep(2000);
         moveBackwardByInches(0.5, 3000, 30);
         // maybe turn sideways
         robot.hooks.lowerHooks(false);
+        sleep(2000);
 
         strafeRightByInches(0.5, 10000, 70);
     }
@@ -124,9 +154,11 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         moveForwardByInches(0.5, 3000, 27);
 
         robot.hooks.lowerHooks(true);
+        sleep(2000);
         moveBackwardByInches(0.5, 3000, 30);
         // maybe turn sideways
         robot.hooks.lowerHooks(false);
+        sleep(2000);
 
         strafeRightByInches(0.5, 8000, 45);
         moveForwardByInches(0.5, 5000, 22);
