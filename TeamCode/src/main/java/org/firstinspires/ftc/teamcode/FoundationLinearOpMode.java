@@ -14,7 +14,7 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
     private static final int STEP_4_MOVE_BACKWARD_INCHES = 33;
     private static final int STEP_5_STRAFE_TO_SIDE_PARK_INCHES = 70;
     private static final int STEP_5_STRAFE_TO_CENTER_PARK_INCHES = 45;
-    private static final int STEP_6_MOVE_FORWARD_TO_CENTER_PARK_INCHES = 22;
+    private static final int STEP_6_MOVE_FORWARD_TO_CENTER_PARK_INCHES = 25;
     private static final int STEP_7_STRAFE_LEFT_TO_CENTER_PARK_INCHES = 25;
 
     boolean configOnly = false;
