@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.RobotLog;
 public class FoundationLinearOpMode extends BaseLinearOpMode
 {
     private static final int MOVE_AWAY_FROM_WALL_INCHES = 3;
-    private static final int STRAFE_ALONG_WALL_INCHES = 20;
+    private static final int STRAFE_ALONG_WALL_INCHES = 24;
     private static final int MOVE_FORWARD_TO_PLATFORM_INCHES = 29;
     private static final int MOVE_FORWARD_TO_TOUCH_PLATFORM_INCHES = 2;
     private static final int STRAFE_PLATFORM_AWAY_FROM_WALL_INCHES = 14;
@@ -15,8 +15,8 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
     private static final int MOVE_BACKWARD_FROM_PLATFORM_INCHES = 3;
 
     private static final int STRAFE_TO_SIDE_TO_PARK_INCHES = 21;
-    private static final int MOVE_BACKWARD_TO_PARK_INCHES = 37;
-    private static final int STRAFE_TO_CENTER_TO_PARK_INCHES = 5;
+    private static final int MOVE_BACKWARD_TO_PARK_INCHES = 36;
+    private static final int STRAFE_TO_CENTER_TO_PARK_INCHES = 21;
 
 
     boolean configOnly = false;
@@ -70,13 +70,13 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         moveForwardByInches(0.5, MOVE_FORWARD_TO_TOUCH_PLATFORM_INCHES);
 
         robot.hooks.lowerHooks();
-        strafeLeftByInches(0.5, STRAFE_PLATFORM_AWAY_FROM_WALL_INCHES);
-        rotateToAbsoluteYaw(-90);
 
-        strafeRightByInches(0.5, STRAFE_PLATFORM_TO_CORNER_INCHES);
-        rotateToAbsoluteYaw(-90);
+        moveBackwardByInches(0.5, 32);
+
+        rotateToAbsoluteYaw(90);
 
         robot.hooks.raiseHooks();
+
         moveBackwardByInches(0.5, MOVE_BACKWARD_FROM_PLATFORM_INCHES);
     }
 
@@ -92,13 +92,13 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         moveForwardByInches(0.5, MOVE_FORWARD_TO_TOUCH_PLATFORM_INCHES);
 
         robot.hooks.lowerHooks();
-        strafeRightByInches(0.5, STRAFE_PLATFORM_AWAY_FROM_WALL_INCHES);
-        rotateToAbsoluteYaw(-90);
 
-        strafeLeftByInches(0.5, STRAFE_PLATFORM_TO_CORNER_INCHES);
+        moveBackwardByInches(0.5, 32);
+
         rotateToAbsoluteYaw(-90);
 
         robot.hooks.raiseHooks();
+
         moveBackwardByInches(0.5, MOVE_BACKWARD_FROM_PLATFORM_INCHES);
     }
 
@@ -111,7 +111,8 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
         moveRedFoundation();
 
-        strafeRightByInches(0.5, STRAFE_TO_SIDE_TO_PARK_INCHES);
+        strafeRightByInches(0.5, 7);
+
         moveBackwardByInches(0.5, MOVE_BACKWARD_TO_PARK_INCHES);
     }
 
@@ -125,7 +126,8 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
         moveBlueFoundation();
 
-        strafeLeftByInches(0.5, STRAFE_TO_SIDE_TO_PARK_INCHES);
+        strafeLeftByInches(0.5, 7);
+
         moveBackwardByInches(0.5, MOVE_BACKWARD_TO_PARK_INCHES);
     }
 
@@ -137,8 +139,8 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
         moveRedFoundation();
 
+        strafeLeftByInches(0.5, STRAFE_TO_CENTER_TO_PARK_INCHES);
         moveBackwardByInches(0.5, MOVE_BACKWARD_TO_PARK_INCHES);
-        strafeRightByInches(0.5, STRAFE_TO_CENTER_TO_PARK_INCHES);
     }
 
 
@@ -150,8 +152,8 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
         moveBlueFoundation();
 
+        strafeRightByInches(0.5, STRAFE_TO_CENTER_TO_PARK_INCHES);
         moveBackwardByInches(0.5, MOVE_BACKWARD_TO_PARK_INCHES);
-        strafeLeftByInches(0.5, STRAFE_TO_CENTER_TO_PARK_INCHES);
     }
 
 
