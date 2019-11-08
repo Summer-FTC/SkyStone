@@ -17,8 +17,6 @@ public class MecanumDriveController
     DcMotor motorBL;
     String color;
 
-    LinearOpMode opMode;
-
     HardwareMap hwMap = null;
     Telemetry telemetry = null;
 
@@ -45,9 +43,8 @@ public class MecanumDriveController
         }
     }
 
-    public void init(HardwareMap hwMap, Telemetry telemetry, LinearOpMode opMode)
+    public void init(HardwareMap hwMap, Telemetry telemetry)
     {
-        this.opMode = opMode;
         this.hwMap = hwMap;
         this.telemetry = telemetry;
 
@@ -156,7 +153,6 @@ public class MecanumDriveController
         for (DcMotor m : motors)
         {
             m.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            opMode.idle();
         }
     }
 

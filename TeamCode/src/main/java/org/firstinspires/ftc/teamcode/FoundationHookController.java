@@ -32,9 +32,9 @@ public class FoundationHookController
         // Wait for the hooks to raise.
         try {
             Thread.sleep(1500);
-        } catch (InterruptedException e)
-        {
-
+        } catch (InterruptedException e) {
+            // This is important to propagate the interrupt up.
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -46,9 +46,9 @@ public class FoundationHookController
         // Wait for the hooks to raise.
         try {
             Thread.sleep(1500);
-        } catch (InterruptedException e)
-        {
-
+        } catch (InterruptedException e) {
+            // This is important to propagate the interrupt up.
+            Thread.currentThread().interrupt();
         }
     }
 

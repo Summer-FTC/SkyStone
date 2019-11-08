@@ -8,8 +8,6 @@ import com.qualcomm.robotcore.util.RobotLog;
 @Autonomous(name = "Foundation Run", group = "6209")
 public class FoundationLinearOpMode extends BaseLinearOpMode
 {
-
-    LinearOpMode opMode;
     private static final int STEP_1_MOVE_FORWARD_INCHES = 2;
     private static final int STEP_2_STRAFE_INCHES = 32;
     private static final int STEP_3_MOVE_FORWARD_INCHES = 30;
@@ -28,42 +26,43 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
     public void initialize()
     {
-        super.initialize(opMode);
+        super.initialize();
         robot.hooks.raiseHooks();
     }
 
-    ElapsedTime eTime;
-    protected ElapsedTime time = new ElapsedTime();
+
 
     @Override
     public void runOpMode() throws InterruptedException
     {
 
-            telemetry.addData("Status", "Running Autonomous!");
-            telemetry.update();
-            initialize();
-            configMode();
-            waitForStart();
+        telemetry.addData("Status", "Running Autonomous!");
+        telemetry.update();
+        initialize();
+        configMode();
+        waitForStart();
 
-            if (!isStartingBlue && parkOnSide)
-                runSideRed();
-            else if (!isStartingBlue && !parkOnSide)
-                runCenterRed();
-            else if (isStartingBlue && parkOnSide)
-                runSideBlue();
-            else if (isStartingBlue && !parkOnSide)
-                runCenterBlue();
+        if (!isStartingBlue && parkOnSide) {
+            runSideRed();
+        } else if (!isStartingBlue && !parkOnSide) {
+            runCenterRed();
+        } else if (isStartingBlue && parkOnSide) {
+            runSideBlue();
+        } else if (isStartingBlue && !parkOnSide) {
+            runCenterBlue();
+        }
 
-            telemetry.addData("After running", "");
-            telemetry.update();
+        telemetry.addData("After running", "");
+        telemetry.update();
     }
+
+
 
     private void moveRedFoundation()
     {
-        moveEnc(0.5, 3000, 30);
-       // moveForwardByInches(0.5, 3000, STEP_1_MOVE_FORWARD_INCHES);
-      //  strafeRightByInches(0.5, 3000, STEP_2_STRAFE_INCHES);
-     //   moveForwardByInches(0.5, 3000, STEP_3_MOVE_FORWARD_INCHES);
+        moveForwardByInches(0.5, 3000, STEP_1_MOVE_FORWARD_INCHES);
+        strafeRightByInches(0.5, 3000, STEP_2_STRAFE_INCHES);
+        moveForwardByInches(0.5, 3000, STEP_3_MOVE_FORWARD_INCHES);
 
         robot.hooks.lowerHooks();
         sleep(1000);
@@ -81,20 +80,17 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         rotate(88);
     }
 
+
+
     public void runSideRed()
     {
         log("runSideRed");
         sleep(1000);
-      //  if(!isStopRequested())
-        //moveRedFoundation();
 
-        // wait before parking?
+        moveRedFoundation();
 
-        moveEnc(0.5,10,14);
-        moveEnc(0.5,10,6);
-        //strafeLeftByInches(0.5, 10000, STEP_5_STRAFE_TO_SIDE_PARK_INCHES);
+        strafeLeftByInches(0.5, 10000, STEP_5_STRAFE_TO_SIDE_PARK_INCHES);
     }
-
 
 
 
@@ -108,6 +104,7 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         moveForwardByInches(0.5, 5000, STEP_6_MOVE_FORWARD_TO_CENTER_PARK_INCHES);
         strafeLeftByInches(0.5, 5000, STEP_7_STRAFE_LEFT_TO_CENTER_PARK_INCHES);
     }
+
 
     private void moveBlueFoundation()
     {
@@ -131,6 +128,8 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         rotate(-88);
     }
 
+
+
     public void runSideBlue() {
         log("runSideBlue");
         sleep(1000);
@@ -139,6 +138,8 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
         strafeRightByInches(0.5, 10000, STEP_5_STRAFE_TO_SIDE_PARK_INCHES);
     }
+
+
 
     public void runCenterBlue() {
 
@@ -152,13 +153,7 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         strafeRightByInches(0.5, 5000, 14);
     }
 
-    public void pullFoundation()
-    {
-        robot.hooks.lowerHooks();
-        moveBackwardByInches(0.5, 3000, 28);
-        // maybe turn sideways
-        robot.hooks.raiseHooks();
-    }
+
 
     public void configMode() {
         String lastModes = "";
@@ -181,6 +176,7 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         RobotLog.i("configMode() stop");
 
     }
+
 
     private String lastModes="";
     void logConfigModes(boolean update) {

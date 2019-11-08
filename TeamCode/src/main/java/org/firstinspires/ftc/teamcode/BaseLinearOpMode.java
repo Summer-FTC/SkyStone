@@ -10,6 +10,9 @@ import java.util.Map;
 
 public abstract class BaseLinearOpMode extends LinearOpMode
 {
+    // This power will move the robot slowly. It actually moves at .015 (very slowly).
+    private static double MIN_POWER = 0.03;
+
     VenomRobot robot = new VenomRobot();
     double newPower;
 
@@ -23,9 +26,9 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         }
     }
 
-    public void initialize(LinearOpMode opmode)
+    public void initialize()
     {
-        robot.init(hardwareMap, telemetry, true, opmode);
+        robot.init(hardwareMap, telemetry, true);
 
         log("BaseLinearOpMode::initialize complete");
     }
@@ -38,45 +41,16 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                 encFL, encFR, encBL, encBR, null);
     }
 
-    private double getInchesAvg() {
-        double encoders = robot.driveTrain.motorBL.getCurrentPosition() +
-                robot.driveTrain.motorFL.getCurrentPosition() +
-                robot.driveTrain.motorBR.getCurrentPosition() +
-                robot.driveTrain.motorFR.getCurrentPosition();
-        double cpi = 1440 / (4 * Math.PI);
-        return encoders / cpi;
-    }
 
-    public void moveEnc(double power, int timeout, double inches) {
-        robot.driveTrain.resetEncoders();
-
-        ElapsedTime time = new ElapsedTime();
-
-        telemetry.addData("init Inches", getInchesAvg());
-        telemetry.update();
-
-        time.reset();
-        while (Math.abs(getInchesAvg()) < inches && time.seconds() < timeout && opModeIsActive()) {
-            robot.setMotorFL(power);
-            robot.setMotorBL(power);
-            robot.setMotorFR(power);
-            robot.setMotorBR(power);
-
-            telemetry.addData("Inches left", inches - getInchesAvg());
-        }
-        robot.setMotorFL(0);
-        robot.setMotorBL(0);
-        robot.setMotorFR(0);
-        robot.setMotorBR(0);
-
-    }
-
-    // TODO: Add a timeout.
     private void moveWithEncoders(String direction, double power, int msTimeOut,
                                   int encFL, int encFR, int encBL, int encBR,
                                   // null means that we don't stop when the yaw changes.
                                   Double targetYawChange)
     {
+        // Make sure the timeout is big enough.
+        int maxEnc = Math.max(Math.max(encFL, encFR), Math.max(encBL, encBR));
+        msTimeOut = Math.max(msTimeOut, (int)Math.ceil(maxEnc / power));
+
         if (targetYawChange != null)
         {
             if ((targetYawChange < -180) || (targetYawChange > 180)) {
@@ -145,7 +119,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                     if (ticksRemaining > startScalingTicks) {
                         powerToSet = power;
                     } else {
-                        powerToSet = Math.max(0.1,
+                        powerToSet = Math.max(Math.min(MIN_POWER, power),
                                 power * (ticksRemaining / startScalingTicks));
                     }
                 }
@@ -174,7 +148,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                     double scaleAtYawRemaining = 30;
                     if (absYawRemaining < scaleAtYawRemaining) {
                         double scale = absYawRemaining / scaleAtYawRemaining;
-                        powerToSet = Math.max(0.1, scale * power);
+                        powerToSet = Math.max(MIN_POWER, scale * power);
                     }
                 }
 
@@ -183,16 +157,9 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
                 m.setPower(powerToSet);
 
-//                if (yawChange != null) {
-//
-//                }
-
-//                if ((stopDetector != null) && stopDetector.isDone()) {
-//                    active = false;
-//                }
-
             }
             robot.log(message.toString());
+            idle();
         }
 
         for (DcMotor m : motorToEncoder.keySet())
@@ -200,14 +167,11 @@ public abstract class BaseLinearOpMode extends LinearOpMode
             m.setPower(0);
         }
 
-//        robot.log("Loop is done.");
-
         // Why reset here?
         robot.driveTrain.resetEncoders();
         robot.driveTrain.runWithoutEncoders();
     }
 
-    // TODO: Add a timeout.
     public void moveForwardWithEncoders(double power, int msTimeOut, int encoderTicks)
     {
         moveWithEncoders("FORWARD", power, msTimeOut,
@@ -238,16 +202,16 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     }
 
 
-    public void moveToLoadingZone()
+    // This is useful to move to an absolute position based on where you started.
+    public void rotateToAbsoluteYaw(double yawDegrees)
     {
+        double targetYawChange = robot.imu.getTrueDiff(yawDegrees);
+        rotate(targetYawChange);
 
+        double actualYaw = robot.imu.getYaw();
+        log("Targeting yaw=" + yawDegrees + " actual yaw=" + actualYaw);
     }
 
-    // do we need this
-    public void rotate()
-    {
-
-    }
 
     // positive is left, negative is right
     public void rotate(double degrees)
@@ -293,7 +257,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     // left or right
     private int strafeInchtoEnc(double inches)
     {
-        return (int)(inches*(4000/78.13));
+        return (int)(inches*(5000/79));
     }
 
     // forwards or backwards
@@ -301,6 +265,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     {
         return (int)(inches*(4000/65.8));
     }
+
 
     public void displayIMU(int msTimeOut)
     {

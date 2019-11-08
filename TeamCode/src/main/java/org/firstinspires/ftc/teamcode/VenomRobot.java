@@ -30,7 +30,7 @@ public class VenomRobot extends LinearOpMode
     }
 
 
-    public void init(HardwareMap hwMap, Telemetry telemetry, boolean isAuto, LinearOpMode opMode)
+    public void init(HardwareMap hwMap, Telemetry telemetry, boolean isAuto)
     {
         this.hwMap = hwMap;
         this.telemetry = telemetry;
@@ -39,7 +39,7 @@ public class VenomRobot extends LinearOpMode
         log("VenomRobot::init");
 
         driveTrain = new MecanumDriveController();
-        driveTrain.init(hwMap, telemetry, opMode);
+        driveTrain.init(hwMap, telemetry);
 
         hooks = new FoundationHookController();
         hooks.init(hwMap, telemetry);
