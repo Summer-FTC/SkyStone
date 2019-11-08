@@ -1,23 +1,29 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.VenomRobot;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class MecanumDriveController
 {
+
     DcMotor motorFR;
     DcMotor motorFL;
     DcMotor motorBR;
     DcMotor motorBL;
     String color;
 
+    LinearOpMode opMode;
+
     HardwareMap hwMap = null;
     Telemetry telemetry = null;
 
     public DcMotor[] motors = null;
+
 
     public MecanumDriveController()
     {
@@ -39,8 +45,9 @@ public class MecanumDriveController
         }
     }
 
-    public void init(HardwareMap hwMap, Telemetry telemetry)
+    public void init(HardwareMap hwMap, Telemetry telemetry, LinearOpMode opMode)
     {
+        this.opMode = opMode;
         this.hwMap = hwMap;
         this.telemetry = telemetry;
 
@@ -76,7 +83,6 @@ public class MecanumDriveController
         for (DcMotor m : motors) {
             m.setPower(0);
         }
-
     }
 
     public void setHaltModeCoast(boolean coastModeOn)
@@ -150,7 +156,14 @@ public class MecanumDriveController
         for (DcMotor m : motors)
         {
             m.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            opMode.idle();
         }
+    }
+
+    public void resetEnc2()
+    {
+        motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
     }
 
     public void runWithoutEncoders()

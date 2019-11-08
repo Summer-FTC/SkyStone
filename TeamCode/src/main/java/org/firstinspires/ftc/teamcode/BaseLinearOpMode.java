@@ -2,7 +2,9 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
+import java.lang.annotation.ElementType;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,9 +23,9 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         }
     }
 
-    public void initialize()
+    public void initialize(LinearOpMode opmode)
     {
-        robot.init(hardwareMap, telemetry, true);
+        robot.init(hardwareMap, telemetry, true, opmode);
 
         log("BaseLinearOpMode::initialize complete");
     }
@@ -34,6 +36,39 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     {
         moveWithEncoders(direction, power, msTimeOut,
                 encFL, encFR, encBL, encBR, null);
+    }
+
+    private double getInchesAvg() {
+        double encoders = robot.driveTrain.motorBL.getCurrentPosition() +
+                robot.driveTrain.motorFL.getCurrentPosition() +
+                robot.driveTrain.motorBR.getCurrentPosition() +
+                robot.driveTrain.motorFR.getCurrentPosition();
+        double cpi = 1440 / (4 * Math.PI);
+        return encoders / cpi;
+    }
+
+    public void moveEnc(double power, int timeout, double inches) {
+        robot.driveTrain.resetEncoders();
+
+        ElapsedTime time = new ElapsedTime();
+
+        telemetry.addData("init Inches", getInchesAvg());
+        telemetry.update();
+
+        time.reset();
+        while (Math.abs(getInchesAvg()) < inches && time.seconds() < timeout && opModeIsActive()) {
+            robot.setMotorFL(power);
+            robot.setMotorBL(power);
+            robot.setMotorFR(power);
+            robot.setMotorBR(power);
+
+            telemetry.addData("Inches left", inches - getInchesAvg());
+        }
+        robot.setMotorFL(0);
+        robot.setMotorBL(0);
+        robot.setMotorFR(0);
+        robot.setMotorBR(0);
+
     }
 
     // TODO: Add a timeout.

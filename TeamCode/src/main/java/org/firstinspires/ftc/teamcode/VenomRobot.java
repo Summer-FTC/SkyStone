@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class VenomRobot
+public class VenomRobot extends LinearOpMode
 {
     HardwareMap hwMap;
     public Telemetry telemetry = null;
@@ -18,13 +19,18 @@ public class VenomRobot
     IntakeController intake;
 
 
+    @Override
+    public void runOpMode() throws InterruptedException {
+
+    }
+
     public VenomRobot()
     {
 
     }
 
 
-    public void init(HardwareMap hwMap, Telemetry telemetry, boolean isAuto)
+    public void init(HardwareMap hwMap, Telemetry telemetry, boolean isAuto, LinearOpMode opMode)
     {
         this.hwMap = hwMap;
         this.telemetry = telemetry;
@@ -33,7 +39,7 @@ public class VenomRobot
         log("VenomRobot::init");
 
         driveTrain = new MecanumDriveController();
-        driveTrain.init(hwMap, telemetry);
+        driveTrain.init(hwMap, telemetry, opMode);
 
         hooks = new FoundationHookController();
         hooks.init(hwMap, telemetry);
