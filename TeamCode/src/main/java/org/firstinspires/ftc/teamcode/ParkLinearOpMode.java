@@ -48,26 +48,26 @@ public class ParkLinearOpMode extends BaseLinearOpMode
         // So we don't get in the other team's way
         sleep(20000);
         moveForwardByInches(0.5, 1);
-        strafeRightByInches(0.5, 5);
+        strafeRightByInches(0.5, 10);
     }
 
     public void runCenterRed() {
         sleep(20000);
-        moveForwardByInches(0.5,22);
-        strafeRightByInches(0.5,5);
+        moveForwardByInches(0.5,25);
+        strafeRightByInches(0.5,10);
     }
 
     public void runSideBlue() {
         // So we don't get in the other team's way
         sleep(20000);
         moveForwardByInches(0.5, 1);
-        strafeLeftByInches(0.5, 5);
+        strafeLeftByInches(0.5, 10);
     }
 
     public void runCenterBlue() {
         sleep(20000);
-        moveForwardByInches(0.5, 22);
-        strafeLeftByInches(0.5, 5);
+        moveForwardByInches(0.5, 25);
+        strafeLeftByInches(0.5, 10);
     }
 
     public void configMode()

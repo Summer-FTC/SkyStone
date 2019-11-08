@@ -9,14 +9,14 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
     private static final int MOVE_AWAY_FROM_WALL_INCHES = 3;
     private static final int STRAFE_ALONG_WALL_INCHES = 24;
     private static final int MOVE_FORWARD_TO_PLATFORM_INCHES = 29;
-    private static final int MOVE_FORWARD_TO_TOUCH_PLATFORM_INCHES = 2;
+    private static final int MOVE_FORWARD_TO_TOUCH_PLATFORM_INCHES = 5;
     private static final int STRAFE_PLATFORM_AWAY_FROM_WALL_INCHES = 14;
     private static final int STRAFE_PLATFORM_TO_CORNER_INCHES = 8;
     private static final int MOVE_BACKWARD_FROM_PLATFORM_INCHES = 3;
 
     private static final int STRAFE_TO_SIDE_TO_PARK_INCHES = 21;
     private static final int MOVE_BACKWARD_TO_PARK_INCHES = 36;
-    private static final int STRAFE_TO_CENTER_TO_PARK_INCHES = 21;
+    private static final int STRAFE_TO_CENTER_TO_PARK_INCHES = 15;
 
 
     boolean configOnly = false;
@@ -111,7 +111,7 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
         moveRedFoundation();
 
-        strafeRightByInches(0.5, 7);
+        strafeRightByInches(0.5, 12);
 
         moveBackwardByInches(0.5, MOVE_BACKWARD_TO_PARK_INCHES);
     }
@@ -126,7 +126,7 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
         moveBlueFoundation();
 
-        strafeLeftByInches(0.5, 7);
+        strafeLeftByInches(0.5, 12);
 
         moveBackwardByInches(0.5, MOVE_BACKWARD_TO_PARK_INCHES);
     }

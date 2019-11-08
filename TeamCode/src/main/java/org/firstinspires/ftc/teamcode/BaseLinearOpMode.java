@@ -182,9 +182,9 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
     public void moveBackwardWithEncoders(double power, int encoderTicks)
     {
-        // TODO: Take this out.
+
         log("Moving BACKWARD by " + encoderTicks);
-        sleep(2000);
+
 
         int msTimeOut = moveTimeoutFromTicks(power, encoderTicks);
         moveWithEncoders("BACKWARD", power, msTimeOut,
