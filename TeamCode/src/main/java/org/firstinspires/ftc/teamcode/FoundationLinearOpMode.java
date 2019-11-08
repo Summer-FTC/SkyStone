@@ -1,21 +1,20 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
 
 @Autonomous(name = "Foundation Run", group = "6209")
 public class FoundationLinearOpMode extends BaseLinearOpMode
 {
-    private static final int STEP_1_MOVE_FORWARD_INCHES = 2;
-    private static final int STEP_2_STRAFE_INCHES = 32;
-    private static final int STEP_3_MOVE_FORWARD_INCHES = 30;
-    private static final int STEP_4_MOVE_BACKWARD_INCHES = 34;
-    private static final int STEP_5_STRAFE_TO_SIDE_PARK_INCHES = 41;
-    private static final int STEP_5_STRAFE_TO_CENTER_PARK_INCHES = 32;
+    private static final int MOVE_FOUNDATION_STEP_1_MOVE_AWAY_FROM_WALL_INCHES = 3;
+    private static final int MOVE_FOUNDATION_STEP_2_STRAFE_ALONG_WALL_INCHES = 20;
+    private static final int MOVE_FOUNDATION_STEP_3_MOVE_FORWARD_TO_PLATFORM_INCHES = 29;
+    private static final int MOVE_FOUNDATION_STEP_3B_MOVE_FORWARD_TO_TOUCH_PLATFORM_INCHES = 2;
+    private static final int MOVE_FOUNDATION_STEP_4_MOVE_BACKWARD_FROM_PLATFORM_INCHES = 3;
+    private static final int STEP_5_STRAFE_TO_SIDE_PARK_INCHES = 33;
+    private static final int STEP_5_STRAFE_TO_CENTER_PARK_INCHES = 26;
     private static final int STEP_6_MOVE_FORWARD_TO_CENTER_PARK_INCHES = 16;
-    private static final int STEP_7_STRAFE_LEFT_TO_CENTER_PARK_INCHES = 22;
+    private static final int STEP_7_STRAFE_LEFT_TO_CENTER_PARK_INCHES = 18;
 
     boolean configOnly = false;
 
@@ -60,36 +59,56 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
     private void moveRedFoundation()
     {
-        moveForwardByInches(0.5, 3000, STEP_1_MOVE_FORWARD_INCHES);
-        strafeRightByInches(0.5, 3000, STEP_2_STRAFE_INCHES);
-        moveForwardByInches(0.5, 3000, STEP_3_MOVE_FORWARD_INCHES);
+
+        moveForwardByInches(0.25, MOVE_FOUNDATION_STEP_1_MOVE_AWAY_FROM_WALL_INCHES);
+        strafeRightByInches(0.5, MOVE_FOUNDATION_STEP_2_STRAFE_ALONG_WALL_INCHES);
+        moveForwardByInches(0.5, MOVE_FOUNDATION_STEP_3_MOVE_FORWARD_TO_PLATFORM_INCHES);
+
+        // Make sure we are hitting the platform.
+        moveForwardByInches(0.5, MOVE_FOUNDATION_STEP_3B_MOVE_FORWARD_TO_TOUCH_PLATFORM_INCHES);
 
         robot.hooks.lowerHooks();
-        sleep(1000);
-        moveBackwardByInches(0.5, 3000, STEP_4_MOVE_BACKWARD_INCHES);
+        strafeLeftByInches(0.5,  14); // TODO: Make a constant
+        rotateToAbsoluteYaw(-90);
 
-        // fix this
-        rotate(-88);
+        strafeRightByInches(0.5, 8); // TODO: Make a constant
+        rotateToAbsoluteYaw(-90);
 
-        // maybe turn sideways
         robot.hooks.raiseHooks();
-        sleep(1000);
-
-        moveBackwardByInches(0.5, 2500, 3);
-
-        rotate(88);
+        moveBackwardByInches(0.5, MOVE_FOUNDATION_STEP_4_MOVE_BACKWARD_FROM_PLATFORM_INCHES);
     }
 
 
 
-    public void runSideRed()
+    private void moveBlueFoundation()
+    {
+        moveForwardByInches(0.25, MOVE_FOUNDATION_STEP_1_MOVE_AWAY_FROM_WALL_INCHES);
+        strafeLeftByInches(0.5, MOVE_FOUNDATION_STEP_2_STRAFE_ALONG_WALL_INCHES);
+        moveForwardByInches(0.5, MOVE_FOUNDATION_STEP_3_MOVE_FORWARD_TO_PLATFORM_INCHES);
+
+        // Make sure we are hitting the platform.
+        moveForwardByInches(0.5, MOVE_FOUNDATION_STEP_3B_MOVE_FORWARD_TO_TOUCH_PLATFORM_INCHES);
+
+        robot.hooks.lowerHooks();
+        strafeRightByInches(0.5,  14); // TODO: Make a constant
+        rotateToAbsoluteYaw(-90);
+
+        strafeLeftByInches(0.5, 8); // TODO: Make a constant
+        rotateToAbsoluteYaw(-90);
+
+        robot.hooks.raiseHooks();
+        moveBackwardByInches(0.5, MOVE_FOUNDATION_STEP_4_MOVE_BACKWARD_FROM_PLATFORM_INCHES);
+    }
+
+     public void runSideRed()
     {
         log("runSideRed");
         sleep(1000);
 
         moveRedFoundation();
 
-        strafeLeftByInches(0.5, 10000, STEP_5_STRAFE_TO_SIDE_PARK_INCHES);
+        strafeRightByInches(0.5, 21);    // TODO: Constants
+        moveBackwardByInches(0.5, 37);  // TODO: Constants
     }
 
 
@@ -100,32 +119,8 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
         moveRedFoundation();
 
-        strafeLeftByInches(0.5, 8000, STEP_5_STRAFE_TO_CENTER_PARK_INCHES);
-        moveForwardByInches(0.5, 5000, STEP_6_MOVE_FORWARD_TO_CENTER_PARK_INCHES);
-        strafeLeftByInches(0.5, 5000, STEP_7_STRAFE_LEFT_TO_CENTER_PARK_INCHES);
-    }
-
-
-    private void moveBlueFoundation()
-    {
-        moveForwardByInches(0.5, 3000, STEP_1_MOVE_FORWARD_INCHES);
-        strafeLeftByInches(0.5, 3000, STEP_2_STRAFE_INCHES);
-        moveForwardByInches(0.5, 3000, STEP_3_MOVE_FORWARD_INCHES);
-
-        robot.hooks.lowerHooks();
-        sleep(1000);
-        moveBackwardByInches(0.5, 3000, STEP_4_MOVE_BACKWARD_INCHES);
-
-        // fix this
-        rotate(88);
-
-        // maybe turn sideways
-        robot.hooks.raiseHooks();
-        sleep(1000);
-
-        moveBackwardByInches(0.5, 2500, 5);
-
-        rotate(-88);
+        moveBackwardByInches(0.5, 37);  // TODO: Constants
+        strafeRightByInches(0.5, 5);    // TODO: Constants
     }
 
 
@@ -136,7 +131,8 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
         moveBlueFoundation();
 
-        strafeRightByInches(0.5, 10000, STEP_5_STRAFE_TO_SIDE_PARK_INCHES);
+        strafeLeftByInches(0.5, 21);    // TODO: Constants
+        moveBackwardByInches(0.5, 37);  // TODO: Constants
     }
 
 
@@ -148,9 +144,8 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
         moveBlueFoundation();
 
-        strafeRightByInches(0.5, 8000, 28);
-        moveForwardByInches(0.5, 5000, 38);
-        strafeRightByInches(0.5, 5000, 14);
+        moveBackwardByInches(0.5, 37);  // TODO: Constants
+        strafeLeftByInches(0.5, 5);    // TODO: Constants
     }
 
 

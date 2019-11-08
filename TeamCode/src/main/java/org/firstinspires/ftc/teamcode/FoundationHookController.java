@@ -43,7 +43,7 @@ public class FoundationHookController
         leftHook.setPosition(0);
         rightHook.setPosition(1);
 
-        // Wait for the hooks to raise.
+        // Wait for the hooks to lower.
         try {
             Thread.sleep(1500);
         } catch (InterruptedException e) {

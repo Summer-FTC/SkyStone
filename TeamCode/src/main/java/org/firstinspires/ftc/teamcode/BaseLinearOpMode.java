@@ -48,8 +48,8 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                                   Double targetYawChange)
     {
         // Make sure the timeout is big enough.
-        int maxEnc = Math.max(Math.max(encFL, encFR), Math.max(encBL, encBR));
-        msTimeOut = Math.max(msTimeOut, (int)Math.ceil(maxEnc / power));
+//        int maxEnc = Math.max(Math.max(Math.abs(encFL), encFR), Math.max(encBL, encBR));
+//        msTimeOut = Math.max(msTimeOut, (int)Math.ceil(maxEnc / power));
 
         if (targetYawChange != null)
         {
@@ -172,30 +172,38 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         robot.driveTrain.runWithoutEncoders();
     }
 
-    public void moveForwardWithEncoders(double power, int msTimeOut, int encoderTicks)
+    public void moveForwardWithEncoders(double power, int encoderTicks)
     {
+        int msTimeOut = moveTimeoutFromTicks(power, encoderTicks);
         moveWithEncoders("FORWARD", power, msTimeOut,
                 encoderTicks, encoderTicks,
                 encoderTicks, encoderTicks);
     }
 
-    public void moveBackwardWithEncoders(double power, int msTimeOut, int encoderTicks)
+    public void moveBackwardWithEncoders(double power, int encoderTicks)
     {
+        // TODO: Take this out.
+        log("Moving BACKWARD by " + encoderTicks);
+        sleep(2000);
+
+        int msTimeOut = moveTimeoutFromTicks(power, encoderTicks);
         moveWithEncoders("BACKWARD", power, msTimeOut,
                 -encoderTicks, -encoderTicks,
                 -encoderTicks, -encoderTicks);
     }
 
 
-    public void strafeRightWithEncoders(double power, int msTimeOut, int encoderTicks)
+    public void strafeRightWithEncoders(double power, int encoderTicks)
     {
+        int msTimeOut = strafeTimeoutFromTicks(power, encoderTicks);
         moveWithEncoders("RIGHT", power, msTimeOut,
                 encoderTicks, -encoderTicks,
                 -encoderTicks,  encoderTicks);
     }
 
-    public void strafeLeftWithEncoders(double power, int msTimeOut, int encoderTicks)
+    public void strafeLeftWithEncoders(double power, int encoderTicks)
     {
+        int msTimeOut = strafeTimeoutFromTicks(power, encoderTicks);
         moveWithEncoders("LEFT", power, msTimeOut,
                 -encoderTicks,  encoderTicks,
                 encoderTicks, -encoderTicks);
@@ -230,28 +238,48 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
     }
 
-    public void strafeRightByInches(double power, int msTimeOut, double inches)
+    private int strafeTimeoutFromTicks(double power, int encoderTicks)
+    {
+        return moveTimeoutFromTicks(power, encoderTicks);
+    }
+
+    private int moveTimeoutFromTicks(double power, int encoderTicks)
+    {
+        // Derive the timeout from the encoder ticks.
+        // Power 1 : 3000 ticks / second.
+
+        double ticksPerSecondAtMaxPower = 3000.0;
+        int msInSeconds = 1000;
+        int safetyFactor = 2;
+        double adjustedPower = Math.max(power, .1);
+
+        double seconds = encoderTicks / (adjustedPower * ticksPerSecondAtMaxPower);
+
+        return (int)(safetyFactor * msInSeconds * seconds);
+    }
+
+    public void strafeRightByInches(double power, double inches)
     {
         int encoderTicks = strafeInchtoEnc(inches);
-        strafeRightWithEncoders(power, msTimeOut, encoderTicks);
+        strafeRightWithEncoders(power, encoderTicks);
     }
 
-    public void strafeLeftByInches(double power, int msTimeOut, double inches)
+    public void strafeLeftByInches(double power, double inches)
     {
         int encoderTicks = strafeInchtoEnc(inches);
-        strafeLeftWithEncoders(power, msTimeOut, encoderTicks);
+        strafeLeftWithEncoders(power, encoderTicks);
     }
 
-    public void moveForwardByInches(double power, int msTimeOut, double inches)
+    public void moveForwardByInches(double power, double inches)
     {
         int encoderTicks = moveInchtoEnc(inches);
-        moveForwardWithEncoders(power, msTimeOut, encoderTicks);
+        moveForwardWithEncoders(power, encoderTicks);
     }
 
-    public void moveBackwardByInches(double power, int msTimeOut, double inches)
+    public void moveBackwardByInches(double power, double inches)
     {
         int encoderTicks = moveInchtoEnc(inches);
-        moveBackwardWithEncoders(power, msTimeOut, encoderTicks);
+        moveBackwardWithEncoders(power, encoderTicks);
     }
 
     // left or right

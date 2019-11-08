@@ -23,70 +23,81 @@ public class DemoLinearOpMode extends BaseLinearOpMode
 
         telemetry.addData("Before moving", "");
 
-//        5000/79
-//        moveForwardWithEncoders(0.01, 50000, 100); sleep(1000);
-//        moveForwardWithEncoders(0.015, 50000, 100); sleep(1000);
-//        moveForwardWithEncoders(0.02, 50000, 100); sleep(1000);
-//        moveForwardWithEncoders(0.025, 50000, 100); sleep(1000);
-//        moveForwardWithEncoders(0.05, 50000, 100); sleep(1000);
-//        moveForwardWithEncoders(0.075, 50000, 100); sleep(1000);
-//        moveForwardWithEncoders(0.1, 50000, 100); sleep(1000);
+//        moveForwardWithEncoders(0.01, 100); sleep(1000);
+//        moveForwardWithEncoders(0.015, 100); sleep(1000);
+//        moveForwardWithEncoders(0.02, 100); sleep(1000);
+//        moveForwardWithEncoders(0.025, 100); sleep(1000);
+//        moveForwardWithEncoders(0.05, 100); sleep(1000);
+//        moveForwardWithEncoders(0.075, 100); sleep(1000);
+//        moveForwardWithEncoders(0.1, 100); sleep(1000);
 //
-        rotate(45);
-        sleep(500);
-        rotateToAbsoluteYaw(0);
-        sleep(2500);
 
-        rotate(-45);
-        sleep(500);
-        rotateToAbsoluteYaw(0);
-        sleep(2500);
+        strafeLeftByInches(0.5, 20);
+        moveBackwardByInches(0.5, 20);
+        strafeRightByInches(0.5, 20);
+        moveForwardByInches(0.5, 20);
 
-        rotate(90);
-        sleep(500);
-        rotateToAbsoluteYaw(0);
-        sleep(2500);
+        strafeLeftByInches(0.5, 20);
+        moveBackwardByInches(0.5, 20);
+        strafeRightByInches(0.5, 20);
+        moveForwardByInches(0.5, 20);
 
-        rotate(-90);
-        sleep(500);
-        rotateToAbsoluteYaw(0);
-        sleep(2500);
-
-        rotate(170);
-        sleep(500);
-        rotateToAbsoluteYaw(0);
-        sleep(2500);
-
-        rotate(-170);
-        sleep(500);
-        rotateToAbsoluteYaw(0);
-        sleep(2500);
+        //
+//        rotateToAbsoluteYaw(45);
+//        sleep(500);
+//        rotateToAbsoluteYaw(0);
+//        sleep(2500);
 //
-//        strafeRightByInches(0.5, 5000, 2); // 2
-//        sleep(2000);
-//        strafeRightByInches(0.5, 5000, 6); // 8
-//        sleep(2000);
-//        strafeRightByInches(0.5, 5000, 16); // 24
-//        sleep(2000);
-//        strafeRightByInches(0.5, 5000, 24); // 48
-//        sleep(2000);
-
-//        moveForwardWithEncoders(0.5, 50000, 4000);
+//        rotateToAbsoluteYaw(-45);
+//        sleep(500);
+//        rotateToAbsoluteYaw(0);
+//        sleep(2500);
 //
-//        strafeRightWithEncoders(0.5, 50000, 1000);
+//        rotateToAbsoluteYaw(90);
+//        sleep(500);
+//        rotateToAbsoluteYaw(0);
+//        sleep(2500);
+//
+//        rotateToAbsoluteYaw(-90);
+//        sleep(500);
+//        rotateToAbsoluteYaw(0);
+//        sleep(2500);
+//
+//        rotateToAbsoluteYaw(170);
+//        sleep(500);
+//        rotateToAbsoluteYaw(0);
+//        sleep(2500);
+//
+//        rotateToAbsoluteYaw(-170);
+//        sleep(500);
+//        rotateToAbsoluteYaw(0);
+//        sleep(2500);
+
+//        strafeRightByInches(0.5, 2); // 2 , 24
+//        sleep(2000);
+//        strafeRightByInches(0.5, 6); // 8 , 32
+//        sleep(2000);
+//        strafeRightByInches(0.5, 16); // 24 , 48
+//        sleep(2000);
+//        strafeRightByInches(0.5, 24); // 48 , 72
+//        sleep(2000);
+
+//        moveForwardWithEncoders(0.5, 4000);
+//
+//        strafeRightWithEncoders(0.5, 1000);
 //        sleep(4000);
-//        strafeRightWithEncoders(0.5, 50000, 2000);
+//        strafeRightWithEncoders(0.5, 2000);
 //        sleep(4000);
-//        strafeRightWithEncoders(0.5, 50000, 4000);
+//        strafeRightWithEncoders(0.5, 4000);
 //        sleep(4000);
 
-//        strafeRightWithEncoders(0.5, 50000, 5000);
+//        strafeRightWithEncoders(0.5, 5000);
 //        sleep(4000);
-//        strafeLeftWithEncoders(0.5, 50000, 5000);
+//        strafeLeftWithEncoders(0.5, 5000);
 
 //
 //        // Moves in a square
-//        moveForwardWithEncoders(0.5, 5000, 4000);
+//        moveForwardWithEncoders(0.5, 4000);
 //        sleep(5000);
 //
 //        // Turns right
@@ -94,7 +105,7 @@ public class DemoLinearOpMode extends BaseLinearOpMode
 //
 //        sleep(3000);
 //
-//        strafeRightWithEncoders(0.5, 5000, 5000);
+//        strafeRightWithEncoders(0.5, 5000);
 //        sleep(5000);
 
         //  rotate(90);
