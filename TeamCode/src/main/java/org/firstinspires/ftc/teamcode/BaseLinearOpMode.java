@@ -2,12 +2,17 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
+import java.lang.annotation.ElementType;
 import java.util.HashMap;
 import java.util.Map;
 
 public abstract class BaseLinearOpMode extends LinearOpMode
 {
+    // This power will move the robot slowly. It actually moves at .015 (very slowly).
+    private static double MIN_POWER = 0.03;
+
     VenomRobot robot = new VenomRobot();
     double newPower;
 
@@ -36,12 +41,16 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                 encFL, encFR, encBL, encBR, null);
     }
 
-    // TODO: Add a timeout.
+
     private void moveWithEncoders(String direction, double power, int msTimeOut,
                                   int encFL, int encFR, int encBL, int encBR,
                                   // null means that we don't stop when the yaw changes.
                                   Double targetYawChange)
     {
+        // Make sure the timeout is big enough.
+//        int maxEnc = Math.max(Math.max(Math.abs(encFL), encFR), Math.max(encBL, encBR));
+//        msTimeOut = Math.max(msTimeOut, (int)Math.ceil(maxEnc / power));
+
         if (targetYawChange != null)
         {
             if ((targetYawChange < -180) || (targetYawChange > 180)) {
@@ -110,7 +119,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                     if (ticksRemaining > startScalingTicks) {
                         powerToSet = power;
                     } else {
-                        powerToSet = Math.max(0.1,
+                        powerToSet = Math.max(Math.min(MIN_POWER, power),
                                 power * (ticksRemaining / startScalingTicks));
                     }
                 }
@@ -139,7 +148,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                     double scaleAtYawRemaining = 30;
                     if (absYawRemaining < scaleAtYawRemaining) {
                         double scale = absYawRemaining / scaleAtYawRemaining;
-                        powerToSet = Math.max(0.1, scale * power);
+                        powerToSet = Math.max(MIN_POWER, scale * power);
                     }
                 }
 
@@ -148,16 +157,9 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
                 m.setPower(powerToSet);
 
-//                if (yawChange != null) {
-//
-//                }
-
-//                if ((stopDetector != null) && stopDetector.isDone()) {
-//                    active = false;
-//                }
-
             }
             robot.log(message.toString());
+            idle();
         }
 
         for (DcMotor m : motorToEncoder.keySet())
@@ -165,54 +167,59 @@ public abstract class BaseLinearOpMode extends LinearOpMode
             m.setPower(0);
         }
 
-//        robot.log("Loop is done.");
-
         // Why reset here?
         robot.driveTrain.resetEncoders();
         robot.driveTrain.runWithoutEncoders();
     }
 
-    // TODO: Add a timeout.
-    public void moveForwardWithEncoders(double power, int msTimeOut, int encoderTicks)
+    public void moveForwardWithEncoders(double power, int encoderTicks)
     {
+        int msTimeOut = moveTimeoutFromTicks(power, encoderTicks);
         moveWithEncoders("FORWARD", power, msTimeOut,
                 encoderTicks, encoderTicks,
                 encoderTicks, encoderTicks);
     }
 
-    public void moveBackwardWithEncoders(double power, int msTimeOut, int encoderTicks)
+    public void moveBackwardWithEncoders(double power, int encoderTicks)
     {
+
+        log("Moving BACKWARD by " + encoderTicks);
+
+
+        int msTimeOut = moveTimeoutFromTicks(power, encoderTicks);
         moveWithEncoders("BACKWARD", power, msTimeOut,
                 -encoderTicks, -encoderTicks,
                 -encoderTicks, -encoderTicks);
     }
 
 
-    public void strafeRightWithEncoders(double power, int msTimeOut, int encoderTicks)
+    public void strafeRightWithEncoders(double power, int encoderTicks)
     {
+        int msTimeOut = strafeTimeoutFromTicks(power, encoderTicks);
         moveWithEncoders("RIGHT", power, msTimeOut,
                 encoderTicks, -encoderTicks,
                 -encoderTicks,  encoderTicks);
     }
 
-    public void strafeLeftWithEncoders(double power, int msTimeOut, int encoderTicks)
+    public void strafeLeftWithEncoders(double power, int encoderTicks)
     {
+        int msTimeOut = strafeTimeoutFromTicks(power, encoderTicks);
         moveWithEncoders("LEFT", power, msTimeOut,
                 -encoderTicks,  encoderTicks,
                 encoderTicks, -encoderTicks);
     }
 
 
-    public void moveToLoadingZone()
+    // This is useful to move to an absolute position based on where you started.
+    public void rotateToAbsoluteYaw(double yawDegrees)
     {
+        double targetYawChange = robot.imu.getTrueDiff(yawDegrees);
+        rotate(targetYawChange);
 
+        double actualYaw = robot.imu.getYaw();
+        log("Targeting yaw=" + yawDegrees + " actual yaw=" + actualYaw);
     }
 
-    // do we need this
-    public void rotate()
-    {
-
-    }
 
     // positive is left, negative is right
     public void rotate(double degrees)
@@ -231,34 +238,54 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
     }
 
-    public void strafeRightByInches(double power, int msTimeOut, double inches)
+    private int strafeTimeoutFromTicks(double power, int encoderTicks)
+    {
+        return moveTimeoutFromTicks(power, encoderTicks);
+    }
+
+    private int moveTimeoutFromTicks(double power, int encoderTicks)
+    {
+        // Derive the timeout from the encoder ticks.
+        // Power 1 : 3000 ticks / second.
+
+        double ticksPerSecondAtMaxPower = 3000.0;
+        int msInSeconds = 1000;
+        int safetyFactor = 2;
+        double adjustedPower = Math.max(power, .1);
+
+        double seconds = encoderTicks / (adjustedPower * ticksPerSecondAtMaxPower);
+
+        return (int)(safetyFactor * msInSeconds * seconds);
+    }
+
+    public void strafeRightByInches(double power, double inches)
     {
         int encoderTicks = strafeInchtoEnc(inches);
-        strafeRightWithEncoders(power, msTimeOut, encoderTicks);
+        strafeRightWithEncoders(power, encoderTicks);
     }
 
-    public void strafeLeftByInches(double power, int msTimeOut, double inches)
+    public void strafeLeftByInches(double power, double inches)
     {
         int encoderTicks = strafeInchtoEnc(inches);
-        strafeLeftWithEncoders(power, msTimeOut, encoderTicks);
+        strafeLeftWithEncoders(power, encoderTicks);
     }
 
-    public void moveForwardByInches(double power, int msTimeOut, double inches)
+    public void moveForwardByInches(double power, double inches)
     {
         int encoderTicks = moveInchtoEnc(inches);
-        moveForwardWithEncoders(power, msTimeOut, encoderTicks);
+        moveForwardWithEncoders(power, encoderTicks);
     }
 
-    public void moveBackwardByInches(double power, int msTimeOut, double inches)
+    public void moveBackwardByInches(double power, double inches)
     {
         int encoderTicks = moveInchtoEnc(inches);
-        moveBackwardWithEncoders(power, msTimeOut, encoderTicks);
+        moveBackwardWithEncoders(power, encoderTicks);
     }
 
     // left or right
     private int strafeInchtoEnc(double inches)
     {
-        return (int)(inches*(4000/78.13));
+        return (int)(inches*(5000/79));
     }
 
     // forwards or backwards
@@ -266,6 +293,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     {
         return (int)(inches*(4000/65.8));
     }
+
 
     public void displayIMU(int msTimeOut)
     {

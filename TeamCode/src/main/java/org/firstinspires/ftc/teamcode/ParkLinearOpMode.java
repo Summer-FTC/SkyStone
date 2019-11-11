@@ -46,31 +46,32 @@ public class ParkLinearOpMode extends BaseLinearOpMode
 
     public void runSideRed() {
         // So we don't get in the other team's way
-        //sleep(20000);
-        strafeRightByInches(0.5, 3000, 50);
+        sleep(20000);
+        moveForwardByInches(0.5, 1);
+        strafeRightByInches(0.5, 10);
     }
 
     public void runCenterRed() {
-        //sleep(15000);
-        strafeRightByInches(0.5, 8000, 25);
-        moveForwardByInches(0.5, 5000, 22);
-        strafeRightByInches(0.5, 5000, 25);
+        sleep(20000);
+        moveForwardByInches(0.5,25);
+        strafeRightByInches(0.5,10);
     }
 
     public void runSideBlue() {
         // So we don't get in the other team's way
-        //sleep(20000);
-        strafeLeftByInches(0.5, 3000, 50);
+        sleep(20000);
+        moveForwardByInches(0.5, 1);
+        strafeLeftByInches(0.5, 10);
     }
 
     public void runCenterBlue() {
-        //sleep(15000);
-        strafeLeftByInches(0.5, 8000, 25);
-        moveForwardByInches(0.5, 5000, 22);
-        strafeLeftByInches(0.5, 5000, 25);
+        sleep(20000);
+        moveForwardByInches(0.5, 25);
+        strafeLeftByInches(0.5, 10);
     }
 
-    public void configMode() {
+    public void configMode()
+    {
         String lastModes = "";
         telemetry.addData("Entering " , "ConfigMode");
         telemetry.update();

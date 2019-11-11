@@ -1,21 +1,23 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
 
 @Autonomous(name = "Foundation Run", group = "6209")
 public class FoundationLinearOpMode extends BaseLinearOpMode
 {
+    private static final int MOVE_AWAY_FROM_WALL_INCHES = 3;
+    private static final int STRAFE_ALONG_WALL_INCHES = 24;
+    private static final int MOVE_FORWARD_TO_PLATFORM_INCHES = 29;
+    private static final int MOVE_FORWARD_TO_TOUCH_PLATFORM_INCHES = 5;
+    private static final int STRAFE_PLATFORM_AWAY_FROM_WALL_INCHES = 14;
+    private static final int STRAFE_PLATFORM_TO_CORNER_INCHES = 8;
+    private static final int MOVE_BACKWARD_FROM_PLATFORM_INCHES = 3;
 
-    private static final int STEP_1_MOVE_FORWARD_INCHES = 2;
-    private static final int STEP_2_STRAFE_INCHES = 30;
-    private static final int STEP_3_MOVE_FORWARD_INCHES = 29;
-    private static final int STEP_4_MOVE_BACKWARD_INCHES = 34;
-    private static final int STEP_5_STRAFE_TO_SIDE_PARK_INCHES = 70;
-    private static final int STEP_5_STRAFE_TO_CENTER_PARK_INCHES = 45;
-    private static final int STEP_6_MOVE_FORWARD_TO_CENTER_PARK_INCHES = 26;
-    private static final int STEP_7_STRAFE_LEFT_TO_CENTER_PARK_INCHES = 25;
+    private static final int STRAFE_TO_SIDE_TO_PARK_INCHES = 21;
+    private static final int MOVE_BACKWARD_TO_PARK_INCHES = 36;
+    private static final int STRAFE_TO_CENTER_TO_PARK_INCHES = 15;
+
 
     boolean configOnly = false;
 
@@ -23,118 +25,111 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
     boolean isStartingBlue = true;
     boolean parkOnSide = true;
 
-    @Override
+
     public void initialize()
     {
         super.initialize();
         robot.hooks.raiseHooks();
     }
 
-    ElapsedTime eTime;
-    protected ElapsedTime time = new ElapsedTime();
+
 
     @Override
     public void runOpMode() throws InterruptedException
     {
-//        if (configOnly) {
-//            readConfigValues();
-//            configMode();
-//            writeConfigValues();
-//            logConfigModes(false);
-//        } else {
-//            telemetry.addData("Status", "Initializing...");
-//            telemetry.update();
-//
-//
-//
-//            telemetry.addData("Status", "Initialized.");
-//            telemetry.update();
-//
-////            readConfigValues();
-//            configMode();
-//            writeConfigValues();
-//            logConfigModes(false);
-//
-//            telemetry.addData("Status", "Configuration loaded.");
-//            telemetry.update();
-//
-//
-//            telemetry.addData("Status", "Everything Ready. Waiting for Start.");
-//            telemetry.update();
-//
-//
-//            while (!(isStarted() || isStopRequested())) { // equivalent to waitForStart();
-//                telemetry.addData("Status", "waiting for start");
-//                telemetry.update();
-//                idle();
-//            }
-//
-            telemetry.addData("Status", "Running Autonomous!");
-            telemetry.update();
-            initialize();
-            configMode();
-            waitForStart();
 
-            if (!isStartingBlue && parkOnSide)
-                runSideRed();
-            else if (!isStartingBlue && !parkOnSide)
-                runCenterRed();
-            else if (isStartingBlue && parkOnSide)
-                runSideBlue();
-            else if (isStartingBlue && !parkOnSide)
-                runCenterBlue();
+        telemetry.addData("Status", "Running Autonomous!");
+        telemetry.update();
+        initialize();
+        configMode();
+        waitForStart();
 
-            telemetry.addData("After running", "");
-            telemetry.update();
+        if (!isStartingBlue && parkOnSide) {
+            runSideRed();
+        } else if (!isStartingBlue && !parkOnSide) {
+            runCenterRed();
+        } else if (isStartingBlue && parkOnSide) {
+            runSideBlue();
+        } else if (isStartingBlue && !parkOnSide) {
+            runCenterBlue();
+        }
+
+        telemetry.addData("After running", "");
+        telemetry.update();
     }
+
+
 
     private void moveRedFoundation()
     {
-        moveForwardByInches(0.5, 3000, STEP_1_MOVE_FORWARD_INCHES);
-        strafeRightByInches(0.5, 3000, STEP_2_STRAFE_INCHES);
-        moveForwardByInches(0.5, 3000, STEP_3_MOVE_FORWARD_INCHES);
+        moveForwardByInches(0.25, MOVE_AWAY_FROM_WALL_INCHES);
+        strafeRightByInches(0.5, STRAFE_ALONG_WALL_INCHES);
+        moveForwardByInches(0.5, MOVE_FORWARD_TO_PLATFORM_INCHES);
+
+        // Make sure we are hitting the platform.
+        moveForwardByInches(0.5, MOVE_FORWARD_TO_TOUCH_PLATFORM_INCHES);
 
         robot.hooks.lowerHooks();
-        sleep(1000);
-        moveBackwardByInches(0.5, 3000, STEP_4_MOVE_BACKWARD_INCHES);
-        // maybe turn sideways
+
+        moveBackwardByInches(0.5, 32);
+
+        rotateToAbsoluteYaw(90);
+
         robot.hooks.raiseHooks();
-        sleep(1000);
+
+        moveBackwardByInches(0.5, MOVE_BACKWARD_FROM_PLATFORM_INCHES);
     }
 
-    public void runSideRed()
+
+
+    private void moveBlueFoundation()
+    {
+        moveForwardByInches(0.25, MOVE_AWAY_FROM_WALL_INCHES);
+        strafeLeftByInches(0.5, STRAFE_ALONG_WALL_INCHES);
+        moveForwardByInches(0.5, MOVE_FORWARD_TO_PLATFORM_INCHES);
+
+        // Make sure we are hitting the platform.
+        moveForwardByInches(0.5, MOVE_FORWARD_TO_TOUCH_PLATFORM_INCHES);
+
+        robot.hooks.lowerHooks();
+
+        moveBackwardByInches(0.5, 32);
+
+        rotateToAbsoluteYaw(-90);
+
+        robot.hooks.raiseHooks();
+
+        moveBackwardByInches(0.5, MOVE_BACKWARD_FROM_PLATFORM_INCHES);
+    }
+
+
+
+     public void runSideRed()
     {
         log("runSideRed");
         sleep(1000);
 
         moveRedFoundation();
 
-        // wait before parking?
+        strafeRightByInches(0.5, 12);
 
-        strafeLeftByInches(0.5, 10000, STEP_5_STRAFE_TO_SIDE_PARK_INCHES);
+        moveBackwardByInches(0.5, MOVE_BACKWARD_TO_PARK_INCHES);
     }
 
-    // Attempt rotate.
-//    public void runSideRed() {
-//        moveForwardByInches(0.5, 3000, 2);
-//        strafeRightByInches(0.5, 3000, 30);
-//        moveForwardByInches(0.5, 3000, 29);
-//
-//        robot.hooks.lowerHooks(true);
-//        sleep(2000);
-//        strafeLeftByInches(0.5, 3000, 20);
-//        rotate(180);
-//
-//        moveForwardByInches(0.5, 3000, 6);
-//
-//        // maybe turn sideways
-//        robot.hooks.lowerHooks(false);
-//        sleep(2000);
-//
-//        // wait before parking
-//        moveBackwardByInches(0.25, 3000, 3);
-//        strafeRightByInches(0.5, 10000, 70);
-//    }
+
+
+
+
+    public void runSideBlue() {
+        log("runSideBlue");
+        sleep(1000);
+
+        moveBlueFoundation();
+
+        strafeLeftByInches(0.5, 12);
+
+        moveBackwardByInches(0.5, MOVE_BACKWARD_TO_PARK_INCHES);
+    }
 
 
 
@@ -144,33 +139,11 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
         moveRedFoundation();
 
-        strafeLeftByInches(0.5, 8000, STEP_5_STRAFE_TO_CENTER_PARK_INCHES);
-        moveForwardByInches(0.5, 5000, STEP_6_MOVE_FORWARD_TO_CENTER_PARK_INCHES);
-        strafeLeftByInches(0.5, 5000, STEP_7_STRAFE_LEFT_TO_CENTER_PARK_INCHES);
+        strafeLeftByInches(0.5, STRAFE_TO_CENTER_TO_PARK_INCHES);
+        moveBackwardByInches(0.5, MOVE_BACKWARD_TO_PARK_INCHES);
     }
 
-    private void moveBlueFoundation()
-    {
-        moveForwardByInches(0.5, 3000, STEP_1_MOVE_FORWARD_INCHES);
-        strafeLeftByInches(0.5, 3000, STEP_2_STRAFE_INCHES);
-        moveForwardByInches(0.5, 3000, STEP_3_MOVE_FORWARD_INCHES);
 
-        robot.hooks.lowerHooks();
-        sleep(1000);
-        moveBackwardByInches(0.5, 3000, STEP_4_MOVE_BACKWARD_INCHES);
-        // maybe turn sideways
-        robot.hooks.raiseHooks();
-        sleep(1000);
-    }
-
-    public void runSideBlue() {
-        log("runSideBlue");
-        sleep(1000);
-
-        moveBlueFoundation();
-
-        strafeRightByInches(0.5, 10000, STEP_5_STRAFE_TO_SIDE_PARK_INCHES);
-    }
 
     public void runCenterBlue() {
 
@@ -179,18 +152,11 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
         moveBlueFoundation();
 
-        strafeRightByInches(0.5, 8000, STEP_5_STRAFE_TO_CENTER_PARK_INCHES);
-        moveForwardByInches(0.5, 5000, STEP_6_MOVE_FORWARD_TO_CENTER_PARK_INCHES);
-        strafeRightByInches(0.5, 5000, STEP_7_STRAFE_LEFT_TO_CENTER_PARK_INCHES);
+        strafeRightByInches(0.5, STRAFE_TO_CENTER_TO_PARK_INCHES);
+        moveBackwardByInches(0.5, MOVE_BACKWARD_TO_PARK_INCHES);
     }
 
-    public void pullFoundation()
-    {
-        robot.hooks.lowerHooks();
-        moveBackwardByInches(0.5, 3000, 28);
-        // maybe turn sideways
-        robot.hooks.raiseHooks();
-    }
+
 
     public void configMode() {
         String lastModes = "";
@@ -213,6 +179,7 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         RobotLog.i("configMode() stop");
 
     }
+
 
     private String lastModes="";
     void logConfigModes(boolean update) {
