@@ -8,6 +8,7 @@ public class VenomTeleOp extends OpMode
 {
     VenomRobot robot = new VenomRobot();
     double intakePower = 1;
+    double drivePower = 1;
 
     @Override
     public void init()
@@ -22,8 +23,6 @@ public class VenomTeleOp extends OpMode
     {
         // add later
     }
-    // left trigger: .25
-    // right trigger: .5
 
     public void stop()
     {
@@ -40,13 +39,24 @@ public class VenomTeleOp extends OpMode
 
     void doDrive()
     {
-        double forward = -gamepad1.left_stick_y;
-        double strafe = -gamepad1.left_stick_x;
-        double rotate = gamepad1.right_stick_x;
+        double forward = -gamepad1.left_stick_y * drivePower;
+        double strafe = -gamepad1.left_stick_x * drivePower;
+        double rotate = gamepad1.right_stick_x * drivePower;
 
 
         robot.driveTrain.arcadeDrive(forward, strafe, rotate);
         robot.driveTrain.arcadeDrive(forward, strafe, rotate);
+
+        slowDown(gamepad1.left_trigger, 0.25);
+        slowDown(gamepad1.right_trigger, 0.5);
+    }
+
+    public void slowDown(float trigger, double speed) {
+
+        if(trigger > 0.8 && drivePower == 1)
+            drivePower = speed;
+        else if (trigger > 0.8 && drivePower != 1)
+            drivePower = 1;
     }
 
     public void doIntake()
