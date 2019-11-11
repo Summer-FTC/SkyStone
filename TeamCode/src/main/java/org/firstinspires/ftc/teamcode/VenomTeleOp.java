@@ -22,6 +22,8 @@ public class VenomTeleOp extends OpMode
     {
         // add later
     }
+    // left trigger: .25
+    // right trigger: .5
 
     public void stop()
     {
