@@ -55,10 +55,12 @@ public class VenomTeleOp extends OpMode
 
     public void slowDown(float trigger, double speed) {
 
-        if(trigger > 0.8 && drivePower == 1)
+        if(trigger > 0.8) {
             drivePower = speed;
-        else if (trigger > 0.8 && drivePower != 1)
+        }
+        else if (trigger < 0.8) {
             drivePower = 1;
+        }
     }
 
     public void doIntake()
