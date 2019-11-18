@@ -40,18 +40,10 @@ public class SkystoneLinearOpMode extends BaseLinearOpMode
     public void findSkystone() throws InterruptedException {
         // Tensor Flow stuff: detect Skystones
 
-        // use intake to get Skystone
-        // scans from middle --> right
-        // if !Skystone
-        // keep strafing
-        // if Skystone
+        // look at left 2 stones
+        // if Skystone there, returns location and match with either first or second
+        // if Skystone not there, go to third location
         // get Skystone
-
-        // Scan first stones from left to right until first Skystone detected
-        // If in first three, come back for second Skystone
-        // Scan last three stones
-        // If second Skystone still there, get
-        // If in last three, ally already got first Skystone, get second
         TensorFlowSkyStone tf = new TensorFlowSkyStone();
         tf.runOpMode();
     }
