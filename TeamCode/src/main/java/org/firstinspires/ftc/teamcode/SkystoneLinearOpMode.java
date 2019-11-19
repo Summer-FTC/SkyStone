@@ -26,7 +26,7 @@ public class SkystoneLinearOpMode extends BaseLinearOpMode
     @Override
     public void runOpMode() throws InterruptedException
     {
-        // move to stones
+        // move forward to be in correct distance of sensing 2 stones
         findSkystone();
         // strafe across line
         dropStone();

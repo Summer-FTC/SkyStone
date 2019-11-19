@@ -25,7 +25,6 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
     boolean isStartingBlue = true;
     boolean parkOnSide = true;
 
-
     public void initialize()
     {
         super.initialize();
