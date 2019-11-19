@@ -132,6 +132,7 @@ public class TensorFlowSkyStone extends LinearOpMode{
                             if (recognition.getLabel().equals("Skystone"))
                                 skystonePosition = i;
                             i++;
+                            // getConfidence() to make sure Skystone detected correctly
                         }
 
                         telemetry.update();

@@ -56,9 +56,13 @@ public class VenomTeleOp extends OpMode
     public void slowDown(float trigger, double speed) {
 
         if(trigger > 0.8) {
+            telemetry.addData(trigger + "", "");
+            telemetry.update();
             drivePower = speed;
         }
         else if (trigger < 0.8) {
+            telemetry.addData(trigger + "", "");
+            telemetry.update();
             drivePower = 1;
         }
     }
