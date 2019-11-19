@@ -41,30 +41,27 @@ public class VenomTeleOp extends OpMode
 
     void doDrive()
     {
+        slowDown();
+
         double forward = -gamepad1.left_stick_y * drivePower;
         double strafe = -gamepad1.left_stick_x * drivePower;
         double rotate = gamepad1.right_stick_x * drivePower;
 
-
         robot.driveTrain.arcadeDrive(forward, strafe, rotate);
         robot.driveTrain.arcadeDrive(forward, strafe, rotate);
 
-        slowDown(gamepad1.left_trigger, 0.25);
-        slowDown(gamepad1.right_trigger, 0.5);
     }
 
-    public void slowDown(float trigger, double speed) {
+    public void slowDown() {
 
-        if(trigger > 0.8) {
-            telemetry.addData(trigger + "", "");
-            telemetry.update();
-            drivePower = speed;
-        }
-        else if (trigger < 0.8) {
-            telemetry.addData(trigger + "", "");
-            telemetry.update();
+        if(gamepad1.right_trigger > 0.7)
+            drivePower = 0.5;
+
+        else if (gamepad1.left_trigger > 0.7)
+            drivePower = 0.25;
+        
+        else
             drivePower = 1;
-        }
     }
 
     public void doIntake()
