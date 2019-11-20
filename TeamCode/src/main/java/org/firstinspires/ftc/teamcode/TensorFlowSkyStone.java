@@ -129,7 +129,8 @@ public class TensorFlowSkyStone extends LinearOpMode{
                                     recognition.getLeft(), recognition.getTop());
                             telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
                                     recognition.getRight(), recognition.getBottom());
-                            if (recognition.getLabel().equals("Skystone"))
+
+                            if (recognition.getLabel().equals("Skystone") && recognition.getConfidence() > .50)
                                 skystonePosition = i;
                             i++;
                             // getConfidence() to make sure Skystone detected correctly
@@ -144,6 +145,10 @@ public class TensorFlowSkyStone extends LinearOpMode{
         if (tfod != null) {
             tfod.shutdown();
         }
+    }
+
+    public int getSkystonePosition() {
+        return skystonePosition;
     }
 
     /**

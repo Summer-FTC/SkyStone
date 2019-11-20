@@ -59,7 +59,7 @@ public class VenomTeleOp extends OpMode
 
         else if (gamepad1.left_trigger > 0.7)
             drivePower = 0.25;
-        
+
         else
             drivePower = 1;
     }

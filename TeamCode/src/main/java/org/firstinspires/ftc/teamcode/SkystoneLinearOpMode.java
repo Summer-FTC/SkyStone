@@ -11,9 +11,9 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 @Disabled
 public class SkystoneLinearOpMode extends BaseLinearOpMode
 {
-    protected static final String VUFORIA_KEY = "";
-    protected VuforiaLocalizer vuforia;
-    protected TFObjectDetector tfod;
+    TensorFlowSkyStone tf;
+    int skystonePosition;
+
 
     ElapsedTime eTime;
     protected ElapsedTime time = new ElapsedTime();
@@ -21,45 +21,47 @@ public class SkystoneLinearOpMode extends BaseLinearOpMode
     @Override
     public void initialize() {
         super.initialize();
+        tf = new TensorFlowSkyStone();
     }
 
     @Override
     public void runOpMode() throws InterruptedException
     {
-        // move forward to be in correct distance of sensing 2 stones
-        findSkystone();
-        // strafe across line
-        dropStone();
-        // strafe back
-        findSkystone();
-        // strafe across line
-        dropStone();
-        park();
-    }
-
-    public void findSkystone() throws InterruptedException {
-        // Tensor Flow stuff: detect Skystones
-
-        // look at left 2 stones
-        // if Skystone there, returns location and match with either first or second
-        // if Skystone not there, go to third location
-        // get Skystone
-        TensorFlowSkyStone tf = new TensorFlowSkyStone();
+        // move forward first
         tf.runOpMode();
+        skystonePosition = tf.getSkystonePosition();
+        tf.stop();
+
+        // move to skystonePosition
+
+        getStone(skystonePosition);
+
+        // move across line to foundation
+        dropStone(); // on foundation
+
+        // get in the right position
+        robot.hooks.lowerHooks();
+        // move and rotate
+        robot.hooks.raiseHooks();
+
+        // go park
     }
 
-    public void getStone() throws InterruptedException
+    public void getStone(int position) throws InterruptedException
     {
-        // use output to get stone
+        if (position == 1) {
+            // get stone in position 1;
+        }
+        else if (position == 2) {
+            // get stone in position 2;
+        }
+        else {
+            // get stone in position 3;
+        }
     }
 
     public void dropStone()
     {
         // Drop Stone across the tape
-    }
-
-    public void park()
-    {
-        // park robot on line: center or side?
     }
 }
