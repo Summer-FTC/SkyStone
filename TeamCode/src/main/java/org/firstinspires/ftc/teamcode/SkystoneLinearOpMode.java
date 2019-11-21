@@ -28,7 +28,10 @@ public class SkystoneLinearOpMode extends BaseLinearOpMode
     public void runOpMode() throws InterruptedException
     {
         // move forward first
+        moveForwardByInches(0.5, 20);
         tf.runOpMode();
+        // wait for phone to find position
+        sleep(3000);
         skystonePosition = tf.getSkystonePosition();
         tf.stop();
 
@@ -51,12 +54,15 @@ public class SkystoneLinearOpMode extends BaseLinearOpMode
     {
         if (position == 1) {
             // get stone in position 1;
+            strafeRightByInches(0.5, 3);
         }
         else if (position == 2) {
             // get stone in position 2;
+            strafeLeftByInches(0.5, 3);
         }
         else {
             // get stone in position 3;
+            strafeLeftByInches(0.5, 10);
         }
     }
 
