@@ -55,6 +55,7 @@ public class SkystoneLinearOpMode extends BaseLinearOpMode
         if (position == 1) {
             // get stone in position 1;
             strafeRightByInches(0.5, 3);
+            moveForwardByInches(0.5, 5);
         }
         else if (position == 2) {
             // get stone in position 2;
