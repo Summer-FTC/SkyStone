@@ -10,8 +10,8 @@ public class FoundationHookController
     public Servo leftHook;
     public Servo rightHook;
 
-    HardwareMap hwMap = null;
-    Telemetry telemetry = null;
+    HardwareMap hwMap;
+    Telemetry telemetry;
 
     public void init(HardwareMap hardwareMap, Telemetry telemetry){
         this.hwMap = hardwareMap;
