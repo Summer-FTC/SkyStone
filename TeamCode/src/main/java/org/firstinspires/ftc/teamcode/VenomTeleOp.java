@@ -10,8 +10,6 @@ public class VenomTeleOp extends OpMode
     double intakePower = 1;
     double drivePower = 1;
 
-
-
     @Override
     public void init()
     {
@@ -36,7 +34,7 @@ public class VenomTeleOp extends OpMode
         doDrive();
         doFoundation();
         // doIntake();
-        // doOutake();
+        // doOutput();
     }
 
     void doDrive()
@@ -72,7 +70,7 @@ public class VenomTeleOp extends OpMode
             robot.intake.setPower(-intakePower);
     }
 
-    public void doOutake(){
+    public void doOutput(){
         if(gamepad2.right_trigger > 0.2){
             robot.output.setPower(true);
         }
@@ -80,17 +78,15 @@ public class VenomTeleOp extends OpMode
         if(gamepad2.left_trigger > 0.2){
             robot.output.setPower(false);
         }
+
+
     }
 
     public void doFoundation(){
-        if(gamepad2.dpad_down){
+        if(gamepad2.left_bumper)
             robot.hooks.lowerHooks();
-            telemetry.addData("After lowering", "");
-            telemetry.update();
-        }
 
-        if(gamepad2.dpad_up){
+        if(gamepad2.right_bumper)
             robot.hooks.raiseHooks();
-        }
     }
 }

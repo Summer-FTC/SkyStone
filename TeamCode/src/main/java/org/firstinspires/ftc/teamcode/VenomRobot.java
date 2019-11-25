@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.icu.util.Output;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -44,14 +46,14 @@ public class VenomRobot extends LinearOpMode
         hooks = new FoundationHookController();
         hooks.init(hwMap, telemetry);
 
+        output = new OutputController();
+        output.init(hwMap, telemetry);
+
         imu = new IMU(hwMap.get(BNO055IMU.class, "imu"));
         imu.IMUinit(hwMap);
 
         //intake = new IntakeController();
         //intake.init(hwMap, telemetry);
-        //
-        // output = new OutputController();
-        // output.init(hwMap,telemetry);
   }
 
 

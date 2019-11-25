@@ -19,6 +19,7 @@ public class OutputController
     public Servo elbow2;
     public Servo wrist;
     public CRServo clamp;
+    int position;
 
     HardwareMap hwMap;
     Telemetry telemetry;
@@ -32,11 +33,11 @@ public class OutputController
         this.telemetry = telemetry;
 
         motorLift = hwMap.dcMotor.get("motorLift");
+
         // elbows flip
         // 1 and 2 work simultaneously, might need to turn in opposite directions
         elbow1 = hwMap.servo.get("elbow1");
         elbow2 = hwMap.servo.get("elbow2");
-
         // wrist rotates block
         wrist = hwMap.servo.get("wrist");
         // clamp opens and closes on block
@@ -75,29 +76,35 @@ public class OutputController
         motorLift.setPower(0);
     }
 
-    public void extendLift()
+    public void movetoPosition(int newPos)
     {
-        // something with motorOutput
-    }
-
-    public void lowerLift()
-    {
-        // something with motorOutput
+        if (newPos == 1) {
+            // inside
+            // move in from position 2
+            position = 1;
+        } else if (newPos == 2) {
+            if (position == 1) {
+                // move out from position 1
+                position = 2;
+            } else if (position == 3) {
+                // raise up from position 3
+                position = 2;
+            }
+            // outside high
+        } else if (newPos == 3) {
+            // outside low
+            // lower from position 2;
+            position = 2;
+        }
     }
 
     public void openClamp()
     {
-        // something with servoClamp
+        // something with clamp
     }
 
     public void closeClamp()
     {
-        // something with servoClamp
-    }
-
-    // change the name of this
-    public void dunk()
-    {
-
+        // something with clamp
     }
 }
