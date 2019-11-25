@@ -100,11 +100,12 @@ public class OutputController
 
     public void openClamp()
     {
-        // something with clamp
+        clamp.setPower(0.3);
+        // idk what power
     }
 
     public void closeClamp()
     {
-        // something with clamp
+        clamp.setPower(-0.3);
     }
 }
