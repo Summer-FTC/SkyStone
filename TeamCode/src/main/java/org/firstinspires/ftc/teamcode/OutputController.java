@@ -94,7 +94,7 @@ public class OutputController
         } else if (newPos == 3) {
             // outside low
             // lower from position 2;
-            position = 2;
+            position = 3;
         }
     }
 
@@ -108,4 +108,6 @@ public class OutputController
     {
         clamp.setPower(-0.3);
     }
+
+
 }

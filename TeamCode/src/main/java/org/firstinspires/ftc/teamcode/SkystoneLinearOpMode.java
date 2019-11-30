@@ -36,8 +36,7 @@ public class SkystoneLinearOpMode extends BaseLinearOpMode
         tf.stop();
 
         // move to skystonePosition
-
-        getStone(skystonePosition);
+        moveToStone(skystonePosition);
 
         // move across line to foundation
         dropStone(); // on foundation
@@ -50,17 +49,19 @@ public class SkystoneLinearOpMode extends BaseLinearOpMode
         // go park
     }
 
-    public void getStone(int position) throws InterruptedException
+    public void moveToStone(int position) throws InterruptedException
     {
         if (position == 1) {
             // get stone in position 1;
             strafeRightByInches(0.5, 3);
             moveForwardByInches(0.5, 5);
+            getStone();
         }
         else if (position == 2) {
             // get stone in position 2;
             strafeLeftByInches(0.5, 3);
             moveForwardByInches(0.5, 5);
+            getStone();
         }
         else {
             // get stone in position 3;
@@ -69,8 +70,23 @@ public class SkystoneLinearOpMode extends BaseLinearOpMode
         }
     }
 
+    public void getStone() {
+        robot.output.movetoPosition(2);
+        robot.output.movetoPosition(3);
+        robot.output.openClamp();
+
+        moveForwardByInches(0.5, 5);
+
+        robot.output.closeClamp();
+
+        moveBackwardByInches(0.8, 10);
+    }
+
     public void dropStone()
     {
         // Drop Stone across the tape
+        robot.output.movetoPosition(2);
+        // may need to raise lift
+        robot.output.openClamp();
     }
 }
