@@ -80,29 +80,46 @@ public class OutputController
     {
         if (newPos == 1) {
             // inside
-            // move in from position 2
-            elbow1.setPosition(1);
-            elbow2.setPosition(1); // need to work simultaneously? And turn while moving
-            wrist.scaleRange(0, 90);
+
+            wrist.setPosition(0.5);
+            moveServosSimultaneously(elbow1, elbow2, 0.7, 0.3);
+
+            wrist.setPosition(0);
+
+            moveServosSimultaneously(elbow1, elbow2, 0.3, 0);
+
+            // need to work simultaneously? And turn while moving
+            // move a little at a time, using loop
+            // servo .setPosition() anywhere from 0-1, from lower to upper limit
 
             openClamp(); // for certain amount of time
 
             position = 1;
 
         } else if (newPos == 2) {
-
-            elbow1.setPosition(2);
-            elbow2.setPosition(2);
-
             // outside high
+
+            // go outward from position 1
+            if (position == 1) {
+                moveServosSimultaneously(elbow1, elbow2, 0, 0.3);
+
+                wrist.setPosition(0.5); // 90 degrees
+
+                moveServosSimultaneously(elbow1, elbow2, 0.3, 0.7);
+                wrist.setPosition(0);
+            }
+
+            // raise from position 3
+            else if (position == 3) {
+                moveServosSimultaneously(elbow1, elbow2, 1, 0.7);
+            }
+
             position = 2;
-            
+
         } else if (newPos == 3) {
             // outside low
             // lower from position 2;
-
-            elbow1.setPosition(3);
-            elbow2.setPosition(3);
+            moveServosSimultaneously(elbow1, elbow2, 0.7, 1);
 
             position = 3;
         }
@@ -119,5 +136,11 @@ public class OutputController
         clamp.setPower(-0.3);
     }
 
+    public void moveServosSimultaneously(Servo servo1, Servo servo2, double start, double end) {
 
+        for (double i = start + 0.05; i <= end; i+=0.05) {
+            servo1.setPosition(i);
+            servo2.setPosition(i);
+        }
+    }
 }
