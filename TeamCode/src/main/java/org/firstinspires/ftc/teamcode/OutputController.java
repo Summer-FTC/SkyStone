@@ -76,24 +76,34 @@ public class OutputController
         motorLift.setPower(0);
     }
 
-    public void movetoPosition(int newPos)
+    public void moveToPosition(int newPos)
     {
         if (newPos == 1) {
             // inside
             // move in from position 2
+            elbow1.setPosition(1);
+            elbow2.setPosition(1); // need to work simultaneously? And turn while moving
+            wrist.scaleRange(0, 90);
+
+            openClamp(); // for certain amount of time
+
             position = 1;
+
         } else if (newPos == 2) {
-            if (position == 1) {
-                // move out from position 1
-                position = 2;
-            } else if (position == 3) {
-                // raise up from position 3
-                position = 2;
-            }
+
+            elbow1.setPosition(2);
+            elbow2.setPosition(2);
+
             // outside high
+            position = 2;
+            
         } else if (newPos == 3) {
             // outside low
             // lower from position 2;
+
+            elbow1.setPosition(3);
+            elbow2.setPosition(3);
+
             position = 3;
         }
     }

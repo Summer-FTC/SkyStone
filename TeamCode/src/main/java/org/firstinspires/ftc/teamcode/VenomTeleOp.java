@@ -80,10 +80,10 @@ public class VenomTeleOp extends OpMode
             robot.output.setPower(false);
 
         if(gamepad2.dpad_down)
-            robot.output.movetoPosition(robot.output.position + 1);
+            robot.output.moveToPosition(robot.output.position + 1);
 
         if(gamepad2.dpad_up)
-            robot.output.movetoPosition(robot.output.position - 1);
+            robot.output.moveToPosition(robot.output.position - 1);
 
         if(gamepad2.a)
             robot.output.openClamp();

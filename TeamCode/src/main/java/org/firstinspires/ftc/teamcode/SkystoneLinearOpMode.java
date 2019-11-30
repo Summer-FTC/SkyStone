@@ -71,8 +71,8 @@ public class SkystoneLinearOpMode extends BaseLinearOpMode
     }
 
     public void getStone() {
-        robot.output.movetoPosition(2);
-        robot.output.movetoPosition(3);
+        robot.output.moveToPosition(2);
+        robot.output.moveToPosition(3);
         robot.output.openClamp();
 
         moveForwardByInches(0.5, 5);
@@ -85,7 +85,7 @@ public class SkystoneLinearOpMode extends BaseLinearOpMode
     public void dropStone()
     {
         // Drop Stone across the tape
-        robot.output.movetoPosition(2);
+        robot.output.moveToPosition(2);
         // may need to raise lift
         robot.output.openClamp();
     }
