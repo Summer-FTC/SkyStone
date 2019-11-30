@@ -112,8 +112,11 @@ public class TensorFlowSkyStone extends LinearOpMode{
         telemetry.update();
         waitForStart();
 
+        // add move to location first
+        // or make this a method
+
         if (opModeIsActive()) {
-            while (opModeIsActive()) {
+            while (opModeIsActive()) { // run until skystone detected or time out
                 if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
@@ -135,6 +138,8 @@ public class TensorFlowSkyStone extends LinearOpMode{
                             i++;
                             // getConfidence() to make sure Skystone detected correctly
                         }
+                        // Bo recommends strafing until we find Skystone
+                        // bc tensorflow can't detect that accurately
 
                         telemetry.update();
                     }
