@@ -8,9 +8,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class IntakeController
 {
-    public DcMotor motorIntake;
-    public Servo leftClamp;
-    public Servo rightClamp;
+    public DcMotor motorIntakeL;
+    public DcMotor motorIntakeR;
 
     HardwareMap hwMap;
     Telemetry telemetry;
@@ -20,27 +19,13 @@ public class IntakeController
         this.hwMap = hwMap;
         this.telemetry = telemetry;
 
-        //motorIntake = hwMap.dcMotor.get("motorIntake");
-        //leftClamp = hwMap.servo.get("leftClamp");
-        rightClamp = hwMap.servo.get("rightClamp");
+        motorIntakeL = hwMap.dcMotor.get("motorIntakeL");
+        motorIntakeR = hwMap.dcMotor.get("motorIntakeR");
     }
 
     public void setPower(double power)
     {
-        motorIntake.setPower(power);
+        motorIntakeL.setPower(power);
+        motorIntakeR.setPower(power);
     }
-
-    public void clampPositions(boolean clamp)
-    {
-        if(clamp){
-            //leftClamp.setPosition(1);
-            rightClamp.setPosition(1);
-        } else {
-            //leftClamp.setPosition(0);
-            rightClamp.setPosition(0);
-        }
-
-    }
-
-
 }

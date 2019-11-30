@@ -20,7 +20,6 @@ public class VenomRobot extends LinearOpMode
     FoundationHookController hooks;
     IntakeController intake;
 
-
     @Override
     public void runOpMode() throws InterruptedException {
 
@@ -28,9 +27,7 @@ public class VenomRobot extends LinearOpMode
 
     public VenomRobot()
     {
-
     }
-
 
     public void init(HardwareMap hwMap, Telemetry telemetry, boolean isAuto)
     {
@@ -49,13 +46,12 @@ public class VenomRobot extends LinearOpMode
         output = new OutputController();
         output.init(hwMap, telemetry);
 
+        intake = new IntakeController();
+        intake.init(hwMap, telemetry);
+
         imu = new IMU(hwMap.get(BNO055IMU.class, "imu"));
         imu.IMUinit(hwMap);
-
-        //intake = new IntakeController();
-        //intake.init(hwMap, telemetry);
   }
-
 
     public void setMotorFL(double power)
     {
