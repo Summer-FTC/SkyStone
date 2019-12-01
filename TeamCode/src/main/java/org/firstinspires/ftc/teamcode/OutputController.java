@@ -35,13 +35,15 @@ public class OutputController
         motorLift = hwMap.dcMotor.get("motorLift");
 
         // elbows flip
-        // 1 and 2 work simultaneously, might need to turn in opposite directions
+        // 1 and 2 should work simultaneously
         elbow1 = hwMap.servo.get("elbow1");
         elbow2 = hwMap.servo.get("elbow2");
         // wrist rotates block
         wrist = hwMap.servo.get("wrist");
         // clamp opens and closes on block
         clamp = hwMap.crservo.get("clamp");
+
+        // this is kind of what David was saying:
 
         // flip up 30 degrees, using elbow
         // turn 90 degrees, using wrist
@@ -127,6 +129,8 @@ public class OutputController
 
     public void openClamp()
     {
+        // have to set power since continuous servo
+        // I want to be able to do it for a certain amt of time, but haven't figured that out yet
         clamp.setPower(0.3);
         // idk what power
     }
@@ -137,6 +141,8 @@ public class OutputController
     }
 
     public void moveServosSimultaneously(Servo servo1, Servo servo2, double start, double end) {
+        // since we have two servos controlling the "elbow", I made this method to move them together
+        // idk if it works
 
         for (double i = start + 0.05; i <= end; i+=0.05) {
             servo1.setPosition(i);
