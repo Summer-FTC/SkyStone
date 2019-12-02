@@ -4,10 +4,6 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -95,6 +91,7 @@ public class OutputController
             // servo .setPosition() anywhere from 0-1, from lower to upper limit
 
             openClamp(); // for certain amount of time
+            //sleep(2000);
 
             position = 1;
 
@@ -103,6 +100,8 @@ public class OutputController
 
             // go outward from position 1
             if (position == 1) {
+                closeClamp();
+                sleep(1000);
                 moveServosSimultaneously(elbow1, elbow2, 0, 0.3);
 
                 wrist.setPosition(0.5); // 90 degrees
@@ -124,6 +123,10 @@ public class OutputController
             moveServosSimultaneously(elbow1, elbow2, 0.7, 1);
 
             position = 3;
+
+            openClamp();
+            sleep(2000);
+
         }
     }
 
@@ -131,13 +134,13 @@ public class OutputController
     {
         // have to set power since continuous servo
         // I want to be able to do it for a certain amt of time, but haven't figured that out yet
-        clamp.setPower(0.3);
+        clamp.setPower(0.5);
         // idk what power
     }
 
     public void closeClamp()
     {
-        clamp.setPower(-0.3);
+        clamp.setPower(-0.5);
     }
 
     public void moveServosSimultaneously(Servo servo1, Servo servo2, double start, double end) {
@@ -147,6 +150,14 @@ public class OutputController
         for (double i = start + 0.05; i <= end; i+=0.05) {
             servo1.setPosition(i);
             servo2.setPosition(i);
+        }
+    }
+
+    public final void sleep(long milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
 }

@@ -73,6 +73,8 @@ public class VenomRobot extends LinearOpMode
         driveTrain.motorBR.setPower(power);
     }
 
+
+
     public void log(String message)
     {
         if (telemetry != null)
