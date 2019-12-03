@@ -20,8 +20,6 @@ public class OutputController
     HardwareMap hwMap;
     Telemetry telemetry;
 
-    double liftPower = 0.5;
-
 
     public void init(HardwareMap hwMap, Telemetry telemetry)
     {
@@ -61,12 +59,8 @@ public class OutputController
         telemetry.addData("Output Motor Initialization Complete", "");
     }
 
-    public void setLiftPower(boolean extend) {
-        if (extend) {
+    public void setLiftPower(double liftPower) {
             motorLift.setPower(liftPower);
-        } else {
-            motorLift.setPower(-liftPower);
-        }
     }
 
     public void stopOutputMotors()
@@ -79,18 +73,32 @@ public class OutputController
         if (newPos == 1) {
             // inside
 
-            wrist.setPosition(0.5);
-            moveServosSimultaneously(elbow1, elbow2, 0.7, 0.3);
+            if (position == 3) {
+                moveServosSimultaneously(elbow1, elbow2, 1, 0.7);
 
-            wrist.setPosition(0);
+                wrist.setPosition(0.5);
+                moveServosSimultaneously(elbow1, elbow2, 0.7, 0.3);
 
-            moveServosSimultaneously(elbow1, elbow2, 0.3, 0);
+                wrist.setPosition(0);
+
+                moveServosSimultaneously(elbow1, elbow2, 0.3, 0);
+            }
+
+            if (position == 2) {
+
+                wrist.setPosition(0.5);
+                moveServosSimultaneously(elbow1, elbow2, 0.7, 0.3);
+
+                wrist.setPosition(0);
+
+                moveServosSimultaneously(elbow1, elbow2, 0.3, 0);
+            }
 
             // need to work simultaneously? And turn while moving
             // move a little at a time, using loop
             // servo .setPosition() anywhere from 0-1, from lower to upper limit
 
-            openClamp(); // for certain amount of time
+            //openClamp(); // for certain amount of time
             //sleep(2000);
 
             position = 1;
@@ -100,8 +108,8 @@ public class OutputController
 
             // go outward from position 1
             if (position == 1) {
-                closeClamp();
-                sleep(1000);
+                //closeClamp();
+                //sleep(1000);
                 moveServosSimultaneously(elbow1, elbow2, 0, 0.3);
 
                 wrist.setPosition(0.5); // 90 degrees
@@ -120,13 +128,29 @@ public class OutputController
         } else if (newPos == 3) {
             // outside low
             // lower from position 2;
-            moveServosSimultaneously(elbow1, elbow2, 0.7, 1);
+
+            if (position == 1) {
+                //closeClamp();
+                //sleep(1000);
+                moveServosSimultaneously(elbow1, elbow2, 0, 0.3);
+
+                wrist.setPosition(0.5); // 90 degrees
+
+                moveServosSimultaneously(elbow1, elbow2, 0.3, 0.7);
+                wrist.setPosition(0);
+
+                moveServosSimultaneously(elbow1, elbow2, 0.7, 1);
+            }
+
+            if (position == 2) {
+                moveServosSimultaneously(elbow1, elbow2, 0.7, 1);
+            }
+
+
+            //openClamp();
+            //sleep(2000);
 
             position = 3;
-
-            openClamp();
-            sleep(2000);
-
         }
     }
 

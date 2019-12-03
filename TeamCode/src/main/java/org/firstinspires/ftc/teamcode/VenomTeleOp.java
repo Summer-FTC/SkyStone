@@ -34,7 +34,7 @@ public class VenomTeleOp extends OpMode
     {
         doDrive();
         doFoundation();
-        doIntake();
+        // doIntake();
         doOutput();
     }
 
@@ -63,44 +63,56 @@ public class VenomTeleOp extends OpMode
             drivePower = 1;
     }
 
-    public void doIntake()
+    /**public void doIntake()
     {
         if(gamepad2.right_bumper)
             robot.intake.setPower(intakePower);
-        if (gamepad2.left_bumper)
+        else if (gamepad2.left_bumper)
             robot.intake.setPower(-intakePower);
-    }
+        else
+            robot.intake.setPower(0);
+    }**/
 
     public void doOutput(){
 
         if(gamepad2.right_trigger > 0.5)
-            robot.output.setLiftPower(true);
+            robot.output.setLiftPower(0.5);
+        else if(gamepad2.left_trigger > 0.5)
+            robot.output.setLiftPower(-0.5);
+        else
+            robot.output.setLiftPower(0);
 
-        if(gamepad2.left_trigger > 0.5)
-            robot.output.setLiftPower(false);
+        if(gamepad2.dpad_down) {
+            robot.output.moveToPosition(3);
+            telemetry.addData("" + robot.output.position, "");
+            telemetry.update();
+        }
 
-        if(gamepad2.dpad_down)
-            robot.output.moveToPosition(robot.output.position + 1);
+        if(gamepad2.dpad_left) {
+            robot.output.moveToPosition(2);
+            telemetry.addData("" + robot.output.position, "");
+            telemetry.update();
+        }
 
-        if(gamepad2.dpad_up)
-            robot.output.moveToPosition(robot.output.position - 1);
+        if(gamepad2.dpad_up) {
+            robot.output.moveToPosition(1);
+            telemetry.addData("" + robot.output.position, "");
+            telemetry.update();
+        }
 
         if(gamepad2.a)
             robot.output.openClamp();
-        else
-            robot.output.clamp.setPower(0);
-
-        if(gamepad2.b)
+        else if (gamepad2.b)
             robot.output.closeClamp();
         else
             robot.output.clamp.setPower(0);
     }
 
     public void doFoundation(){
-        if(gamepad2.left_bumper)
+        if(gamepad2.x)
             robot.hooks.lowerHooks();
 
-        if(gamepad2.right_bumper)
+        if(gamepad2.y)
             robot.hooks.raiseHooks();
     }
 }
