@@ -34,8 +34,8 @@ public class VenomTeleOp extends OpMode
     {
         doDrive();
         doFoundation();
-        // doIntake();
-        // doOutput();
+        doIntake();
+        doOutput();
     }
 
     void doDrive()
@@ -73,11 +73,11 @@ public class VenomTeleOp extends OpMode
 
     public void doOutput(){
 
-        if(gamepad2.right_trigger > 0.2)
-            robot.output.setPower(true);
+        if(gamepad2.right_trigger > 0.5)
+            robot.output.setLiftPower(true);
 
-        if(gamepad2.left_trigger > 0.2)
-            robot.output.setPower(false);
+        if(gamepad2.left_trigger > 0.5)
+            robot.output.setLiftPower(false);
 
         if(gamepad2.dpad_down)
             robot.output.moveToPosition(robot.output.position + 1);

@@ -20,7 +20,7 @@ public class OutputController
     HardwareMap hwMap;
     Telemetry telemetry;
 
-    double liftPower = 1;
+    double liftPower = 0.5;
 
 
     public void init(HardwareMap hwMap, Telemetry telemetry)
@@ -61,7 +61,7 @@ public class OutputController
         telemetry.addData("Output Motor Initialization Complete", "");
     }
 
-    public void setPower(boolean extend) {
+    public void setLiftPower(boolean extend) {
         if (extend) {
             motorLift.setPower(liftPower);
         } else {
@@ -142,6 +142,7 @@ public class OutputController
     {
         clamp.setPower(-1);
     }
+
 
     public void moveServosSimultaneously(Servo servo1, Servo servo2, double start, double end) {
         // since we have two servos controlling the "elbow", I made this method to move them together
