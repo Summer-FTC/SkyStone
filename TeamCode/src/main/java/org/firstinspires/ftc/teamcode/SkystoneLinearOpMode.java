@@ -29,6 +29,8 @@ public class SkystoneLinearOpMode extends BaseLinearOpMode
     {
         // move forward first
         moveForwardByInches(0.5, 20);
+        robot.output.moveToPosition(2);
+        robot.output.moveToPosition(3);
         tf.runOpMode();
         // wait for phone to find position
         sleep(3000);
@@ -67,6 +69,7 @@ public class SkystoneLinearOpMode extends BaseLinearOpMode
             // get stone in position 3;
             strafeLeftByInches(0.5, 10);
             moveForwardByInches(0.5, 5);
+            getStone();
         }
     }
 

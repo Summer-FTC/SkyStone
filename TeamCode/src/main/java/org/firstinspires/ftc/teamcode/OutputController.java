@@ -15,7 +15,7 @@ public class OutputController
     public Servo elbow2;
     public Servo wrist;
     public CRServo clamp;
-    int position;
+    int position = 1;
 
     HardwareMap hwMap;
     Telemetry telemetry;
@@ -134,13 +134,13 @@ public class OutputController
     {
         // have to set power since continuous servo
         // I want to be able to do it for a certain amt of time, but haven't figured that out yet
-        clamp.setPower(0.5);
+        clamp.setPower(1);
         // idk what power
     }
 
     public void closeClamp()
     {
-        clamp.setPower(-0.5);
+        clamp.setPower(-1);
     }
 
     public void moveServosSimultaneously(Servo servo1, Servo servo2, double start, double end) {
