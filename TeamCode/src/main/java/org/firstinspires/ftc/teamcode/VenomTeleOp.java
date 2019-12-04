@@ -84,20 +84,14 @@ public class VenomTeleOp extends OpMode
 
         if(gamepad2.dpad_down) {
             robot.output.moveToPosition(3);
-            telemetry.addData("" + robot.output.position, "");
-            telemetry.update();
         }
 
         if(gamepad2.dpad_left) {
             robot.output.moveToPosition(2);
-            telemetry.addData("" + robot.output.position, "");
-            telemetry.update();
         }
 
         if(gamepad2.dpad_up) {
             robot.output.moveToPosition(1);
-            telemetry.addData("" + robot.output.position, "");
-            telemetry.update();
         }
 
         if(gamepad2.a)
