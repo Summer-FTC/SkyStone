@@ -76,6 +76,7 @@ public class OutputController
             telemetry.addData("" + position, "");
 
             if (position == 3) {
+
                 moveServosSimultaneously(elbow1, elbow2, 1, 0.7);
 
                 /**
@@ -102,7 +103,7 @@ public class OutputController
             // servo .setPosition() anywhere from 0-1, from lower to upper limit
 
             openClamp(); // for certain amount of time
-            sleep(2000);
+            sleep(1000);
 
             position = 1;
 
@@ -117,11 +118,18 @@ public class OutputController
             if (position == 1) {
                 closeClamp();
                 sleep(1000);
-                moveServosSimultaneously(elbow1, elbow2, 0, 0.3);
+                setLiftPower(0.5);
+                sleep(1000);
+                setLiftPower(0);
+                elbow1.setPosition(0.3);
+                elbow2.setPosition(0.3);
+                //moveServosSimultaneously(elbow1, elbow2, 0, 0.3);
 
                 wrist.setPosition(0.5); // 90 degrees
 
-                moveServosSimultaneously(elbow1, elbow2, 0.3, 0.7);
+                //moveServosSimultaneously(elbow1, elbow2, 0.3, 0.7);
+                elbow1.setPosition(0.7);
+                elbow2.setPosition(0.7);
                 wrist.setPosition(0);
             }
 
@@ -189,7 +197,7 @@ public class OutputController
 
         for (double i = start + 0.05; i <= end; i+=0.05) {
             servo1.setPosition(i);
-            servo2.setPosition(i);
+            servo2.setPosition(-i);
         }
     }
 
