@@ -82,16 +82,18 @@ public class VenomTeleOp extends OpMode
         else
             robot.output.setLiftPower(0);
 
-        if(gamepad2.dpad_down) {
-            robot.output.moveToPosition(3);
-        }
+
+        // won't use in AML2
+         if(gamepad2.dpad_up) {
+         robot.output.moveToPosition(1);
+         }
 
         if(gamepad2.dpad_left) {
             robot.output.moveToPosition(2);
         }
 
-        if(gamepad2.dpad_up) {
-            robot.output.moveToPosition(1);
+        if(gamepad2.dpad_down) {
+            robot.output.moveToPosition(3);
         }
 
         if(gamepad2.a)

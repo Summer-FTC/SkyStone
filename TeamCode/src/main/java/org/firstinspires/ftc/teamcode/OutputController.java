@@ -54,57 +54,6 @@ public class OutputController
         motorLift.setPower(0);
     }
 
-    public void oneToTwo() {
-        closeClamp();
-        sleep(1000);
-
-        setLiftPower(0.5);
-        sleep(1000);
-        setLiftPower(0);
-
-        setElbowPositions(0.3);
-        wrist.setPosition(0.5); // 90 degrees
-        setElbowPositions(0.7);
-        wrist.setPosition(1);
-    }
-
-    public void twoToOne() {
-        setLiftPower(0.5);
-        sleep(1000);
-        setLiftPower(0);
-
-        wrist.setPosition(0.5);
-        setElbowPositions(0.3);
-        wrist.setPosition(0);
-
-        setLiftPower(-0.5);
-        sleep(1000);
-        setLiftPower(0);
-
-        setElbowPositions(0);
-
-        openClamp();
-        sleep(500);
-    }
-
-    public void threeToTwo() {
-        closeClamp();
-        sleep(1000);
-
-        setElbowPositions(0.7);
-    }
-
-    public void twoToThree() {
-        setLiftPower(-0.5);
-        sleep(1000);
-        setLiftPower(0);
-
-        setElbowPositions(1);
-
-        openClamp();
-        sleep(1000);
-    }
-
     public void moveToPosition(int newPos)
     {
         if (newPos == 1) {
@@ -154,18 +103,72 @@ public class OutputController
 
             if (position == 1) {
                 oneToTwo();
+
+                setLiftPower(-0.5);
+                sleep(1000);
+                setLiftPower(0);
+
                 twoToThree();
             }
 
-            if (position == 2) {
+            if (position == 2)
                 twoToThree();
-            }
 
             position = 3;
 
             telemetry.addData("" + position, "");
             telemetry.update();
         }
+    }
+
+    // since intake not working right now, this will only be used in auto to go out
+    public void oneToTwo() {
+        closeClamp();
+        sleep(1000);
+
+        setLiftPower(0.5);
+        sleep(1000);
+        setLiftPower(0);
+
+        setElbowPositions(0.3);
+        wrist.setPosition(0.5); // 90 degrees
+        setElbowPositions(0.7);
+        wrist.setPosition(1);
+    }
+
+    // won't use in AML2
+    public void twoToOne() {
+        setLiftPower(0.5);
+        sleep(1000);
+        setLiftPower(0);
+
+        wrist.setPosition(0.5);
+        setElbowPositions(0.3);
+        wrist.setPosition(0);
+
+        setLiftPower(-0.5);
+        sleep(1000);
+        setLiftPower(0);
+
+        setElbowPositions(0);
+
+        openClamp();
+        sleep(500);
+    }
+
+    public void threeToTwo() {
+        closeClamp();
+        sleep(1000);
+
+        setElbowPositions(0.7);
+    }
+
+    public void twoToThree() {
+
+        setElbowPositions(1);
+
+        openClamp();
+        sleep(1000);
     }
 
     public void openClamp()
