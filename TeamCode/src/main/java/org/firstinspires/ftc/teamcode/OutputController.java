@@ -37,20 +37,6 @@ public class OutputController
         // clamp opens and closes on block
         clamp = hwMap.crservo.get("clamp");
 
-        // this is kind of what David was saying:
-
-        // flip up 30 degrees, using elbow
-        // turn 90 degrees, using wrist
-        // flip 150 degrees, using elbow
-        // turn 90 degrees, using wrist
-            // deposit
-        // three positions: inside, outside (high/deposit), outside (low/intake)
-        // use dpad to switch: outside low --> dpad up --> outside high --> dpad up --> inside
-            // need to move foundation hooks to different button
-            // small movement by elbow to get to outside low
-            // outside --> inside: opposite of going out
-
-
         telemetry.addData("Output Servo Initialization Complete", "");
 
         motorLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -68,6 +54,57 @@ public class OutputController
         motorLift.setPower(0);
     }
 
+    public void oneToTwo() {
+        closeClamp();
+        sleep(1000);
+
+        setLiftPower(0.5);
+        sleep(1000);
+        setLiftPower(0);
+
+        setElbowPositions(0.3);
+        wrist.setPosition(0.5); // 90 degrees
+        setElbowPositions(0.7);
+        wrist.setPosition(1);
+    }
+
+    public void twoToOne() {
+        setLiftPower(0.5);
+        sleep(1000);
+        setLiftPower(0);
+
+        wrist.setPosition(0.5);
+        setElbowPositions(0.3);
+        wrist.setPosition(0);
+
+        setLiftPower(-0.5);
+        sleep(1000);
+        setLiftPower(0);
+
+        setElbowPositions(0);
+
+        openClamp();
+        sleep(500);
+    }
+
+    public void threeToTwo() {
+        closeClamp();
+        sleep(1000);
+
+        setElbowPositions(0.7);
+    }
+
+    public void twoToThree() {
+        setLiftPower(-0.5);
+        sleep(1000);
+        setLiftPower(0);
+
+        setElbowPositions(1);
+
+        openClamp();
+        sleep(1000);
+    }
+
     public void moveToPosition(int newPos)
     {
         if (newPos == 1) {
@@ -77,33 +114,14 @@ public class OutputController
 
             if (position == 3) {
 
-                moveServosSimultaneously(elbow1, elbow2, 1, 0.7);
-
-                /**
-                wrist.setPosition(0.5);
-                moveServosSimultaneously(elbow1, elbow2, 0.7, 0.3);
-
-                wrist.setPosition(0);
-
-                moveServosSimultaneously(elbow1, elbow2, 0.3, 0);**/
+                threeToTwo();
+                twoToOne();
             }
 
             if (position == 2) {
 
-                wrist.setPosition(0.5);
-                moveServosSimultaneously(elbow1, elbow2, 0.7, 0.3);
-
-                wrist.setPosition(0);
-
-                moveServosSimultaneously(elbow1, elbow2, 0.3, 0);
+                twoToOne();
             }
-
-            // need to work simultaneously? And turn while moving
-            // move a little at a time, using loop
-            // servo .setPosition() anywhere from 0-1, from lower to upper limit
-
-            openClamp(); // for certain amount of time
-            sleep(1000);
 
             position = 1;
 
@@ -114,29 +132,14 @@ public class OutputController
             // outside high
 
             telemetry.addData("" + position, "");
+
             // go outward from position 1
-            if (position == 1) {
-                closeClamp();
-                sleep(1000);
-                setLiftPower(0.5);
-                sleep(1000);
-                setLiftPower(0);
-                elbow1.setPosition(0.3);
-                elbow2.setPosition(0.3);
-                //moveServosSimultaneously(elbow1, elbow2, 0, 0.3);
-
-                wrist.setPosition(0.5); // 90 degrees
-
-                //moveServosSimultaneously(elbow1, elbow2, 0.3, 0.7);
-                elbow1.setPosition(0.7);
-                elbow2.setPosition(0.7);
-                wrist.setPosition(0);
-            }
+            if (position == 1)
+                oneToTwo();
 
             // raise from position 3
-            if (position == 3) {
-                moveServosSimultaneously(elbow1, elbow2, 1, 0.7);
-            }
+            if (position == 3)
+                threeToTwo();
 
             position = 2;
 
@@ -150,25 +153,13 @@ public class OutputController
             telemetry.addData("" + position, "");
 
             if (position == 1) {
-                closeClamp();
-                sleep(1000);
-                moveServosSimultaneously(elbow1, elbow2, 0, 0.3);
-
-                wrist.setPosition(0.5); // 90 degrees
-
-                moveServosSimultaneously(elbow1, elbow2, 0.3, 0.7);
-                wrist.setPosition(0);
-
-                moveServosSimultaneously(elbow1, elbow2, 0.7, 1);
+                oneToTwo();
+                twoToThree();
             }
 
             if (position == 2) {
-                moveServosSimultaneously(elbow1, elbow2, 0.7, 1);
+                twoToThree();
             }
-
-
-            openClamp();
-            sleep(1000);
 
             position = 3;
 
@@ -179,10 +170,7 @@ public class OutputController
 
     public void openClamp()
     {
-        // have to set power since continuous servo
-        // I want to be able to do it for a certain amt of time, but haven't figured that out yet
         clamp.setPower(1);
-        // idk what power
     }
 
     public void closeClamp()
@@ -191,14 +179,10 @@ public class OutputController
     }
 
 
-    public void moveServosSimultaneously(Servo servo1, Servo servo2, double start, double end) {
-        // since we have two servos controlling the "elbow", I made this method to move them together
-        // idk if it works
+    public void setElbowPositions(double pos) {
 
-        for (double i = start + 0.05; i <= end; i+=0.05) {
-            servo1.setPosition(i);
-            servo2.setPosition(-i);
-        }
+        elbow1.setPosition(pos);
+        elbow2.setPosition(pos);
     }
 
     public final void sleep(long milliseconds) {
