@@ -40,7 +40,7 @@ public class FoundationHookController
 
     public void lowerHooks()
     {
-        leftHook.setPosition(0);
+        leftHook.setPosition(0.21);
         rightHook.setPosition(1);
 
         // Wait for the hooks to lower.
