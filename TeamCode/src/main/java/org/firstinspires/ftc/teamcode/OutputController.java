@@ -54,30 +54,31 @@ public class OutputController
         motorLift.setPower(0);
     }
 
+
     public void moveToPosition(int newPos)
     {
-        if (newPos == 1) {
+        if (newPos == 1)
+        {
             // inside
 
             telemetry.addData("" + position, "");
 
-            if (position == 3) {
+            if (position == 3)
+            {
 
                 threeToTwo();
-                twoToOne();
             }
 
-            if (position == 2) {
-
-                twoToOne();
-            }
+            twoToOne();
 
             position = 1;
 
             telemetry.addData("" + position, "");
             telemetry.update();
+        }
 
-        } else if (newPos == 2) {
+        else if (newPos == 2)
+        {
             // outside high
 
             telemetry.addData("" + position, "");
@@ -95,7 +96,10 @@ public class OutputController
             telemetry.addData("" + position, "");
             telemetry.update();
 
-        } else if (newPos == 3) {
+        }
+
+        else if (newPos == 3)
+        {
             // outside low
             // lower from position 2;
 
@@ -163,8 +167,8 @@ public class OutputController
         setElbowPositions(0.7);
     }
 
-    public void twoToThree() {
-
+    public void twoToThree()
+    {
         setElbowPositions(1);
 
         openClamp();
@@ -181,9 +185,13 @@ public class OutputController
         clamp.setPower(-1);
     }
 
+    public void stopClamp()
+    {
+        clamp.setPower(0);
+    }
 
-    public void setElbowPositions(double pos) {
-
+    public void setElbowPositions(double pos)
+    {
         elbow1.setPosition(pos);
         elbow2.setPosition(pos);
     }

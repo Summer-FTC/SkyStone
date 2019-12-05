@@ -63,7 +63,7 @@ public class VenomTeleOp extends OpMode
             drivePower = 1;
     }
 
-    /**public void doIntake()
+    /** public void doIntake()
     {
         if(gamepad2.right_bumper)
             robot.intake.setPower(intakePower);
@@ -73,27 +73,128 @@ public class VenomTeleOp extends OpMode
             robot.intake.setPower(0);
     }**/
 
-    public void doOutput(){
+    public void doOutput() {
 
-        if(gamepad2.right_trigger > 0.5)
-            robot.output.setLiftPower(0.5);
-        else if(gamepad2.left_trigger > 0.5)
+
+        // lift --> dpad
+        if (gamepad2.dpad_up)
+        {
             robot.output.setLiftPower(-0.5);
+        }
+
         else
+        {
             robot.output.setLiftPower(0);
 
+        }
 
-        // won't use in AML2
-         if(gamepad2.dpad_up) {
-         robot.output.moveToPosition(1);
+        if (gamepad2.dpad_down)
+        {
+            robot.output.setLiftPower(0.5);
+        }
+
+        else
+        {
+            robot.output.setLiftPower(0);
+        }
+
+
+        if (gamepad2.x)
+        {
+            robot.output.setElbowPositions(0);
+        }
+
+
+        // this one works
+        if(gamepad2.y)
+        {
+            robot.output.setElbowPositions(1);
+        }
+
+
+        if(gamepad2.b)
+        {
+            robot.output.setElbowPositions(0.5);
+
+        }
+
+        if(gamepad2.a)
+        {
+            robot.output.setElbowPositions(-1);
+
+        }
+
+
+//        if ()
+
+
+        if(gamepad2.right_bumper)
+        {
+            robot.output.openClamp();
+        }
+
+        else if(gamepad2.left_bumper)
+        {
+            robot.output.closeClamp();
+        }
+
+        else
+        {
+            robot.output.stopClamp();
+        }
+
+ //       if(gamepad2.left
+
+//        if(gamepad2.x)
+//        {
+//            robot.output.wrist.setPosition(0.5);
+//            robot.output.elbow2.setPosition(0.5);
+//            robot.output.wrist.setPosition(0);
+//            robot.output.elbow2.setPosition(0);
+//        }
+//
+//        if(gamepad2.y)
+//        {
+//            robot.output.wrist.setPosition(0.5);
+//            robot.output.wrist.setPosition(0.5);
+//        }
+//
+//        if(gamepad2.b)
+//        {
+//            robot.output.wrist.setPosition(0.5);
+//            robot.output.elbow2.setPosition(0.5);
+//            robot.output.wrist.setPosition(1);
+//            robot.output.elbow2.setPosition(1);
+//        }
+
+
+        // elbow 2 is the good one
+
+    }
+
+    public void doFoundation(){
+        if(gamepad2.dpad_left)
+            robot.hooks.lowerHooks();
+
+        if(gamepad2.dpad_down)
+            robot.hooks.raiseHooks();
+    }
+}
+
+            /*
+         if(gamepad2.dpad_up)
+         {
+            robot.output.moveToPosition(1);
          }
 
-        if(gamepad2.dpad_left) {
+        if(gamepad2.dpad_left)
+        {
             robot.output.moveToPosition(2);
         }
 
-        if(gamepad2.dpad_down) {
-            robot.output.moveToPosition(3);
+        if(gamepad2.dpad_down)
+        {
+           robot.output.moveToPosition(3);
         }
 
         if(gamepad2.a)
@@ -104,11 +205,4 @@ public class VenomTeleOp extends OpMode
             robot.output.clamp.setPower(0);
     }
 
-    public void doFoundation(){
-        if(gamepad2.x)
-            robot.hooks.lowerHooks();
-
-        if(gamepad2.y)
-            robot.hooks.raiseHooks();
-    }
-}
+             */
