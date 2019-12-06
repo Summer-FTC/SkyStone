@@ -9,9 +9,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 
-@Autonomous
-@Disabled
-public class AutoTest extends LinearOpMode
+@Autonomous(name = "AutoTest" , group = "6209")
+//@Disabled
+public class AutoTest extends BaseLinearOpMode
 {
     DcMotor motorFR = null;
     DcMotor motorFL = null;
@@ -24,10 +24,23 @@ public class AutoTest extends LinearOpMode
         waitForStart();
         log("runOpMode", "running");
         try {
-            main();
+            test();
         } catch(Exception e){
             log("exception", e);
         }
+    }
+
+    public void test() {
+        telemetry.addData("Status", "Running Autonomous!");
+        telemetry.update();
+        initialize();
+        waitForStart();
+
+        robot.output.moveElbowToPosition(OutputController.ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN);
+        sleep(2000);
+
+        robot.output.moveElbowToPosition(OutputController.ELBOW_POSITION_INSIDE_ROBOT);
+        sleep(2000);
     }
 
 

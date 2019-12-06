@@ -15,9 +15,9 @@ public class OutputController
     private static final double WRIST_POSITION_OUTSIDE_ROBOT= 1;
 
     // Positions for the elbow servo.
-    private static final double ELBOW_POSITION_INSIDE_ROBOT = 0;
-    private static final double ELBOW_POSITION_OUTSIDE_ROBOT_PARALLEL = 0.8;
-    private static final double ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN = 1;
+    public static final double ELBOW_POSITION_INSIDE_ROBOT = 0;
+    public static final double ELBOW_POSITION_OUTSIDE_ROBOT_PARALLEL = 0.8;
+    public static final double ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN = 1;
 
     private static final double LIFT_POWER_UP = 0.75;
 
@@ -26,7 +26,7 @@ public class OutputController
     private static final double LIFT_POWER_DOWN = -0.2;
 
     // How long to move the lift up and then down when moving the clamp in or out of the robot.
-    private static final long MOVE_CLAMP_LIFT_DURATION = 1000;
+    private static final long MOVE_CLAMP_LIFT_DURATION = 500;
 
 
     public DcMotor motorLift;
@@ -289,7 +289,7 @@ public class OutputController
         sleep(1000);
     }
 
-    private void moveElbowToPosition(double pos)
+    public void moveElbowToPosition(double pos)
     {
         setElbowPositions(pos);
 
