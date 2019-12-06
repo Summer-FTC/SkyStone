@@ -36,11 +36,23 @@ public class AutoTest extends BaseLinearOpMode
         initialize();
         waitForStart();
 
-        robot.output.moveElbowToPosition(OutputController.ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN);
+        robot.output.moveClampOutOfRobot();
         sleep(2000);
 
-        robot.output.moveElbowToPosition(OutputController.ELBOW_POSITION_INSIDE_ROBOT);
+        robot.output.moveClampIntoRobot();
         sleep(2000);
+
+//        robot.output.moveElbowToPosition(OutputController.ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN);
+//        sleep(2000);
+//
+//        robot.output.moveElbowToPosition(OutputController.ELBOW_POSITION_INSIDE_ROBOT);
+//        sleep(2000);
+//
+//        robot.output.moveElbowToPosition(OutputController.ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN);
+//        sleep(2000);
+
+//        robot.output.moveElbowToPosition(OutputController.ELBOW_POSITION_INSIDE_ROBOT);
+//        sleep(2000);
     }
 
 
