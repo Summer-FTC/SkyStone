@@ -17,7 +17,7 @@ public class OutputController
     // Positions for the elbow servo.
     public static final double ELBOW_POSITION_INSIDE_ROBOT = 0;
     public static final double ELBOW_POSITION_OUTSIDE_ROBOT_PARALLEL = 0.8;
-    public static final double ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN = 1;
+    public static final double ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN = 0.9;
 
     private static final double LIFT_POWER_UP = 0.75;
 

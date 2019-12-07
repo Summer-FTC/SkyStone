@@ -51,6 +51,7 @@ public class ParkLinearOpMode extends BaseLinearOpMode
         strafeRightByInches(0.5, 10);
     }
 
+    // red is right
     public void runCenterRed() {
         sleep(20000);
         moveForwardByInches(0.5,25);
@@ -64,6 +65,7 @@ public class ParkLinearOpMode extends BaseLinearOpMode
         strafeLeftByInches(0.5, 10);
     }
 
+    // blue is left
     public void runCenterBlue() {
         sleep(20000);
         moveForwardByInches(0.5, 25);
