@@ -15,7 +15,9 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
     private static final int MOVE_BACKWARD_FROM_PLATFORM_INCHES = 3;
 
     private static final int STRAFE_TO_SIDE_TO_PARK_INCHES = 21;
-    private static final int MOVE_BACKWARD_TO_PARK_INCHES = 36;
+
+    // new - was 36 before
+    private static final int MOVE_BACKWARD_TO_PARK_INCHES = 34;
     private static final int STRAFE_TO_CENTER_TO_PARK_INCHES = 15;
 
 
@@ -72,6 +74,9 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
         moveBackwardByInches(0.5, 32);
 
+        // new
+        strafeLeftByInches(0.5, 12);
+
         rotateToAbsoluteYaw(90);
 
         robot.hooks.raiseHooks();
@@ -93,6 +98,8 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         robot.hooks.lowerHooks();
 
         moveBackwardByInches(0.5, 32);
+
+        strafeRightByInches(0.5, 12);
 
         rotateToAbsoluteYaw(-90);
 
