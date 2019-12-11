@@ -236,7 +236,7 @@ public class OutputController
 
         moveWristToPosition(WRIST_POSITION_SIDEWAYS);
 
-        moveElbowToPosition(ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN);
+        moveElbowToPosition(ELBOW_POSITION_OUTSIDE_ROBOT_PARALLEL);
 
         moveWristToPosition(WRIST_POSITION_OUTSIDE_ROBOT);
 
