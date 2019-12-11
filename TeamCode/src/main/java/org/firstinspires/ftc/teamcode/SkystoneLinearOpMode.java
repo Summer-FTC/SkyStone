@@ -8,7 +8,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 @Autonomous
-@Disabled
+
 public class SkystoneLinearOpMode extends BaseLinearOpMode
 {
     TensorFlowSkyStone tf;
@@ -19,7 +19,8 @@ public class SkystoneLinearOpMode extends BaseLinearOpMode
     protected ElapsedTime time = new ElapsedTime();
 
     @Override
-    public void initialize() {
+    public void initialize()
+    {
         super.initialize();
         tf = new TensorFlowSkyStone();
     }
@@ -28,44 +29,62 @@ public class SkystoneLinearOpMode extends BaseLinearOpMode
     public void runOpMode() throws InterruptedException
     {
         // move forward first
-        moveForwardByInches(0.5, 20);
-//        robot.output.moveToPosition(2);
-//        robot.output.moveToPosition(3);
+     //   moveForwardByInches(0.5, 20);
+
+        telemetry.addData("Status", "Running Autonomous!");
+        telemetry.update();
+        initialize();
+        waitForStart();
+
         tf.runOpMode();
-        // wait for phone to find position
+      //   wait for phone to find position
         sleep(3000);
+
         skystonePosition = tf.getSkystonePosition();
         tf.stop();
 
-        // move to skystonePosition
-        moveToStone(skystonePosition);
-
-        // move across line to foundation
-        dropStone(); // on foundation
-
-        // get in the right position
         robot.hooks.lowerHooks();
-        // move and rotate
-        robot.hooks.raiseHooks();
+
+        // move to skystonePosition
+       // moveToStone(skystonePosition);
+
+        //        // move across line to foundation
+//        dropStone(); // on foundation
+//
+//        // get in the right position
+//        robot.hooks.lowerHooks();
+//        // move and rotate
+//        robot.hooks.raiseHooks();
 
         // go park
     }
 
+
+    public void pickBetween2()
+    {
+
+    }
+
+    // TO DO change positions 1 2 3 to constants
     public void moveToStone(int position) throws InterruptedException
     {
-        if (position == 1) {
+        if (position == 1)
+        {
             // get stone in position 1;
             strafeRightByInches(0.5, 3);
             moveForwardByInches(0.5, 5);
             getStone();
         }
-        else if (position == 2) {
+
+        else if (position == 2)
+        {
             // get stone in position 2;
             strafeLeftByInches(0.5, 3);
             moveForwardByInches(0.5, 5);
             getStone();
         }
-        else {
+        else
+        {
             // get stone in position 3;
             strafeLeftByInches(0.5, 10);
             moveForwardByInches(0.5, 5);
@@ -73,25 +92,24 @@ public class SkystoneLinearOpMode extends BaseLinearOpMode
         }
     }
 
-    public void getStone() {
-        /**robot.output.moveToPosition(2);
-        robot.output.moveToPosition(3);
+    public void getStone()
+    {
+        robot.output.moveClampOutOfRobot();
         robot.output.openClamp();
 
         moveForwardByInches(0.5, 5);
-
         robot.output.closeClamp();
 
-        moveBackwardByInches(0.8, 10);**/
+        robot.output.startMoveLiftUp();
+        sleep(1000);
+
+        moveBackwardByInches(0.5, 5);
     }
 
     public void dropStone()
     {
-        /**
-        // Drop Stone across the tape
-        robot.output.moveToPosition(2);
-        // may need to raise lift
+        robot.output.startMoveLiftDown();
+        sleep(1000);
         robot.output.openClamp();
-         **/
     }
 }

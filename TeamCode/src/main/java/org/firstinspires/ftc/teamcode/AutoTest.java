@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 
 @Autonomous(name = "AutoTest" , group = "6209")
-//@Disabled
+@Disabled
 public class AutoTest extends BaseLinearOpMode
 {
     DcMotor motorFR = null;
