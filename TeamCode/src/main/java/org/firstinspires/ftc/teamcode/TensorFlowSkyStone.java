@@ -53,7 +53,7 @@ import java.util.List;
  * is explained below.
  */
 @Autonomous(name = "TensorFlow", group = "6209")
-public class TensorFlowSkyStone extends LinearOpMode{
+public class TensorFlowSkyStone extends BaseLinearOpMode{
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Stone";
     private static final String LABEL_SECOND_ELEMENT = "Skystone";
@@ -91,6 +91,7 @@ public class TensorFlowSkyStone extends LinearOpMode{
     public void runOpMode() {
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
+        super.initialize();
         initVuforia();
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
@@ -136,6 +137,9 @@ public class TensorFlowSkyStone extends LinearOpMode{
 
                             if (recognition.getLabel().equals("Skystone") && recognition.getConfidence() > .50)
                                 skystonePosition = i;
+                                robot.hooks.raiseHooks();
+                                sleep(1000);
+                                robot.hooks.lowerHooks();
                             i++;
                             // getConfidence() to make sure Skystone detected correctly
                         }

@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
-@Autonomous
+@Autonomous (name= "Skystone Run", group = "6209")
 
 public class SkystoneLinearOpMode extends BaseLinearOpMode
 {
@@ -18,7 +18,7 @@ public class SkystoneLinearOpMode extends BaseLinearOpMode
     ElapsedTime eTime;
     protected ElapsedTime time = new ElapsedTime();
 
-    @Override
+
     public void initialize()
     {
         super.initialize();
@@ -29,7 +29,7 @@ public class SkystoneLinearOpMode extends BaseLinearOpMode
     public void runOpMode() throws InterruptedException
     {
         // move forward first
-     //   moveForwardByInches(0.5, 20);
+        // moveForwardByInches(0.5, 20);
 
         telemetry.addData("Status", "Running Autonomous!");
         telemetry.update();
@@ -37,8 +37,9 @@ public class SkystoneLinearOpMode extends BaseLinearOpMode
         waitForStart();
 
         tf.runOpMode();
+
       //   wait for phone to find position
-        sleep(3000);
+     //   sleep(3000);
 
         skystonePosition = tf.getSkystonePosition();
         tf.stop();
