@@ -89,8 +89,7 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
 
     @Override
     public void runOpMode() {
-        // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
-        // first.
+
         super.initialize();
         initVuforia();
 
@@ -108,8 +107,6 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
             tfod.activate();
         }
 
-
-        /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
         waitForStart();
@@ -118,37 +115,71 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
         // or make this a method
 
         if (opModeIsActive()) {
-            while (opModeIsActive()) { // run until skystone detected or time out
+            while (opModeIsActive()) {
                 if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
+
+                    // move up to the stones
+                    moveForwardByInches(0.5, 20);
+
+                    // STRAFE HERE? DISTANCE ????
+
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                     if (updatedRecognitions != null) {
                         telemetry.addData("# Object Detected", updatedRecognitions.size());
 
                         // step through the list of recognitions and display boundary info.
                         int i = 1;
+
                         for (Recognition recognition : updatedRecognitions) {
                             telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
                             telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
                                     recognition.getLeft(), recognition.getTop());
                             telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
                                     recognition.getRight(), recognition.getBottom());
+                            telemetry.update();
 
                             if (recognition.getLabel().equals("Skystone") && recognition.getConfidence() > .50)
-                                skystonePosition = i;
-                                robot.hooks.raiseHooks();
-                                sleep(1000);
-                                robot.hooks.lowerHooks();
-                            i++;
-                            // getConfidence() to make sure Skystone detected correctly
-                        }
-                        // Bo recommends strafing until we find Skystone
-                        // bc tensorflow can't detect that accurately
+                            {
+                                getStone();
+                                driveUnderBridge();
+                                dropStone();
+                            }
 
-                        telemetry.update();
+                            else {
+
+                                // Todo: Make this customizable Left/Right corresponding with Blue/Red
+                                // Todo: make the distance a constant and figure out how far it is to get to the next block
+
+
+                                strafeRightByInches(0.7, 8);
+
+                                if (recognition.getLabel().equals("Skystone") && recognition.getConfidence() > .50)
+                                {
+                                    getStone();
+                                    driveUnderBridge();
+                                    dropStone();
+                                }
+
+                                // Should we make it check the 3rd stone or just assume if it didn't detect one
+                                // of the first two then its the 3rd?
+                                else
+                                {
+                                    // Todo: make the inches same constant as above
+                                    strafeRightByInches(0.7, 8);
+                                    getStone();
+                                    driveUnderBridge();
+                                    dropStone();
+
+                                }
+
+                            }
+                        }
                     }
                 }
+
+                // Todo: add foundation run auto here?
             }
         }
 
@@ -157,13 +188,72 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
         }
     }
 
-    public int getSkystonePosition() {
+    public void driveUnderBridge()
+    {
+        // Todo: figure out these distances
+        moveBackwardByInches(0.5, 5);
+        strafeLeftByInches(0.75, 60);
+    }
+
+    // Todo: change positions 1 2 3 to constants
+    // Todo: figure out if we need this method if we're strafing?
+    public void moveToStone(int position) throws InterruptedException
+    {
+        if (position == 1)
+        {
+            // get stone in position 1;
+            strafeRightByInches(0.5, 3);
+            moveForwardByInches(0.5, 5);
+            getStone();
+        }
+
+        else if (position == 2)
+        {
+            // get stone in position 2;
+            strafeLeftByInches(0.5, 3);
+            moveForwardByInches(0.5, 5);
+            getStone();
+        }
+        else
+        {
+            // get stone in position 3;
+            strafeLeftByInches(0.5, 10);
+            moveForwardByInches(0.5, 5);
+            getStone();
+        }
+    }
+
+    public void getStone()
+    {
+        robot.output.moveClampOutOfRobot();
+        robot.output.openClamp();
+
+        moveForwardByInches(0.5, 5);
+        robot.output.closeClamp();
+
+        robot.output.startMoveLiftUp();
+        sleep(1000);
+
+        moveBackwardByInches(0.5, 5);
+    }
+
+    public void dropStone()
+    {
+        robot.output.startMoveLiftDown();
+        sleep(1000);
+        robot.output.openClamp();
+    }
+
+    // Todo: might not need this method
+    public int getSkystonePosition()
+    {
         return skystonePosition;
     }
 
     /**
      * Initialize the Vuforia localization engine.
      */
+
     private void initVuforia() {
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
