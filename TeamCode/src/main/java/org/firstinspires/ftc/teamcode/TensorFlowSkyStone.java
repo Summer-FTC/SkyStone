@@ -88,7 +88,8 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
     private TFObjectDetector tfod;
 
     @Override
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException
+    {
 
         super.initialize();
         initVuforia();
@@ -121,9 +122,10 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
                     // the last time that call was made.
 
                     // move up to the stones
-                    moveForwardByInches(0.5, 20);
+                    moveForwardByInches(0.5, 16);
 
                     // STRAFE HERE? DISTANCE ????
+                    wait(2000);
 
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                     if (updatedRecognitions != null) {
