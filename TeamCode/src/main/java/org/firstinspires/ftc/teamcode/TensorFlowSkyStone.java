@@ -125,7 +125,13 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
                     moveForwardByInches(0.5, 16);
 
                     // STRAFE HERE? DISTANCE ????
-                    wait(2000);
+                    telemetry.addData("", "Sleeping");
+                    telemetry.update();
+                    sleep(5000);
+
+                    telemetry.addData("", "Done sleeping");
+                    telemetry.update();
+
 
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                     if (updatedRecognitions != null) {
@@ -144,13 +150,16 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
 
                             if (recognition.getLabel().equals("Skystone") && recognition.getConfidence() > .50)
                             {
+                                telemetry.addData("", "Step 1");
+                                telemetry.update();
                                 getStone();
                                 driveUnderBridge();
                                 dropStone();
                             }
 
                             else {
-
+                                telemetry.addData("", "Step 2");
+                                telemetry.update();
                                 // Todo: Make this customizable Left/Right corresponding with Blue/Red
                                 // Todo: make the distance a constant and figure out how far it is to get to the next block
 
@@ -168,6 +177,8 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
                                 // of the first two then its the 3rd?
                                 else
                                 {
+                                    telemetry.addData("", "Step 3");
+                                    telemetry.update();
                                     // Todo: make the inches same constant as above
                                     strafeRightByInches(0.7, 8);
                                     getStone();
