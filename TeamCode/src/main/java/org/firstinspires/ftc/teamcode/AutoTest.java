@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 
 @Autonomous(name = "AutoTest" , group = "6209")
-@Disabled
+
 public class AutoTest extends BaseLinearOpMode
 {
     DcMotor motorFR = null;
@@ -21,6 +21,8 @@ public class AutoTest extends BaseLinearOpMode
     @Override
     public void runOpMode() throws InterruptedException
     {
+        initialize();
+
         waitForStart();
         log("runOpMode", "running");
         try {
@@ -33,14 +35,30 @@ public class AutoTest extends BaseLinearOpMode
     public void test() {
         telemetry.addData("Status", "Running Autonomous!");
         telemetry.update();
-        initialize();
-        waitForStart();
+
 
         robot.output.moveClampOutOfRobot();
-        sleep(2000);
 
-        robot.output.moveClampIntoRobot();
-        sleep(2000);
+
+        robot.output.openClampFully();
+
+        moveForwardByInches(.5, 14);
+
+        robot.output.closeClampPartway();
+
+        robot.output.startMoveLiftUp();
+        sleep(100);
+
+        moveBackwardByInches(.5,3);
+
+        strafeLeftByInches(0.75, 8);
+
+
+//        robot.output.test();
+//        sleep(2000);
+
+     //   robot.output.moveClampIntoRobot();
+    //    sleep(2000);
 
 //        robot.output.moveElbowToPosition(OutputController.ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN);
 //        sleep(2000);

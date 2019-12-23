@@ -2,9 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-import java.lang.annotation.ElementType;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -312,5 +310,31 @@ public abstract class BaseLinearOpMode extends LinearOpMode
             );
 
         }
+    }
+
+
+    public void grabStoneInAuto()
+    {
+        robot.output.moveClampOutOfRobot();
+        robot.output.startOpeningClamp(); // TODO: Need to wait.
+
+        sleep(10000);
+
+        moveForwardByInches(0.5, 5);
+        robot.output.startClosingClamp();
+
+        robot.output.startMoveLiftUp();
+        sleep(1000);
+
+        moveBackwardByInches(0.5, 5);
+    }
+
+
+    public void dropStone()
+    {
+        // TODO: Implement me.
+//        robot.output.startMoveLiftDown();
+//        sleep(1000);
+//        robot.output.startOpeningClamp();
     }
 }

@@ -100,11 +100,11 @@ public class VenomTeleOp extends OpMode
 
         if (gamepad2.right_bumper)
         {
-            robot.output.openClamp();
+            robot.output.startOpeningClamp();
         }
         else if (gamepad2.left_bumper)
         {
-            robot.output.closeClamp();
+            robot.output.startClosingClamp();
         }
         else {
             robot.output.stopClamp();

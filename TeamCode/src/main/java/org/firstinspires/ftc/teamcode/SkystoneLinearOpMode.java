@@ -1,11 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 @Autonomous (name= "Skystone Run", group = "6209")
 
@@ -74,7 +70,7 @@ public class SkystoneLinearOpMode extends BaseLinearOpMode
             // get stone in position 1;
             strafeRightByInches(0.5, 3);
             moveForwardByInches(0.5, 5);
-            getStone();
+            grabStoneInAuto();
         }
 
         else if (position == 2)
@@ -82,35 +78,14 @@ public class SkystoneLinearOpMode extends BaseLinearOpMode
             // get stone in position 2;
             strafeLeftByInches(0.5, 3);
             moveForwardByInches(0.5, 5);
-            getStone();
+            grabStoneInAuto();
         }
         else
         {
             // get stone in position 3;
             strafeLeftByInches(0.5, 10);
             moveForwardByInches(0.5, 5);
-            getStone();
+            grabStoneInAuto();
         }
-    }
-
-    public void getStone()
-    {
-        robot.output.moveClampOutOfRobot();
-        robot.output.openClamp();
-
-        moveForwardByInches(0.5, 5);
-        robot.output.closeClamp();
-
-        robot.output.startMoveLiftUp();
-        sleep(1000);
-
-        moveBackwardByInches(0.5, 5);
-    }
-
-    public void dropStone()
-    {
-        robot.output.startMoveLiftDown();
-        sleep(1000);
-        robot.output.openClamp();
     }
 }

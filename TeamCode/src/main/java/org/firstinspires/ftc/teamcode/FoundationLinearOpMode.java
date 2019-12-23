@@ -30,7 +30,6 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
     public void initialize()
     {
         super.initialize();
-        robot.hooks.raiseHooks();
     }
 
 

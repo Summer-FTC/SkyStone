@@ -13,20 +13,22 @@ public class OutputController
     private static final double WRIST_POSITION_SIDEWAYS = 0.45;
     private static final double WRIST_POSITION_INSIDE_ROBOT = 0;
     private static final double WRIST_POSITION_OUTSIDE_ROBOT= 1;
+    private static final long WRIST_POSITION_DURATION = 200;
+    private static final long ELBOW_POSITION_DURATION = 900;
 
     // Positions for the elbow servo.
     public static final double ELBOW_POSITION_INSIDE_ROBOT = 0;
     public static final double ELBOW_POSITION_OUTSIDE_ROBOT_PARALLEL = 0.8;
     public static final double ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN = 0.9;
 
-    private static final double LIFT_POWER_UP = 0.75;
+    private static final double LIFT_POWER_UP = 1;
 
     // This is negative to move down and has a much smaller absolute value since gravity
     // helps us down.
-    private static final double LIFT_POWER_DOWN = -0.2;
+    private static final double LIFT_POWER_DOWN = -0.3;
 
     // How long to move the lift up and then down when moving the clamp in or out of the robot.
-    private static final long MOVE_CLAMP_LIFT_DURATION = 500;
+    private static final long MOVE_CLAMP_LIFT_DURATION = 150;
 
 
     public DcMotor motorLift;
@@ -39,7 +41,6 @@ public class OutputController
     HardwareMap hwMap;
     Telemetry telemetry;
 
-
     public void init(HardwareMap hwMap, Telemetry telemetry)
     {
         this.hwMap = hwMap;
@@ -51,6 +52,10 @@ public class OutputController
         // 1 and 2 should work simultaneously
         elbowR = hwMap.servo.get("elbow1");
         elbowL = hwMap.servo.get("elbow2");
+
+        // This is necessary so that we can detect when the wrist is in and out of the robot.
+        moveElbowToPosition(ELBOW_POSITION_INSIDE_ROBOT);
+
         // wrist rotates block
         wrist = hwMap.servo.get("wrist");
         // clamp opens and closes on block
@@ -62,6 +67,7 @@ public class OutputController
         motorLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         telemetry.addData("Output Motor Initialization Complete", "");
+        telemetry.update();
     }
 
     private void setLiftPower(double liftPower) {
@@ -156,7 +162,7 @@ public class OutputController
 //
 //    // since intake not working right now, this will only be used in auto to go out
 //    public void oneToTwo() {
-//        closeClamp();
+//        startClosingClamp();
 //        sleep(1000);
 //
 //        setLiftPower(0.5);
@@ -185,12 +191,12 @@ public class OutputController
 //
 //        setElbowPositions(0);
 //
-//        openClamp();
+//        startOpeningClamp();
 //        sleep(500);
 //    }
 //
 //    public void threeToTwo() {
-//        closeClamp();
+//        startClosingClamp();
 //        sleep(1000);
 //
 //        setElbowPositions(0.7);
@@ -200,16 +206,34 @@ public class OutputController
 //    {
 //        setElbowPositions(1);
 //
-//        openClamp();
+//        startOpeningClamp();
 //        sleep(1000);
 //    }
 
-    public void openClamp()
+    public void openClampFully() {
+        startOpeningClamp();
+        sleep(3000);
+        stopClamp();
+    }
+
+    public void closeClampFully() {
+        startClosingClamp();
+        sleep(3500); // This is a little bigger than on open to be sure we close on the stone.
+        stopClamp();
+    }
+
+    public void closeClampPartway() {
+        // Closes clamp enough to grab a stone longways
+        startClosingClamp();
+        sleep(1000);
+        stopClamp();
+    }
+    public void startOpeningClamp()
     {
         clamp.setPower(1);
     }
 
-    public void closeClamp()
+    public void startClosingClamp()
     {
         clamp.setPower(-1);
     }
@@ -219,12 +243,47 @@ public class OutputController
         clamp.setPower(0);
     }
 
+    private void printElbows(String when, StringBuilder history) {
+        history.append(when + " L elbow=" + getLeftElbowPos() + "  R elbow=" + getRightElbowPos() + "\n");
+        telemetry.addData(history.toString(), "");
+        telemetry.update();
+    }
+
+    public void test()
+    {
+//        long stopTime = System.currentTimeMillis() + 25000;
+
+
+        StringBuilder history = new StringBuilder();
+        printElbows("At start", history);
+
+        sleep(4000);
+
+        moveElbowToPosition(ELBOW_POSITION_OUTSIDE_ROBOT_PARALLEL);
+
+        sleep(4000);
+        printElbows("After outside", history);
+
+        moveElbowToPosition(ELBOW_POSITION_INSIDE_ROBOT);
+
+        sleep(4000);
+        printElbows("After inside", history);
+
+        sleep(10000);
+
+
+//        moveClampOutOfRobot();
+    }
+
     // This needs to be faster than 5 seconds.
     public void moveClampOutOfRobot()
     {
+        long startMillis = System.currentTimeMillis();
+
         if (! isClampInRobot())
         {
-            telemetry.addData("WARNING. Clamp is not in robot!","");
+            telemetry.addData("WARNING. Clamp is not in robot!" +
+                    " L elbow=" + getLeftElbowPos() + "  R elbow=" + getRightElbowPos(), "");
             telemetry.update();
             return;
         }
@@ -244,13 +303,18 @@ public class OutputController
         startMoveLiftDown();
         sleep(MOVE_CLAMP_LIFT_DURATION);
         stopLift();
+
+        long durationMillis = System.currentTimeMillis() - startMillis;
+        telemetry.addData("Moving clamp out took " + durationMillis + " ms", "");
+        telemetry.update();
     }
 
     public void moveClampIntoRobot()
     {
         if (! isClampOutOfRobot())
         {
-            telemetry.addData("WARNING. Clamp is not out of robot!","");
+            telemetry.addData("WARNING. Clamp is not in robot!" +
+                    " L elbow=" + getLeftElbowPos() + "  R elbow=" + getRightElbowPos(), "");
             telemetry.update();
             return;
         }
@@ -274,28 +338,51 @@ public class OutputController
 
     private boolean isClampInRobot()
     {
-        return elbowL.getPosition() < 0.1;
+        // elbowL is not connected.
+//        return getLeftElbowPos() < 0.4;
+        // Left starts at 0 and right starts at 1
+
+        return (getRightElbowPos() < 0.4 || getLeftElbowPos() < 0.4);
     }
 
     private boolean isClampOutOfRobot()
     {
-        return elbowL.getPosition() > 0.7;
+        // elbowL is not connected.
+//        return getLeftElbowPos() > 0.6;
+
+        return (getRightElbowPos() > 0.6 || getLeftElbowPos() > 0.6);
     }
 
     private void moveWristToPosition(double pos)
     {
         wrist.setPosition(pos);
 
-        sleep(1000);
+        sleep(WRIST_POSITION_DURATION);
     }
 
-    public void moveElbowToPosition(double pos)
+    private void moveElbowToPosition(double pos)
     {
         setElbowPositions(pos);
 
-        sleep(1000);
+        sleep(ELBOW_POSITION_DURATION);
     }
 
+
+    private double getLeftElbowPos()
+    {
+        return elbowL.getPosition();
+    }
+
+    private double getRightElbowPos()
+    {
+        // The right elbow positions are flipped, so we have to convert them.
+        return convertRightPosition(elbowR.getPosition());
+    }
+
+    private double convertRightPosition(double pos)
+    {
+        return 1- pos;
+    }
 
     public void setElbowPositions(double pos)
     {
@@ -304,7 +391,7 @@ public class OutputController
         telemetry.update();
 
         double posL = pos;
-        double posR = 1 - pos;
+        double posR = convertRightPosition(pos);
 
         elbowL.setPosition(posL);
         elbowR.setPosition(posR);

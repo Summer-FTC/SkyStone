@@ -30,9 +30,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -152,7 +149,7 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
                             {
                                 telemetry.addData("", "Step 1");
                                 telemetry.update();
-                                getStone();
+                                grabStoneInAuto();
                                 driveUnderBridge();
                                 dropStone();
                             }
@@ -168,7 +165,7 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
 
                                 if (recognition.getLabel().equals("Skystone") && recognition.getConfidence() > .50)
                                 {
-                                    getStone();
+                                    grabStoneInAuto();
                                     driveUnderBridge();
                                     dropStone();
                                 }
@@ -181,7 +178,7 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
                                     telemetry.update();
                                     // Todo: make the inches same constant as above
                                     strafeRightByInches(0.7, 8);
-                                    getStone();
+                                    grabStoneInAuto();
                                     driveUnderBridge();
                                     dropStone();
 
@@ -217,7 +214,7 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
             // get stone in position 1;
             strafeRightByInches(0.5, 3);
             moveForwardByInches(0.5, 5);
-            getStone();
+            grabStoneInAuto();
         }
 
         else if (position == 2)
@@ -225,36 +222,15 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
             // get stone in position 2;
             strafeLeftByInches(0.5, 3);
             moveForwardByInches(0.5, 5);
-            getStone();
+            grabStoneInAuto();
         }
         else
         {
             // get stone in position 3;
             strafeLeftByInches(0.5, 10);
             moveForwardByInches(0.5, 5);
-            getStone();
+            grabStoneInAuto();
         }
-    }
-
-    public void getStone()
-    {
-        robot.output.moveClampOutOfRobot();
-        robot.output.openClamp();
-
-        moveForwardByInches(0.5, 5);
-        robot.output.closeClamp();
-
-        robot.output.startMoveLiftUp();
-        sleep(1000);
-
-        moveBackwardByInches(0.5, 5);
-    }
-
-    public void dropStone()
-    {
-        robot.output.startMoveLiftDown();
-        sleep(1000);
-        robot.output.openClamp();
     }
 
     // Todo: might not need this method
