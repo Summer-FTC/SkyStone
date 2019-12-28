@@ -87,6 +87,92 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
     @Override
     public void runOpMode() throws InterruptedException
     {
+        super.initialize();
+        initVuforia();
+
+        if (ClassFactory.getInstance().canCreateTFObjectDetector())
+        {
+            initTfod();
+        }
+
+        else
+        {
+            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
+        }
+
+        /**
+         * Activate TensorFlow Object Detection before we wait for the start command.
+         * Do it here so that the Camera Stream window will have the TensorFlow annotations visible.
+         **/
+        if (tfod != null) {
+            tfod.activate();
+        }
+
+        telemetry.addData(">", "Press Play to start op mode");
+        telemetry.update();
+        waitForStart();
+
+        if (opModeIsActive())
+        {
+            moveForwardByInches(0.8, 14);
+            if (isSkystone())
+            {
+                grabStoneInAuto();
+                //driveUnderBridge();
+               // dropStone();
+                // pull foundation
+                // park
+            }
+            else
+            {
+                strafeRightByInches(0.8, 10);
+                if(isSkystone())
+                {
+                    grabStoneInAuto();
+                }
+                else
+                {
+                    strafeRightByInches(0.8, 10);
+                    grabStoneInAuto();
+                }
+            }
+
+        }
+
+    }
+
+    public boolean isSkystone()
+    {
+        long stopTime = System.currentTimeMillis() + 500; // TODO: Can this be shorter?
+        while (System.currentTimeMillis() < stopTime)
+        {
+            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+            if (updatedRecognitions != null) {
+                telemetry.addData("# Object Detected", updatedRecognitions.size());
+
+                // step through the list of recognitions and display boundary info.
+                int i = 1;
+
+                for (Recognition recognition : updatedRecognitions) {
+                    telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+                    telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
+                            recognition.getLeft(), recognition.getTop());
+                    telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+                            recognition.getRight(), recognition.getBottom());
+                    telemetry.update();
+
+                    if (recognition.getLabel().equals("Skystone") && recognition.getConfidence() > .50) {
+                        return true;
+                    }
+
+                }
+            }
+        }
+        return false;
+    }
+
+    public void runOpModeOld() throws InterruptedException
+    {
 
         super.initialize();
         initVuforia();
@@ -150,8 +236,8 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
                                 telemetry.addData("", "Step 1");
                                 telemetry.update();
                                 grabStoneInAuto();
-                                driveUnderBridge();
-                                dropStone();
+                             //   driveUnderBridge();
+                             //   dropStone();
                             }
 
                             else {
@@ -166,8 +252,8 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
                                 if (recognition.getLabel().equals("Skystone") && recognition.getConfidence() > .50)
                                 {
                                     grabStoneInAuto();
-                                    driveUnderBridge();
-                                    dropStone();
+                                 //   driveUnderBridge();
+                                 //   dropStone();
                                 }
 
                                 // Should we make it check the 3rd stone or just assume if it didn't detect one
@@ -179,8 +265,8 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
                                     // Todo: make the inches same constant as above
                                     strafeRightByInches(0.7, 8);
                                     grabStoneInAuto();
-                                    driveUnderBridge();
-                                    dropStone();
+                                 //   driveUnderBridge();
+                                 //   dropStone();
 
                                 }
 

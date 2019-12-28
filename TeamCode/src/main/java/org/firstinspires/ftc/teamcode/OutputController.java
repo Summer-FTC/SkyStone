@@ -10,22 +10,23 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class OutputController
 {
     // Positions for the wrist servo.
-    private static final double WRIST_POSITION_SIDEWAYS = 0.45;
-    private static final double WRIST_POSITION_INSIDE_ROBOT = 0;
-    private static final double WRIST_POSITION_OUTSIDE_ROBOT= 1;
-    private static final long WRIST_POSITION_DURATION = 200;
-    private static final long ELBOW_POSITION_DURATION = 900;
+    public static final double WRIST_POSITION_SIDEWAYS = 0.45;
+    public static final double WRIST_POSITION_INSIDE_ROBOT = 0;
+    public static final double WRIST_POSITION_OUTSIDE_ROBOT= 1;
+    public static final long WRIST_POSITION_DURATION = 200;
+    public static final long ELBOW_POSITION_DURATION = 900;
 
     // Positions for the elbow servo.
     public static final double ELBOW_POSITION_INSIDE_ROBOT = 0;
     public static final double ELBOW_POSITION_OUTSIDE_ROBOT_PARALLEL = 0.8;
-    public static final double ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN = 0.9;
+    public static final double ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN = 0.85;
 
-    private static final double LIFT_POWER_UP = 1;
-
+    public static final double LIFT_POWER_UP = -1;
+    public static final double LIFT_TENSION_POWER = -0.15;
+    public static final long LIFT_TENSION_DURATION = 1000;
     // This is negative to move down and has a much smaller absolute value since gravity
     // helps us down.
-    private static final double LIFT_POWER_DOWN = -0.3;
+    private static final double LIFT_POWER_DOWN = 0.5;
 
     // How long to move the lift up and then down when moving the clamp in or out of the robot.
     private static final long MOVE_CLAMP_LIFT_DURATION = 150;
@@ -65,6 +66,9 @@ public class OutputController
 
         motorLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorLift.setPower(LIFT_TENSION_POWER);
+        sleep(LIFT_TENSION_DURATION);
+        motorLift.setPower(0);
 
         telemetry.addData("Output Motor Initialization Complete", "");
         telemetry.update();
@@ -353,14 +357,14 @@ public class OutputController
         return (getRightElbowPos() > 0.6 || getLeftElbowPos() > 0.6);
     }
 
-    private void moveWristToPosition(double pos)
+    public void moveWristToPosition(double pos)
     {
         wrist.setPosition(pos);
 
         sleep(WRIST_POSITION_DURATION);
     }
 
-    private void moveElbowToPosition(double pos)
+    public void moveElbowToPosition(double pos)
     {
         setElbowPositions(pos);
 

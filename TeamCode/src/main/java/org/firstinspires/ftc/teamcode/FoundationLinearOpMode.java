@@ -17,8 +17,8 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
     private static final int STRAFE_TO_SIDE_TO_PARK_INCHES = 21;
 
     // new - was 36 before
-    private static final int MOVE_BACKWARD_TO_PARK_INCHES = 34;
-    private static final int STRAFE_TO_CENTER_TO_PARK_INCHES = 15;
+    private static final int MOVE_BACKWARD_TO_PARK_INCHES = 42;
+    private static final int STRAFE_TO_CENTER_TO_PARK_INCHES = 18;
 
 
     boolean configOnly = false;
@@ -58,8 +58,6 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         telemetry.update();
     }
 
-
-
     private void moveRedFoundation()
     {
         moveForwardByInches(0.25, MOVE_AWAY_FROM_WALL_INCHES);
@@ -83,9 +81,28 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         moveBackwardByInches(0.5, MOVE_BACKWARD_FROM_PLATFORM_INCHES);
     }
 
-
-
     private void moveBlueFoundation()
+    {
+        moveForwardByInches(0.25, MOVE_AWAY_FROM_WALL_INCHES);
+        strafeLeftByInches(0.5, 12);
+        moveForwardByInches(0.5, MOVE_FORWARD_TO_PLATFORM_INCHES);
+
+        // Make sure we are hitting the platform.
+        moveForwardByInches(0.5, MOVE_FORWARD_TO_TOUCH_PLATFORM_INCHES);
+
+        robot.hooks.lowerHooks();
+
+        rotateToAbsoluteYaw(-12);
+        moveBackwardByInches(0.7,26);
+        rotateToAbsoluteYaw(-90);
+        moveForwardByInches(0.2, 13);
+
+        robot.hooks.raiseHooks();
+
+        moveBackwardByInches(0.5, MOVE_BACKWARD_FROM_PLATFORM_INCHES);
+    }
+
+    private void moveBlueFoundationOld()
     {
         moveForwardByInches(0.25, MOVE_AWAY_FROM_WALL_INCHES);
         strafeLeftByInches(0.5, STRAFE_ALONG_WALL_INCHES);
@@ -131,9 +148,9 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
         moveBlueFoundation();
 
-        strafeLeftByInches(0.5, 12);
+       strafeLeftByInches(0.5, 12);
 
-        moveBackwardByInches(0.5, MOVE_BACKWARD_TO_PARK_INCHES);
+      moveBackwardByInches(0.5, MOVE_BACKWARD_TO_PARK_INCHES);
     }
 
 
@@ -143,9 +160,9 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         sleep(1000);
 
         moveRedFoundation();
-
-        strafeLeftByInches(0.5, STRAFE_TO_CENTER_TO_PARK_INCHES);
-        moveBackwardByInches(0.5, MOVE_BACKWARD_TO_PARK_INCHES);
+//
+//        strafeLeftByInches(0.5, STRAFE_TO_CENTER_TO_PARK_INCHES);
+//        moveBackwardByInches(0.5, MOVE_BACKWARD_TO_PARK_INCHES);
     }
 
 

@@ -308,7 +308,6 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 //                    "ROLL : " + robot.imu.getRoll() + "\n"
 
             );
-
         }
     }
 
@@ -316,17 +315,20 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     public void grabStoneInAuto()
     {
         robot.output.moveClampOutOfRobot();
-        robot.output.startOpeningClamp(); // TODO: Need to wait.
 
-        sleep(10000);
+        robot.output.openClampFully();
 
-        moveForwardByInches(0.5, 5);
-        robot.output.startClosingClamp();
+        robot.output.moveElbowToPosition(robot.output.ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN);
+
+        moveForwardByInches(1, 14);
+
+        robot.output.closeClampFully();
 
         robot.output.startMoveLiftUp();
-        sleep(1000);
+        sleep(100);
 
-        moveBackwardByInches(0.5, 5);
+        robot.output.stopLift();
+
     }
 
 
