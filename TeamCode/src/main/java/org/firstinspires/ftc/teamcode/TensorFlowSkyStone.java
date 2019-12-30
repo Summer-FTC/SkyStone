@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
@@ -159,12 +160,16 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
                             recognition.getLeft(), recognition.getTop());
                     telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
                             recognition.getRight(), recognition.getBottom());
+                    telemetry.addData("  Angle", String.format(" %.0f degrees", recognition.estimateAngleToObject(AngleUnit.DEGREES)));
                     telemetry.update();
 
                     if (recognition.getLabel().equals("Skystone") && recognition.getConfidence() > .50) {
-                        return true;
+                        double angle = recognition.estimateAngleToObject(AngleUnit.DEGREES);
+                        if ((angle > -2) && (angle < 18))
+                        {
+                            return true;
+                        }
                     }
-
                 }
             }
         }

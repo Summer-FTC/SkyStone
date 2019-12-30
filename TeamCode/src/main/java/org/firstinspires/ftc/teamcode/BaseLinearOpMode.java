@@ -366,8 +366,8 @@ public abstract class BaseLinearOpMode extends LinearOpMode
             log("YAW : " + robot.imu.getYaw() + "\n" +
                 "initialYaw: " + initialYaw + "\n" +
                 "true diff: " + robot.imu.getTrueDiff(initialYaw)
-//                    "PITCH : " + robot.imu.getPitch() + "\n" +
-//                    "ROLL : " + robot.imu.getRoll() + "\n"
+                // "PITCH : " + robot.imu.getPitch() + "\n" +
+                // "ROLL : " + robot.imu.getRoll() + "\n"
 
             );
         }
@@ -380,14 +380,16 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
         robot.output.openClampFully();
 
-        robot.output.moveElbowToPosition(robot.output.ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN);
+        moveForwardByInches(.65, 12);
 
-        moveForwardByInches(1, 14);
+        robot.output.moveElbowToPosition(robot.output.ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN);
 
         robot.output.closeClampFully();
 
+        robot.output.moveElbowToPosition(robot.output.ELBOW_POSITION_OUTSIDE_ROBOT_AND_PARTIALLY_UP);
+
         robot.output.startMoveLiftUp();
-        sleep(100);
+        sleep(200);
 
         robot.output.stopLift();
 

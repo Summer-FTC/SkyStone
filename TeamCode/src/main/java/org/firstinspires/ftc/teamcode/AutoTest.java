@@ -51,7 +51,11 @@ public class AutoTest extends BaseLinearOpMode
         telemetry.addData("Status", "Running Autonomous!");
         telemetry.update();
 
-       moveForwardByInches(1, 12);
+
+        robot.output.moveClampOutOfRobot();
+
+
+//       moveForwardByInches(1, 12);
 
         //strafeRightWithEncoders(0.3, 5000);
 

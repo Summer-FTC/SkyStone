@@ -20,6 +20,7 @@ public class OutputController
     public static final double ELBOW_POSITION_INSIDE_ROBOT = 0;
     public static final double ELBOW_POSITION_OUTSIDE_ROBOT_PARALLEL = 0.8;
     public static final double ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN = 0.85;
+    public static final double ELBOW_POSITION_OUTSIDE_ROBOT_AND_PARTIALLY_UP = 0.65;
 
     public static final double LIFT_POWER_UP = -1;
     public static final double LIFT_TENSION_POWER = -0.15;
