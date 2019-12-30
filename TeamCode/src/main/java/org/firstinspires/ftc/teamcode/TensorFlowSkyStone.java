@@ -113,10 +113,12 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
         telemetry.update();
         waitForStart();
 
+        // TODO: This assumes blue currently.
+        boolean isBlue = true;
         if (opModeIsActive())
         {
             moveForwardByInches(1, 19);
-            if (isSkystone())
+            if (isSkystone(isBlue))
             {
                 grabStoneInAuto();
                 //driveUnderBridge();
@@ -127,7 +129,7 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
             else
             {
                 strafeRightByInches(1, 8);
-                if(isSkystone())
+                if(isSkystone(isBlue))
                 {
                     grabStoneInAuto();
                 }
@@ -142,9 +144,9 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
 
     }
 
-    public boolean isSkystone()
+    public boolean isSkystone(boolean isBlue)
     {
-        long stopTime = System.currentTimeMillis() + 500; // TODO: Can this be shorter?
+        long stopTime = System.currentTimeMillis() + 1000; // TODO: Maybe this needs to be longer.
         while (System.currentTimeMillis() < stopTime)
         {
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
@@ -165,9 +167,15 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
 
                     if (recognition.getLabel().equals("Skystone") && recognition.getConfidence() > .50) {
                         double angle = recognition.estimateAngleToObject(AngleUnit.DEGREES);
-                        if ((angle > -2) && (angle < 18))
-                        {
-                            return true;
+                        if (isBlue) {
+                            if ((angle > -15) && (angle < 25)) {
+                                return true;
+                            }
+                        } else {
+                            // Red sidie
+                            if ((angle > -25) && (angle < 15)) {
+                                return true;
+                            }
                         }
                     }
                 }
