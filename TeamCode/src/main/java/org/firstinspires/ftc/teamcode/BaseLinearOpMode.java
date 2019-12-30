@@ -9,7 +9,9 @@ import java.util.Map;
 public abstract class BaseLinearOpMode extends LinearOpMode
 {
     // This power will move the robot slowly. It actually moves at .015 (very slowly).
-    private static double MIN_POWER = 0.03;
+    private static double MIN_POWER = 0.10;
+    private static double RAMP_UP_MS = 500;
+    private static double RAMP_DOWN_MS = 1000;
 
     VenomRobot robot = new VenomRobot();
     double newPower;
@@ -49,6 +51,9 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         // int maxEnc = Math.max(Math.max(Math.abs(encFL), encFR), Math.max(encBL, encBR));
         // msTimeOut = Math.max(msTimeOut, (int)Math.ceil(maxEnc / power));
 
+        // TODO: Take this out.
+        msTimeOut = Math.max(10000, msTimeOut);
+
         if (targetYawChange != null)
         {
             if ((targetYawChange < -180) || (targetYawChange > 180)) {
@@ -59,6 +64,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         power = Math.abs(power);
 
         long stopTime = msTimeOut + System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
 
         Map<DcMotor, Integer> motorToEncoder = new HashMap<>();
         Map<DcMotor, Double> motorToPowerRatio = new HashMap<>();
@@ -74,6 +80,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
             maxEnc = Math.max(Math.abs(enc), maxEnc);
         }
 
+
         robot.driveTrain.resetEncoders();
         robot.driveTrain.runUsingEncoders();
 
@@ -86,9 +93,10 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         {
             m.setTargetPosition(motorToEncoder.get(m));
             m.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            m.setPower(power);
             // Scale each motor power relative to encoder ticks
             motorToPowerRatio.put(m, ((double)motorToEncoder.get(m)/maxEnc));
+
+            m.setPower(MIN_POWER);
         }
 
         boolean active = true;
@@ -119,16 +127,31 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                 double powerToSet = 0;
                 if (((encoderTicks < 0) && (m.getCurrentPosition() > encoderTicks)) ||
                         ((encoderTicks > 0) && (m.getCurrentPosition() < encoderTicks))) {
+                    // Accelerate slowly at the start.
+                    double rampUpMaxPower = MIN_POWER + (System.currentTimeMillis()-startTime) / RAMP_UP_MS;
 
+                    // Figuring out how to ramp down is more complicated.
 
-                    // Start slowing down when we are within this distance.
-                    int startScalingTicks = 500;
-                    if (ticksRemaining > startScalingTicks) {
-                        powerToSet = power;
-                    } else {
-                        powerToSet = Math.max(Math.min(MIN_POWER, power),
-                                power * (ticksRemaining / startScalingTicks));
-                    }
+                    // At a ramp of 500ms, we got to max power in 12 inches.
+                    // distance = .5 * a * t^2
+                    // Start ramping down from full power at 12 inches.
+                    // 12 inches = .5 * a * .5^2
+                    // a = 12 inches / .5^3.
+                    // a = 96 inches per second per second.
+
+                    double inchesToEnd  = ticksRemaining * (1.0 / moveInchtoEnc(1));
+                    double rampDownAcclerationInchesPerSecond2 = 96;
+                    double secondsToEnd  = Math.sqrt(2.0 * inchesToEnd / rampDownAcclerationInchesPerSecond2); // d = .5 a * t^2
+                    double msToEnd = 1000 * secondsToEnd;
+                    double rampDownMaxPower = MIN_POWER + (msToEnd) / RAMP_DOWN_MS;
+
+                    powerToSet = Math.min(power,
+                            Math.min(rampUpMaxPower, rampDownMaxPower));
+
+                    message.append("inchesToEnd: " + inchesToEnd + "\n");
+                    message.append("msToEnd: " + msToEnd + "\n");
+                    message.append("rampDownMaxPower: " + rampDownMaxPower + "\n");
+                    message.append("rampUpMaxPower: " + rampUpMaxPower + "\n");
                 }
 
                 // If we are rotating, then we can stop the loop once we achieve the desired yaw
@@ -260,8 +283,9 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         double adjustedPower = Math.max(power, .1);
 
         double seconds = encoderTicks / (adjustedPower * ticksPerSecondAtMaxPower);
+        int timeout = (int)(safetyFactor * msInSeconds * seconds);
 
-        return (int)(safetyFactor * msInSeconds * seconds);
+        return timeout;
     }
 
     public void strafeRightByInches(double power, double inches)
@@ -291,13 +315,15 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     // left or right
     private int strafeInchtoEnc(double inches)
     {
-        return (int)(inches*(5000/79));
+        return (int)(inches*(5000/71.5));
+        // return (int)(inches*(5000/79));
     }
 
     // forwards or backwards
     private int moveInchtoEnc(double inches)
     {
-        return (int)(inches*(4000/65.8));
+//        return (int)(inches*(4000/65.8));
+        return (int)(inches*(5000/81));
     }
 
     public void arcBackwardsToAbsoluteYaw(double power, double turningRadius,

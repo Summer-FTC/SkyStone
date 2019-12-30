@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 
-@Autonomous(name = "AutoTest" , group = "6209")
+@Autonomous(name = "Test Run" , group = "6209")
 
 public class AutoTest extends BaseLinearOpMode
 {
@@ -32,13 +32,47 @@ public class AutoTest extends BaseLinearOpMode
         }
     }
 
+    // TODO:
+    //
+    //  1. Measure current behavior (move forward & strafe)
+    //     4 in at 0.3 power is accurate
+    //     4 in at 0.8 power is inaccurate
+    //
+    //
+    //  . Measure minimum power to move robot forward and in strafe.
+    //
+    //  . Ramp up and ramp down with gradual acceleration to measure ticks per inch.
+    //
+    //
+
+
+
     public void test() {
         telemetry.addData("Status", "Running Autonomous!");
         telemetry.update();
 
-           robot.output.moveClampOutOfRobot();
+       moveForwardByInches(1, 12);
 
-           robot.output.moveElbowToPosition(1);
+        //strafeRightWithEncoders(0.3, 5000);
+
+//
+//        for (int i = 0; i < 5; i++)
+//        {
+//            strafeRightByInches(0.3, 4);
+//            sleep(1000);
+//        }
+//
+//        sleep(3000);
+//
+//        for (int i = 0; i < 5; i++)
+//        {
+//            strafeRightByInches(0.8, 4);
+//            sleep(1000);
+//        }
+//
+//           robot.output.moveClampOutOfRobot();
+//
+//           robot.output.moveElbowToPosition(1);
 //        robot.output.openClampFully();
 //
 //        moveForwardByInches(.5, 14);

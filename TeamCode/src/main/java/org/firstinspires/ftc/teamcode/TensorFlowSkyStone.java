@@ -114,7 +114,7 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
 
         if (opModeIsActive())
         {
-            moveForwardByInches(0.8, 14);
+            moveForwardByInches(1, 19);
             if (isSkystone())
             {
                 grabStoneInAuto();
@@ -125,14 +125,14 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
             }
             else
             {
-                strafeRightByInches(0.8, 10);
+                strafeRightByInches(1, 8);
                 if(isSkystone())
                 {
                     grabStoneInAuto();
                 }
                 else
                 {
-                    strafeRightByInches(0.8, 10);
+                    strafeRightByInches(1, 8);
                     grabStoneInAuto();
                 }
             }

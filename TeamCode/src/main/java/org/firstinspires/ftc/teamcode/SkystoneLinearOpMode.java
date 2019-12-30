@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous (name= "Skystone Run", group = "6209")
+@Disabled
 
 public class SkystoneLinearOpMode extends BaseLinearOpMode
 {
@@ -34,8 +36,8 @@ public class SkystoneLinearOpMode extends BaseLinearOpMode
 
         tf.runOpMode();
 
-      //   wait for phone to find position
-     //   sleep(3000);
+        // wait for phone to find position
+        // sleep(3000);
 
         skystonePosition = tf.getSkystonePosition();
         tf.stop();
@@ -43,16 +45,15 @@ public class SkystoneLinearOpMode extends BaseLinearOpMode
         robot.hooks.lowerHooks();
 
         // move to skystonePosition
-       // moveToStone(skystonePosition);
+        // moveToStone(skystonePosition);
 
-        //        // move across line to foundation
-//        dropStone(); // on foundation
-//
-//        // get in the right position
-//        robot.hooks.lowerHooks();
-//        // move and rotate
-//        robot.hooks.raiseHooks();
+        // move across line to foundation
+        // dropStone(); on foundation
 
+        // get in the right position
+        // robot.hooks.lowerHooks();
+        // move and rotate
+        // robot.hooks.raiseHooks();
         // go park
     }
 
