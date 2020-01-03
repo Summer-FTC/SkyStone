@@ -8,8 +8,8 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 {
     private static final int MOVE_AWAY_FROM_WALL_INCHES = 3;
     private static final int STRAFE_ALONG_WALL_INCHES = 24;
-    private static final int MOVE_FORWARD_TO_PLATFORM_INCHES = 29;
-    private static final int MOVE_FORWARD_TO_TOUCH_PLATFORM_INCHES = 5;
+    private static final int MOVE_FORWARD_TO_PLATFORM_INCHES = 27;
+    private static final int MOVE_FORWARD_TO_TOUCH_PLATFORM_INCHES = 3;
     private static final int STRAFE_PLATFORM_AWAY_FROM_WALL_INCHES = 14;
     private static final int STRAFE_PLATFORM_TO_CORNER_INCHES = 8;
     private static final int MOVE_BACKWARD_FROM_PLATFORM_INCHES = 3;
@@ -81,7 +81,29 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         moveBackwardByInches(0.5, MOVE_BACKWARD_FROM_PLATFORM_INCHES);
     }
 
-    private void moveBlueFoundation()
+
+
+    private void moveBlueFoundation() {
+        moveForwardByInches(0.8, MOVE_AWAY_FROM_WALL_INCHES);
+        strafeLeftByInches(0.9, 12);
+        moveForwardByInches(1, MOVE_FORWARD_TO_PLATFORM_INCHES);
+
+        // Make sure we are hitting the platform.
+        moveForwardByInches(0.9, MOVE_FORWARD_TO_TOUCH_PLATFORM_INCHES);
+
+        robot.hooks.lowerHooks();
+
+        arcBackwardsToAbsoluteYaw(0.8, 54, -30, true);
+        rotateToAbsoluteYaw(-90);
+        moveForwardByInches(0.8, 5);
+
+        robot.hooks.raiseHooks();
+
+        moveBackwardByInches(0.5, MOVE_BACKWARD_FROM_PLATFORM_INCHES);
+
+    }
+
+    private void moveBlueFoundation2()
     {
         moveForwardByInches(0.25, MOVE_AWAY_FROM_WALL_INCHES);
         strafeLeftByInches(0.5, 12);
@@ -102,7 +124,8 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         moveBackwardByInches(0.5, MOVE_BACKWARD_FROM_PLATFORM_INCHES);
     }
 
-    private void moveBlueFoundationOld()
+    // oldest version
+    private void moveBlueFoundation3()
     {
         moveForwardByInches(0.25, MOVE_AWAY_FROM_WALL_INCHES);
         strafeLeftByInches(0.5, STRAFE_ALONG_WALL_INCHES);

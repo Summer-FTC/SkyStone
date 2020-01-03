@@ -46,8 +46,8 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                                   Double targetYawChange)
     {
         // Make sure the timeout is big enough.
-//        int maxEnc = Math.max(Math.max(Math.abs(encFL), encFR), Math.max(encBL, encBR));
-//        msTimeOut = Math.max(msTimeOut, (int)Math.ceil(maxEnc / power));
+        // int maxEnc = Math.max(Math.max(Math.abs(encFL), encFR), Math.max(encBL, encBR));
+        // msTimeOut = Math.max(msTimeOut, (int)Math.ceil(maxEnc / power));
 
         if (targetYawChange != null)
         {
@@ -61,15 +61,22 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         long stopTime = msTimeOut + System.currentTimeMillis();
 
         Map<DcMotor, Integer> motorToEncoder = new HashMap<>();
+        Map<DcMotor, Double> motorToPowerRatio = new HashMap<>();
 
         motorToEncoder.put(robot.driveTrain.motorFL, encFL);
         motorToEncoder.put(robot.driveTrain.motorFR, encFR);
         motorToEncoder.put(robot.driveTrain.motorBL, encBL);
         motorToEncoder.put(robot.driveTrain.motorBR, encBR);
 
+        int maxEnc = 0;
+        for (Integer enc : motorToEncoder.values())
+        {
+            maxEnc = Math.max(Math.abs(enc), maxEnc);
+        }
 
         robot.driveTrain.resetEncoders();
         robot.driveTrain.runUsingEncoders();
+
 
         robot.log("Starting loop to move " + direction);
 
@@ -80,6 +87,8 @@ public abstract class BaseLinearOpMode extends LinearOpMode
             m.setTargetPosition(motorToEncoder.get(m));
             m.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             m.setPower(power);
+            // Scale each motor power relative to encoder ticks
+            motorToPowerRatio.put(m, ((double)motorToEncoder.get(m)/maxEnc));
         }
 
         boolean active = true;
@@ -153,8 +162,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                 message.append("Setting power to " + powerToSet + " since m.getCurrentPosition()=" +
                         m.getCurrentPosition() + " encoderTicks=" + encoderTicks + "\n");
 
-                m.setPower(powerToSet);
-
+                m.setPower(powerToSet * motorToPowerRatio.get(m));
             }
             robot.log(message.toString());
             idle();
@@ -291,6 +299,34 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     {
         return (int)(inches*(4000/65.8));
     }
+
+    public void arcBackwardsToAbsoluteYaw(double power, double turningRadius,
+                                          double endingAbsoluteYaw, boolean clockwise)
+    {
+        turningRadius = Math.abs(turningRadius);
+        // turningRadius is for the inner wheel
+        // Todo: measure btwn wheels (15 for now)
+        final double DIST_BTWN_WHEELS = 15;
+        final int MAX_ENCODER_TICKS = -20_000;
+        double innerToOuterRatio = turningRadius / (turningRadius + DIST_BTWN_WHEELS);
+        String direction;
+        int encL;
+        int encR;
+        if(clockwise){
+            direction = "Arcing backwards clockwise";
+            encL = (int)(MAX_ENCODER_TICKS * innerToOuterRatio);
+            encR = MAX_ENCODER_TICKS;
+        }
+        else{
+            direction = "Arcing backwards counterclockwise";
+            encL = MAX_ENCODER_TICKS;
+            encR = (int)(MAX_ENCODER_TICKS * innerToOuterRatio);
+        }
+
+        double targetYawChange = robot.imu.getTrueDiff(endingAbsoluteYaw);
+        moveWithEncoders(direction, power, 30_000, encL, encR, encL, encR, targetYawChange);
+    }
+
 
 
     public void displayIMU(int msTimeOut)
