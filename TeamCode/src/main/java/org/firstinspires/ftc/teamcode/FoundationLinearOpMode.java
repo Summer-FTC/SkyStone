@@ -32,8 +32,6 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         super.initialize();
     }
 
-
-
     @Override
     public void runOpMode() throws InterruptedException
     {
@@ -81,7 +79,6 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         moveBackwardByInches(0.5, MOVE_BACKWARD_FROM_PLATFORM_INCHES);
     }
 
-
     private void moveRedFoundation()
     {
         moveForwardByInches(0.8, MOVE_AWAY_FROM_WALL_INCHES);
@@ -99,8 +96,6 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
         robot.hooks.raiseHooks();
     }
-
-
 
     private void moveBlueFoundation() {
         moveForwardByInches(0.8, MOVE_AWAY_FROM_WALL_INCHES);
@@ -220,4 +215,6 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         }
 
     }
+
+
 }

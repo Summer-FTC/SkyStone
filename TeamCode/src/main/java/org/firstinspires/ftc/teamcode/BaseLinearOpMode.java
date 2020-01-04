@@ -261,6 +261,12 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     // positive is left, negative is right
     public void rotate(double degrees)
     {
+        rotate(degrees, 0.3);
+
+    }
+
+    public void rotate(double degrees, double power)
+    {
         // Flip the direction of the encoders if degrees is negative.
         int encoderSign = 1;
         if (degrees < 0) {
@@ -268,7 +274,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         }
 
         int maxEncoder = 5000;
-        moveWithEncoders("ROTATE", 0.3, 10000,
+        moveWithEncoders("ROTATE", power, 10000,
                 encoderSign * maxEncoder, encoderSign * -maxEncoder,
                 encoderSign * maxEncoder, encoderSign * -maxEncoder,
                 degrees);
@@ -386,9 +392,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     {
         robot.output.moveClampOutOfRobot();
 
-        robot.output.openClampFully();
-
-        moveForwardByInches(.65, 12);
+        moveForwardByInches(.8, 12);
 
         robot.output.moveElbowToPosition(robot.output.ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN);
 
@@ -396,19 +400,74 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
         robot.output.moveElbowToPosition(robot.output.ELBOW_POSITION_OUTSIDE_ROBOT_AND_PARTIALLY_UP);
 
-        robot.output.startMoveLiftUp();
-        sleep(200);
+        moveBackwardByInches(1, 16);
+    }
 
-        robot.output.stopLift();
 
+    public void driveUnderBridge(boolean isBlue, int inches)
+    {
+        if (isBlue)
+            strafeLeftByInches(1, inches);
+        else
+            strafeRightByInches(1, inches);
+    }
+
+    public void strafeToStone(boolean isBlue)
+    {
+        if (isBlue)
+            strafeRightByInches(1, 8);
+        else
+            strafeLeftByInches(1, 8);
     }
 
 
     public void dropStone()
     {
         // TODO: Implement me.
-//        robot.output.startMoveLiftDown();
-//        sleep(1000);
-//        robot.output.startOpeningClamp();
+        // turn wrist down
+        robot.output.moveElbowToPosition(OutputController.ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN);
+        robot.output.startOpeningClamp();
+        sleep(300);
+        robot.output.stopClamp();
+        robot.output.moveElbowToPosition(OutputController.ELBOW_POSITION_OUTSIDE_ROBOT_PARALLEL);
+    }
+
+    public void pullFoundationStraightBack(boolean isBlue, boolean side)
+    {
+        robot.hooks.lowerHooks();
+        moveBackwardByInches(0.8, 36);
+
+
+        if (isBlue) {
+            rotate(20);
+            robot.hooks.raiseHooks();
+            strafeRightByInches(1, 10);
+            rotateToAbsoluteYaw(70);
+
+            if (side) {
+                moveBackwardByInches(1, 28);
+                strafeRightByInches(1, 10);
+                moveBackwardByInches(1, 8);
+            }
+            else
+                moveBackwardByInches(1, 36);
+
+        }
+
+        else {
+            rotate(-20);
+            robot.hooks.raiseHooks();
+            strafeLeftByInches(1, 10);
+            rotateToAbsoluteYaw(70);
+
+            if (side) {
+                moveBackwardByInches(1, 28);
+                strafeLeftByInches(1, 10);
+                moveBackwardByInches(1, 8);
+            }
+            else
+                moveBackwardByInches(1, 36);
+
+        }
     }
 }

@@ -46,12 +46,26 @@ public class AutoTest extends BaseLinearOpMode
     //
 
 
+    public void pullFoundationStraightBack()
+    {
+        robot.hooks.lowerHooks();
+        moveBackwardByInches(0.8, 36);
+        rotate(-20);
+        robot.hooks.raiseHooks();
+        strafeLeftByInches(0.8, 10);
+        rotateToAbsoluteYaw(70);
+        moveBackwardByInches(0.8, 33);
+
+    }
 
     public void test() {
+
         telemetry.addData("Status", "Running Autonomous!");
         telemetry.update();
+        rotate(90, 1);
+        //pullFoundationStraightBack();
 
-        arcBackwardsToAbsoluteYaw(.8, 15, 30, true);
+    //    arcBackwardsToAbsoluteYaw(.8, 15, 30, true);
 
 //        robot.output.moveClampOutOfRobot();
 

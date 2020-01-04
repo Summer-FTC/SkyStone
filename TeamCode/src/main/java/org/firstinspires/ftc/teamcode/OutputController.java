@@ -32,6 +32,9 @@ public class OutputController
     // How long to move the lift up and then down when moving the clamp in or out of the robot.
     private static final long MOVE_CLAMP_LIFT_DURATION = 150;
 
+    private static final long OPEN_CLAMP_FULLY_DURATION = 2500;
+    private static final long CLOSE_CLAMP_FULLY_DURATION = 2500;
+
 
     public DcMotor motorLift;
     public Servo elbowR;
@@ -217,13 +220,13 @@ public class OutputController
 
     public void openClampFully() {
         startOpeningClamp();
-        sleep(3000);
+        sleep(OPEN_CLAMP_FULLY_DURATION);
         stopClamp();
     }
 
     public void closeClampFully() {
         startClosingClamp();
-        sleep(3500); // This is a little bigger than on open to be sure we close on the stone.
+        sleep(CLOSE_CLAMP_FULLY_DURATION); // This is a little bigger than on open to be sure we close on the stone.
         stopClamp();
     }
 
@@ -294,6 +297,9 @@ public class OutputController
         }
 
         // Raise the lift some.
+
+        startOpeningClamp();
+
         startMoveLiftUp();
         sleep(MOVE_CLAMP_LIFT_DURATION);
         stopLift();
@@ -310,6 +316,10 @@ public class OutputController
         stopLift();
 
         long durationMillis = System.currentTimeMillis() - startMillis;
+
+        sleep(OPEN_CLAMP_FULLY_DURATION - durationMillis);
+        stopClamp();
+
         telemetry.addData("Moving clamp out took " + durationMillis + " ms", "");
         telemetry.update();
     }
@@ -404,7 +414,8 @@ public class OutputController
 
     public final void sleep(long milliseconds) {
         try {
-            Thread.sleep(milliseconds);
+            if (milliseconds > 0)
+                Thread.sleep(milliseconds);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }

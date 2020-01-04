@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -56,7 +57,11 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
     private static final String LABEL_FIRST_ELEMENT = "Stone";
     private static final String LABEL_SECOND_ELEMENT = "Skystone";
 
-    private int skystonePosition = 3;
+    boolean configOnly = false;
+
+    // Boolean Values for input
+    boolean isStartingBlue = true;
+    boolean parkOnSide = true;
 
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
@@ -90,6 +95,7 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
     {
         super.initialize();
         initVuforia();
+        configMode();
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector())
         {
@@ -114,39 +120,51 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
         waitForStart();
 
         // TODO: This assumes blue currently.
-        boolean isBlue = true;
+
         if (opModeIsActive())
         {
-            moveForwardByInches(1, 19);
-            if (isSkystone(isBlue))
+            moveForwardByInches(1, 20);
+            if(isStartingBlue){
+                strafeRightByInches(0.75, 12);
+            }
+            else{
+                strafeLeftByInches(0.75, 12);
+            }
+            if (isSkystone(isStartingBlue))
             {
                 grabStoneInAuto();
-                //driveUnderBridge();
-               // dropStone();
-                // pull foundation
-                // park
+                driveUnderBridge(isStartingBlue, 72);
             }
             else
             {
-                strafeRightByInches(1, 8);
-                if(isSkystone(isBlue))
+                strafeToStone(isStartingBlue);
+
+                if(isSkystone(isStartingBlue))
                 {
                     grabStoneInAuto();
+                    driveUnderBridge(isStartingBlue, 79);
                 }
                 else
                 {
-                    strafeRightByInches(1, 8);
+                    strafeToStone(isStartingBlue);
                     grabStoneInAuto();
+                    driveUnderBridge(isStartingBlue, 86);
                 }
             }
 
+            moveForwardByInches(0.8, 20); // move forward to foundation
+            dropStone();
+
+            pullFoundationStraightBack(isStartingBlue, parkOnSide);
         }
+
+
 
     }
 
     public boolean isSkystone(boolean isBlue)
     {
-        long stopTime = System.currentTimeMillis() + 1000; // TODO: Maybe this needs to be longer.
+        long stopTime = System.currentTimeMillis() + 1000; // TODO: Could shorten this to save time
         while (System.currentTimeMillis() < stopTime)
         {
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
@@ -185,159 +203,7 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
         return false;
     }
 
-    public void runOpModeOld() throws InterruptedException
-    {
 
-        super.initialize();
-        initVuforia();
-
-        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
-            initTfod();
-        } else {
-            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
-        }
-
-        /**
-         * Activate TensorFlow Object Detection before we wait for the start command.
-         * Do it here so that the Camera Stream window will have the TensorFlow annotations visible.
-         **/
-        if (tfod != null) {
-            tfod.activate();
-        }
-
-        telemetry.addData(">", "Press Play to start op mode");
-        telemetry.update();
-        waitForStart();
-
-        // add move to location first
-        // or make this a method
-
-        if (opModeIsActive()) {
-            while (opModeIsActive()) {
-                if (tfod != null) {
-                    // getUpdatedRecognitions() will return null if no new information is available since
-                    // the last time that call was made.
-
-                    // move up to the stones
-                    moveForwardByInches(0.5, 16);
-
-                    // STRAFE HERE? DISTANCE ????
-                    telemetry.addData("", "Sleeping");
-                    telemetry.update();
-                    sleep(5000);
-
-                    telemetry.addData("", "Done sleeping");
-                    telemetry.update();
-
-
-                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                    if (updatedRecognitions != null) {
-                        telemetry.addData("# Object Detected", updatedRecognitions.size());
-
-                        // step through the list of recognitions and display boundary info.
-                        int i = 1;
-
-                        for (Recognition recognition : updatedRecognitions) {
-                            telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-                            telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
-                                    recognition.getLeft(), recognition.getTop());
-                            telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
-                                    recognition.getRight(), recognition.getBottom());
-                            telemetry.update();
-
-                            if (recognition.getLabel().equals("Skystone") && recognition.getConfidence() > .50)
-                            {
-                                telemetry.addData("", "Step 1");
-                                telemetry.update();
-                                grabStoneInAuto();
-                             //   driveUnderBridge();
-                             //   dropStone();
-                            }
-
-                            else {
-                                telemetry.addData("", "Step 2");
-                                telemetry.update();
-                                // Todo: Make this customizable Left/Right corresponding with Blue/Red
-                                // Todo: make the distance a constant and figure out how far it is to get to the next block
-
-
-                                strafeRightByInches(0.7, 8);
-
-                                if (recognition.getLabel().equals("Skystone") && recognition.getConfidence() > .50)
-                                {
-                                    grabStoneInAuto();
-                                 //   driveUnderBridge();
-                                 //   dropStone();
-                                }
-
-                                // Should we make it check the 3rd stone or just assume if it didn't detect one
-                                // of the first two then its the 3rd?
-                                else
-                                {
-                                    telemetry.addData("", "Step 3");
-                                    telemetry.update();
-                                    // Todo: make the inches same constant as above
-                                    strafeRightByInches(0.7, 8);
-                                    grabStoneInAuto();
-                                 //   driveUnderBridge();
-                                 //   dropStone();
-
-                                }
-
-                            }
-                        }
-                    }
-                }
-
-                // Todo: add foundation run auto here?
-            }
-        }
-
-        if (tfod != null) {
-            tfod.shutdown();
-        }
-    }
-
-    public void driveUnderBridge()
-    {
-        // Todo: figure out these distances
-        moveBackwardByInches(0.5, 5);
-        strafeLeftByInches(0.75, 60);
-    }
-
-    // Todo: change positions 1 2 3 to constants
-    // Todo: figure out if we need this method if we're strafing?
-    public void moveToStone(int position) throws InterruptedException
-    {
-        if (position == 1)
-        {
-            // get stone in position 1;
-            strafeRightByInches(0.5, 3);
-            moveForwardByInches(0.5, 5);
-            grabStoneInAuto();
-        }
-
-        else if (position == 2)
-        {
-            // get stone in position 2;
-            strafeLeftByInches(0.5, 3);
-            moveForwardByInches(0.5, 5);
-            grabStoneInAuto();
-        }
-        else
-        {
-            // get stone in position 3;
-            strafeLeftByInches(0.5, 10);
-            moveForwardByInches(0.5, 5);
-            grabStoneInAuto();
-        }
-    }
-
-    // Todo: might not need this method
-    public int getSkystonePosition()
-    {
-        return skystonePosition;
-    }
 
     /**
      * Initialize the Vuforia localization engine.
@@ -368,5 +234,48 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
         tfodParameters.minimumConfidence = 0.8;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
+    }
+
+    public void configMode() {
+        String lastModes = "";
+        telemetry.addData("Entering " , "ConfigMode");
+        telemetry.update();
+        do {
+            if (VenomUtilities.isValueChangedAndEqualTo("1.y", gamepad1.y, true))
+                isStartingBlue = !isStartingBlue;
+
+            if (VenomUtilities.isValueChangedAndEqualTo("1.a", gamepad1.a, true))
+                parkOnSide = !parkOnSide;
+
+            logConfigModes(true);
+        }
+
+        while (!gamepad1.right_bumper && !isStarted() &&  !isStopRequested());
+        telemetry.addData("ConfigMode" , lastModes);
+        telemetry.update();
+
+        RobotLog.i("configMode() stop");
+
+    }
+
+    private String lastModes="";
+    void logConfigModes(boolean update) {
+        String modes="";
+        //  modes+="Alliance="+(isRedAlliance?"Red":"Blue");
+        modes+=", Starting="+(isStartingBlue?"Blue":"Red");
+        modes+=", Starting="+(parkOnSide?"Side":"Center");
+
+
+        telemetry.addData("Alliance (Y)", isStartingBlue?"Blue":"Red");
+        telemetry.addData("Park Location (A)", parkOnSide?"Side":"Center");
+
+        if (configOnly) telemetry.addData("ConfigMode" , "Press right bumper to leave config mode.");
+        if (update) telemetry.update();
+
+        if (!modes.equals(lastModes)) {
+            RobotLog.i(modes);
+            lastModes=modes;
+        }
+
     }
 }
