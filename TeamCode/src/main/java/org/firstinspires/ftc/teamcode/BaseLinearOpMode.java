@@ -8,8 +8,8 @@ import java.util.Map;
 
 public abstract class BaseLinearOpMode extends LinearOpMode
 {
-    // This power will move the robot slowly. It actually moves at .015 (very slowly).
-    private static double MIN_POWER = 0.10;
+    // This power will move the robot slowly.
+    private static double MIN_POWER = 0.20;
     private static double RAMP_UP_MS = 500;
     private static double RAMP_DOWN_MS = 1000;
 
@@ -107,6 +107,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
             message.append("Moving " + direction + "\n");
 
             active = true;
+            double maxTicksRemaining = 0;
             for(DcMotor m : motorToEncoder.keySet())
             {
                 int encoderTicks = motorToEncoder.get(m);
@@ -115,6 +116,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                 // busy if we haven't moved half of the encoder ticks.
                 // Stop when we get close.
                 double ticksRemaining = Math.abs(encoderTicks - m.getCurrentPosition());
+                maxTicksRemaining = Math.max(maxTicksRemaining, ticksRemaining);
 
                 // Sometimes the motor is not busy at the very start.
                 // If any motor is not busy and we have covered half of the distance, then
@@ -189,6 +191,12 @@ public abstract class BaseLinearOpMode extends LinearOpMode
             }
             robot.log(message.toString());
             idle();
+
+            // If all of the encoders are close, then set a timeout to 1 second from now.
+
+            if(maxTicksRemaining < 100){
+                stopTime = Math.min(stopTime,System.currentTimeMillis() + 1000);
+            }
         }
 
         for (DcMotor m : motorToEncoder.keySet())
@@ -332,7 +340,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         turningRadius = Math.abs(turningRadius);
         // turningRadius is for the inner wheel
         // Todo: measure btwn wheels (15 for now)
-        final double DIST_BTWN_WHEELS = 15;
+        final double DIST_BTWN_WHEELS = 15.5;
         final int MAX_ENCODER_TICKS = -20_000;
         double innerToOuterRatio = turningRadius / (turningRadius + DIST_BTWN_WHEELS);
         String direction;

@@ -172,12 +172,13 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
                                 return true;
                             }
                         } else {
-                            // Red sidie
+                            // Red side
                             if ((angle > -25) && (angle < 15)) {
                                 return true;
                             }
                         }
                     }
+                    i++;
                 }
             }
         }
