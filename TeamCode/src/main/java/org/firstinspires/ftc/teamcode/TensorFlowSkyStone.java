@@ -139,7 +139,9 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
                     grabStoneInAuto();
                 }
             }
+
         }
+
     }
 
     public boolean isSkystone(boolean isBlue)
@@ -305,6 +307,31 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
 
     // Todo: change positions 1 2 3 to constants
     // Todo: figure out if we need this method if we're strafing?
+    public void moveToStone(int position) throws InterruptedException
+    {
+        if (position == 1)
+        {
+            // get stone in position 1;
+            strafeRightByInches(0.5, 3);
+            moveForwardByInches(0.5, 5);
+            grabStoneInAuto();
+        }
+
+        else if (position == 2)
+        {
+            // get stone in position 2;
+            strafeLeftByInches(0.5, 3);
+            moveForwardByInches(0.5, 5);
+            grabStoneInAuto();
+        }
+        else
+        {
+            // get stone in position 3;
+            strafeLeftByInches(0.5, 10);
+            moveForwardByInches(0.5, 5);
+            grabStoneInAuto();
+        }
+    }
 
     // Todo: might not need this method
     public int getSkystonePosition()
