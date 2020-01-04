@@ -306,6 +306,12 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
     // Todo: change positions 1 2 3 to constants
     // Todo: figure out if we need this method if we're strafing?
 
+    // Todo: might not need this method
+    public int getSkystonePosition()
+    {
+        return skystonePosition;
+    }
+
     /**
      * Initialize the Vuforia localization engine.
      */
