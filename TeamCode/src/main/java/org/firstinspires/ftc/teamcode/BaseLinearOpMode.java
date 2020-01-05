@@ -34,7 +34,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     }
 
 
-    private void moveWithEncoders(String direction, double power, int msTimeOut,
+    public void moveWithEncoders(String direction, double power, int msTimeOut,
                                   int encFL, int encFR, int encBL, int encBR)
     {
         moveWithEncoders(direction, power, msTimeOut,
@@ -42,7 +42,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     }
 
 
-    private void moveWithEncoders(String direction, double power, int msTimeOut,
+    public void moveWithEncoders(String direction, double power, int msTimeOut,
                                   int encFL, int encFR, int encBL, int encBR,
                                   // null means that we don't stop when the yaw changes.
                                   Double targetYawChange)
@@ -400,7 +400,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
         robot.output.moveElbowToPosition(robot.output.ELBOW_POSITION_OUTSIDE_ROBOT_AND_PARTIALLY_UP);
 
-        moveBackwardByInches(1, 16);
+        moveBackwardByInches(1, 15);
     }
 
 

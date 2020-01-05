@@ -123,12 +123,12 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
 
         if (opModeIsActive())
         {
-            moveForwardByInches(1, 20);
+            moveForwardByInches(0.8, 20);
             if(isStartingBlue){
-                strafeRightByInches(0.75, 12);
+                strafeRightByInches(0.9, 12);
             }
             else{
-                strafeLeftByInches(0.75, 12);
+                strafeLeftByInches(0.9, 12);
             }
             if (isSkystone(isStartingBlue))
             {
@@ -152,7 +152,7 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
                 }
             }
 
-            moveForwardByInches(0.8, 20); // move forward to foundation
+            moveForwardByInches(1, 20); // move forward to foundation
             dropStone();
 
             pullFoundationStraightBack(isStartingBlue, parkOnSide);
@@ -164,7 +164,7 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
 
     public boolean isSkystone(boolean isBlue)
     {
-        long stopTime = System.currentTimeMillis() + 1000; // TODO: Could shorten this to save time
+        long stopTime = System.currentTimeMillis() + 800; // TODO: Could shorten this to save time
         while (System.currentTimeMillis() < stopTime)
         {
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();

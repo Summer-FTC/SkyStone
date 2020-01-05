@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
 @Autonomous(name = "Test Run" , group = "6209")
@@ -22,12 +23,19 @@ public class AutoTest extends BaseLinearOpMode
     public void runOpMode() throws InterruptedException
     {
         initialize();
+        HardwareMap hwMap = robot.driveTrain.hwMap;
+        motorFR = hwMap.dcMotor.get("motorFR");
+        motorFL = hwMap.dcMotor.get("motorFL");
+        motorBR = hwMap.dcMotor.get("motorBR");
+        motorBL = hwMap.dcMotor.get("motorBL");
 
         waitForStart();
         log("runOpMode", "running");
         try {
-            test();
+            arcFoundationUsingEncValues();
+            arcTest();
         } catch(Exception e){
+
             log("exception", e);
         }
     }
@@ -56,6 +64,12 @@ public class AutoTest extends BaseLinearOpMode
         rotateToAbsoluteYaw(70);
         moveBackwardByInches(0.8, 33);
 
+    }
+
+    public void arcFoundationUsingEncValues()
+    {
+        robot.hooks.lowerHooks();
+        moveWithEncoders("Backwards", 1, 10_000, -2 * 2710, -2 *332, -2*-1005, -2*-486, 90.0);
     }
 
     public void test() {
@@ -125,6 +139,20 @@ public class AutoTest extends BaseLinearOpMode
 //        sleep(2000);
     }
 
+    public void arcTest()
+    {
+        robot.hooks.lowerHooks();
+        resetEncoders();
+        while (opModeIsActive())
+        {
+            telemetry.addData("motorFR", motorFR.getCurrentPosition());
+            telemetry.addData("motorFL", motorFL.getCurrentPosition());
+            telemetry.addData("motorBR", motorBR.getCurrentPosition());
+            telemetry.addData("motorBL", motorBL.getCurrentPosition());
+            telemetry.update();
+            sleep(1000);
+        }
+    }
 
     public void main() throws InterruptedException
     {
@@ -240,7 +268,7 @@ public class AutoTest extends BaseLinearOpMode
     public void resetEncoders()
     {
         motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
@@ -248,7 +276,7 @@ public class AutoTest extends BaseLinearOpMode
     public void runToPosition()
     {
         motorBR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorBR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorBL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorFR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorFL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
@@ -256,7 +284,7 @@ public class AutoTest extends BaseLinearOpMode
     public void runUsingEncoders()
     {
         motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorBL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }

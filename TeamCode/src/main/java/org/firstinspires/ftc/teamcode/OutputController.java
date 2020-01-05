@@ -32,7 +32,7 @@ public class OutputController
     // How long to move the lift up and then down when moving the clamp in or out of the robot.
     private static final long MOVE_CLAMP_LIFT_DURATION = 150;
 
-    private static final long OPEN_CLAMP_FULLY_DURATION = 2500;
+    private static final long OPEN_CLAMP_FULLY_DURATION = 2000;
     private static final long CLOSE_CLAMP_FULLY_DURATION = 2500;
 
 
@@ -41,7 +41,6 @@ public class OutputController
     public Servo elbowL;
     public Servo wrist;
     public CRServo clamp;
-    int position = 1;
 
     HardwareMap hwMap;
     Telemetry telemetry;
