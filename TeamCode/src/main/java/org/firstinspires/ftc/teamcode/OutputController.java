@@ -27,7 +27,8 @@ public class OutputController
     public static final long LIFT_TENSION_DURATION = 1000;
     // This is negative to move down and has a much smaller absolute value since gravity
     // helps us down.
-    private static final double LIFT_POWER_DOWN = 1;
+    // When using DcMotor.ZeroPowerBehavior.BRAKE, this should be larger like 0.8.
+    private static final double LIFT_POWER_DOWN = 0.5;
 
     // How long to move the lift up and then down when moving the clamp in or out of the robot.
     private static final long MOVE_CLAMP_LIFT_DURATION = 150;
@@ -72,7 +73,8 @@ public class OutputController
         motorLift.setPower(LIFT_TENSION_POWER);
         sleep(LIFT_TENSION_DURATION);
         motorLift.setPower(0);
-        motorLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // stops lift from drifting down
+        // This MIGHT have caused the chain to break. Disable it just in case for now.
+//        motorLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // stops lift from drifting down
 
         telemetry.addData("Output Motor Initialization Complete", "");
         telemetry.update();
