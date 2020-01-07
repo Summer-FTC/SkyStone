@@ -89,23 +89,26 @@ public class OnlySkystone extends BaseLinearOpMode{
             else
             {
                 strafeToStone(isStartingBlue);
-                moveForwardInches += 8;
+                //moveForwardInches += 8;
 
-                if(isSkystone(isStartingBlue))
+                if(isSkystone(isStartingBlue)) {
                     grabAndTurn(isStartingBlue);
+                    moveForwardByInches(0.7, 8);
+                }
                 else
                 {
                     strafeToStone(isStartingBlue);
-                    moveForwardInches += 8;
+                    //moveForwardInches += 8;
                     grabAndTurn(isStartingBlue);
+                    moveForwardByInches(0.7, 16);
                 }
             }
 
             long durationMillis = System.currentTimeMillis() - startTime;
-            sleep(30000 - (7000 + durationMillis)); // sleep until 7 sec remaining
+            sleep(30000 - (8000 + durationMillis)); // sleep until 8 sec remaining
             moveForwardByInches(0.7, moveForwardInches);
             dropStone();
-            moveBackwardByInches(0.7, 20);
+            parkOnlySkystone();
         }
     }
 
@@ -147,6 +150,14 @@ public class OnlySkystone extends BaseLinearOpMode{
         if (!modes.equals(lastModes)) {
             RobotLog.i(modes);
             lastModes=modes;
+        }
+    }
+
+    public void parkOnlySkystone() {
+        if (parkOnSide) {
+            moveBackwardByInches(0.7, 20);
+        } else {
+            moveBackwardByInches(0.7, 20);
         }
     }
 }

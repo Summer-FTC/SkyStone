@@ -74,7 +74,7 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
 
         if (opModeIsActive())
         {
-            moveForwardByInches(0.8, 16);
+            moveForwardByInches(0.8, 14);
             if(isStartingBlue)
                 strafeRightByInches(0.9, 12);
             else
