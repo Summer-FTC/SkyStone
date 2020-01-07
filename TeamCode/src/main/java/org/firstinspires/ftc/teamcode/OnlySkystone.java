@@ -52,7 +52,7 @@ import java.util.List;
  * is explained below.
  */
 @Autonomous(name = "TensorFlow", group = "6209")
-public class TensorFlowSkyStone extends BaseLinearOpMode{
+public class OnlySkystone extends BaseLinearOpMode{
 
     boolean configOnly = false;
 
@@ -69,43 +69,42 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
         waitForStart();
+        long startTime = System.currentTimeMillis();
 
         // TODO: This assumes blue currently.
 
         if (opModeIsActive())
         {
+            int moveForwardInches = 40;
             moveForwardByInches(0.8, 22);
+
             if(isStartingBlue)
                 strafeRightByInches(0.9, 12);
             else
                 strafeLeftByInches(0.9, 12);
 
             if (isSkystone(isStartingBlue))
-            {
-                grabStoneInAuto(22);
-                driveUnderBridge(isStartingBlue, 70);
-            }
+                grabAndTurn(isStartingBlue);
             else
             {
                 strafeToStone(isStartingBlue);
+                moveForwardInches += 8;
 
                 if(isSkystone(isStartingBlue))
-                {
-                    grabStoneInAuto(22);
-                    driveUnderBridge(isStartingBlue, 78);
-                }
+                    grabAndTurn(isStartingBlue);
                 else
                 {
                     strafeToStone(isStartingBlue);
-                    grabStoneInAuto(22);
-                    driveUnderBridge(isStartingBlue, 86);
+                    moveForwardInches += 8;
+                    grabAndTurn(isStartingBlue);
                 }
             }
 
-            moveForwardByInches(1, 25); // move forward to foundation
+            long durationMillis = System.currentTimeMillis() - startTime;
+            sleep(30000 - (7000 + durationMillis)); // sleep until 7 sec remaining
+            moveForwardByInches(1, moveForwardInches);
             dropStone();
-
-            pullFoundationAndPark(isStartingBlue, parkOnSide);
+            moveBackwardByInches(0.8, 20);
         }
     }
 
@@ -136,6 +135,7 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
         //  modes+="Alliance="+(isRedAlliance?"Red":"Blue");
         modes+=", Starting="+(isStartingBlue?"Blue":"Red");
         modes+=", Starting="+(parkOnSide?"Side":"Center");
+
 
         telemetry.addData("Alliance (Y)", isStartingBlue?"Blue":"Red");
         telemetry.addData("Park Location (A)", parkOnSide?"Side":"Center");

@@ -3,11 +3,48 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class BaseLinearOpMode extends LinearOpMode
 {
+    private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
+    private static final String LABEL_FIRST_ELEMENT = "Stone";
+    private static final String LABEL_SECOND_ELEMENT = "Skystone";
+
+    /*
+     * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
+     * 'parameters.vuforiaLicenseKey' is initialized is for illustration only, and will not function.
+     * A Vuforia 'Development' license key, can be obtained free of charge from the Vuforia developer
+     * web site at https://developer.vuforia.com/license-manager.
+     *
+     * Vuforia license keys are always 380 characters long, and look as if they contain mostly
+     * random data. As an example, here is a example of a fragment of a valid key:
+     *      ... yIgIzTqZ4mWjk9wd3cZO9T1axEqzuhxoGlfOOI2dRzKS4T0hQ8kT ...
+     * Once you've obtained a license key, copy the string from the Vuforia web site
+     * and paste it in to your code on the next line, between the double quotes.
+     */
+    private static final String VUFORIA_KEY = "AdlGeb7/////AAABmSRxygbWhU7JmYOsyl0bcLgAAIlM4tFb63K1a+swM0Z2qYggVDcwj/RDVakun/FOpm14tLjtU7UAmIRuCfA1Sah8YloIcX8O6+8Uj/BI3J9D/C3uiTBXzfLEA8Ml4c53WhR2GhQ1LJtfrZ1bjsmY5qksP7i0eaXfFUZ6s1elxJua5gVx4jbuVrh09yaGCfZ3GxymbY3S5ZJWDWiEB7RY5JIHGb01Ar30tzki47QL1YQKHkqM2u1Zm4aJl6/KedqOTc1EL3DNXAYb/jCj/Xnl2pzV7vAKUvhscgHA1MMHo5yPjL2mG6ySKKZnMr0tyjgwAYsyWA5syAi1Bgb+lqeUlsAaD3rssPZfPE0BzXV9dqzG";
+
+    /**
+     * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
+     * localization engine.
+     */
+    private VuforiaLocalizer vuforia;
+
+    /**
+     * {@link #tfod} is the variable we will use to store our instance of the TensorFlow Object
+     * Detection engine.
+     */
+    private TFObjectDetector tfod;
+
     // This power will move the robot slowly.
     private static double MIN_POWER = 0.20;
     private static double RAMP_UP_MS = 500;
@@ -29,6 +66,21 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     public void initialize()
     {
         robot.init(hardwareMap, telemetry, true);
+
+        initVuforia();
+
+        if (ClassFactory.getInstance().canCreateTFObjectDetector())
+            initTfod();
+
+        else
+            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
+
+        /**
+         * Activate TensorFlow Object Detection before we wait for the start command.
+         * Do it here so that the Camera Stream window will have the TensorFlow annotations visible.
+         **/
+        if (tfod != null)
+            tfod.activate();
 
         log("BaseLinearOpMode::initialize complete");
     }
@@ -388,11 +440,11 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     }
 
 
-    public void grabStoneInAuto()
+    public void grabStoneInAuto(int backwards)
     {
         robot.output.moveClampOutOfRobot();
 
-        moveForwardByInches(.8, 12);
+        moveForwardByInches(.8, 14);
 
         robot.output.moveElbowToPosition(robot.output.ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN);
 
@@ -400,7 +452,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
         robot.output.moveElbowToPosition(robot.output.ELBOW_POSITION_OUTSIDE_ROBOT_AND_PARTIALLY_UP);
 
-        moveBackwardByInches(1, 15);
+        moveBackwardByInches(1, backwards);
     }
 
 
@@ -427,22 +479,22 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         // turn wrist down
         robot.output.moveElbowToPosition(OutputController.ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN);
         robot.output.startOpeningClamp();
-        sleep(300);
+        sleep(300); // can do this while lowering hooks
+        // can have more time for OnlySkystone
         robot.output.stopClamp();
         robot.output.moveElbowToPosition(OutputController.ELBOW_POSITION_OUTSIDE_ROBOT_PARALLEL);
     }
 
-    public void pullFoundationStraightBack(boolean isBlue, boolean side)
+    public void pullFoundationAndPark(boolean isBlue, boolean side)
     {
         robot.hooks.lowerHooks();
-        moveBackwardByInches(0.8, 36);
-
+        moveBackwardByInches(0.8, 42);
 
         if (isBlue) {
             rotate(20);
             robot.hooks.raiseHooks();
             strafeRightByInches(1, 10);
-            rotateToAbsoluteYaw(70);
+            rotateToAbsoluteYaw(-70);
 
             if (side) {
                 moveBackwardByInches(1, 28);
@@ -451,7 +503,6 @@ public abstract class BaseLinearOpMode extends LinearOpMode
             }
             else
                 moveBackwardByInches(1, 36);
-
         }
 
         else {
@@ -467,7 +518,86 @@ public abstract class BaseLinearOpMode extends LinearOpMode
             }
             else
                 moveBackwardByInches(1, 36);
-
         }
+    }
+
+    public void grabAndTurn(boolean isBlue) {
+        if (isBlue) {
+            grabStoneInAuto(14);
+            rotateToAbsoluteYaw(-90);
+        }
+        else {
+            grabStoneInAuto(14);
+            rotateToAbsoluteYaw(90);
+        }
+    }
+
+    public boolean isSkystone(boolean isBlue)
+    {
+        long stopTime = System.currentTimeMillis() + 800; // TODO: Could shorten this to save time
+        while (System.currentTimeMillis() < stopTime)
+        {
+            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+            if (updatedRecognitions != null) {
+                telemetry.addData("# Object Detected", updatedRecognitions.size());
+
+                // step through the list of recognitions and display boundary info.
+                int i = 1;
+
+                for (Recognition recognition : updatedRecognitions) {
+                    telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+                    telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
+                            recognition.getLeft(), recognition.getTop());
+                    telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+                            recognition.getRight(), recognition.getBottom());
+                    telemetry.addData("  Angle", String.format(" %.0f degrees", recognition.estimateAngleToObject(AngleUnit.DEGREES)));
+                    telemetry.update();
+
+                    if (recognition.getLabel().equals("Skystone") && recognition.getConfidence() > .20) {
+                        double angle = recognition.estimateAngleToObject(AngleUnit.DEGREES);
+                        if (isBlue) {
+                            if ((angle > -15) && (angle < 25))
+                                return true;
+                        } else {
+                            // Red side
+                            if ((angle > -25) && (angle < 15))
+                                return true;
+                        }
+                    }
+                    i++;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Initialize the Vuforia localization engine.
+     */
+    public void initVuforia() {
+        /*
+         * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
+         */
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+
+        //  Instantiate the Vuforia engine
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+
+        // Loading trackables is not necessary for the TensorFlow Object Detection engine.
+    }
+
+    /**
+     * Initialize the TensorFlow Object Detection engine.
+     */
+    public void initTfod() {
+        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+        tfodParameters.minimumConfidence = 0.8;
+        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
     }
 }

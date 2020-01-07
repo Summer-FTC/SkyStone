@@ -33,7 +33,7 @@ public class OutputController
     private static final long MOVE_CLAMP_LIFT_DURATION = 150;
 
     private static final long OPEN_CLAMP_FULLY_DURATION = 2000;
-    private static final long CLOSE_CLAMP_FULLY_DURATION = 2500;
+    private static final long CLOSE_CLAMP_FULLY_DURATION = 2000;
 
 
     public DcMotor motorLift;
@@ -72,6 +72,7 @@ public class OutputController
         motorLift.setPower(LIFT_TENSION_POWER);
         sleep(LIFT_TENSION_DURATION);
         motorLift.setPower(0);
+        motorLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // stops lift from drifting down
 
         telemetry.addData("Output Motor Initialization Complete", "");
         telemetry.update();
