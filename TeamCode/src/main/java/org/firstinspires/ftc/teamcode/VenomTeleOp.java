@@ -91,7 +91,7 @@ public class VenomTeleOp extends OpMode
 
         if (gamepad2.x)
         {
-            robot.output.moveClampIntoRobot();
+            //robot.output.moveClampIntoRobot();
         }
         if (gamepad2.y)
         {

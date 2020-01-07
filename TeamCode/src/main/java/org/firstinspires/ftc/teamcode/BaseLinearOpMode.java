@@ -444,7 +444,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     {
         robot.output.moveClampOutOfRobot();
 
-        moveForwardByInches(.8, 14);
+        moveForwardByInches(.5, 14);
 
         robot.output.moveElbowToPosition(robot.output.ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN);
 
@@ -452,7 +452,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
         robot.output.moveElbowToPosition(robot.output.ELBOW_POSITION_OUTSIDE_ROBOT_AND_PARTIALLY_UP);
 
-        moveBackwardByInches(1, backwards);
+        moveBackwardByInches(0.6, backwards);
     }
 
 
@@ -524,11 +524,11 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     public void grabAndTurn(boolean isBlue) {
         if (isBlue) {
             grabStoneInAuto(14);
-            rotateToAbsoluteYaw(-90);
+            rotateToAbsoluteYaw(-70);
         }
         else {
             grabStoneInAuto(14);
-            rotateToAbsoluteYaw(90);
+            rotateToAbsoluteYaw(70);
         }
     }
 

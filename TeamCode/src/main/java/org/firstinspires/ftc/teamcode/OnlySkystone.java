@@ -51,7 +51,7 @@ import java.util.List;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "TensorFlow", group = "6209")
+@Autonomous(name = "OnlySkystone", group = "6209")
 public class OnlySkystone extends BaseLinearOpMode{
 
     boolean configOnly = false;
@@ -76,12 +76,13 @@ public class OnlySkystone extends BaseLinearOpMode{
         if (opModeIsActive())
         {
             int moveForwardInches = 40;
-            moveForwardByInches(0.8, 22);
+
+            moveForwardByInches(0.5, 14);
 
             if(isStartingBlue)
-                strafeRightByInches(0.9, 12);
+                strafeRightByInches(0.5, 12);
             else
-                strafeLeftByInches(0.9, 12);
+                strafeLeftByInches(0.5, 12);
 
             if (isSkystone(isStartingBlue))
                 grabAndTurn(isStartingBlue);
@@ -102,9 +103,9 @@ public class OnlySkystone extends BaseLinearOpMode{
 
             long durationMillis = System.currentTimeMillis() - startTime;
             sleep(30000 - (7000 + durationMillis)); // sleep until 7 sec remaining
-            moveForwardByInches(1, moveForwardInches);
+            moveForwardByInches(0.7, moveForwardInches);
             dropStone();
-            moveBackwardByInches(0.8, 20);
+            moveBackwardByInches(0.7, 20);
         }
     }
 
