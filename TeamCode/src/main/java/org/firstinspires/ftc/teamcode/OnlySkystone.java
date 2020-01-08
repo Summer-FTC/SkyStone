@@ -105,7 +105,7 @@ public class OnlySkystone extends BaseLinearOpMode{
             }
 
             long durationMillis = System.currentTimeMillis() - startTime;
-            sleep(30000 - (8000 + durationMillis)); // sleep until 8 sec remaining
+            sleep(30000 - (10000 + durationMillis)); // sleep until 10 sec remaining
             moveForwardByInches(0.7, moveForwardInches);
             dropStone();
             parkOnlySkystone();
@@ -154,10 +154,17 @@ public class OnlySkystone extends BaseLinearOpMode{
     }
 
     public void parkOnlySkystone() {
-        if (parkOnSide) {
+
+        if (isStartingBlue) {
+            strafeRightByInches(0.7, 3);
+        } else {
+            strafeLeftByInches(0.7, 3);
+        }
+        moveBackwardByInches(0.7, 20);
+        /**if (parkOnSide) {
             moveBackwardByInches(0.7, 20);
         } else {
             moveBackwardByInches(0.7, 20);
-        }
+        }**/
     }
 }
