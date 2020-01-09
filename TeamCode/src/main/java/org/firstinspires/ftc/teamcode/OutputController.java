@@ -46,6 +46,7 @@ public class OutputController
     HardwareMap hwMap;
     Telemetry telemetry;
 
+    public void init(HardwareMap hwMap, Telemetry telemetry, boolean isAuto)
     {
         this.hwMap = hwMap;
         this.telemetry = telemetry;

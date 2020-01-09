@@ -158,7 +158,14 @@ public class OnlySkystone extends BaseLinearOpMode{
     }
 
     public void parkOnlySkystone() {
-        if (parkOnSide) {
+
+        if (isStartingBlue) {
+            strafeRightByInches(0.7, 3);
+        } else {
+            strafeLeftByInches(0.7, 3);
+        }
+        moveBackwardByInches(0.7, 20);
+        /**if (parkOnSide) {
             moveBackwardByInches(0.7, 20);
         } else {
             moveBackwardByInches(0.7, 20);

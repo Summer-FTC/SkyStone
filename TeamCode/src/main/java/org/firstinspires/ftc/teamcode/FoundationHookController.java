@@ -30,12 +30,16 @@ public class FoundationHookController
     }
 
 
+    public void startRaiseHooks()
     {
         leftHook.setPosition(1);
         rightHook.setPosition(0);
     }
 
 
+    public void raiseHooks()
+    {
+        startRaiseHooks();
 
         // Wait for the hooks to raise.
         try {
