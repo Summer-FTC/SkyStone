@@ -63,7 +63,7 @@ public class TensorFlowSkyStone extends BaseLinearOpMode{
     @Override
     public void runOpMode() throws InterruptedException
     {
-        super.initialize();
+        super.initialize(true);
         configMode();
 
         telemetry.addData(">", "Press Play to start op mode");

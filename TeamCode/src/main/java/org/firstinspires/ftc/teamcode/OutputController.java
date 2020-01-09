@@ -59,7 +59,7 @@ public class OutputController
         elbowL = hwMap.servo.get("elbow2");
 
         // This is necessary so that we can detect when the wrist is in and out of the robot.
-        setElbowPositions(ELBOW_POSITION_INSIDE_ROBOT);
+         setElbowPositions(ELBOW_POSITION_INSIDE_ROBOT);
 
         // wrist rotates block
         wrist = hwMap.servo.get("wrist");
@@ -70,9 +70,9 @@ public class OutputController
 
         motorLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motorLift.setPower(LIFT_TENSION_POWER);
-        sleep(LIFT_TENSION_DURATION);
-        motorLift.setPower(0);
+    //    motorLift.setPower(LIFT_TENSION_POWER);
+     //   sleep(LIFT_TENSION_DURATION);
+    //    motorLift.setPower(0);
         // This MIGHT have caused the chain to break. Disable it just in case for now.
 //        motorLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // stops lift from drifting down
 

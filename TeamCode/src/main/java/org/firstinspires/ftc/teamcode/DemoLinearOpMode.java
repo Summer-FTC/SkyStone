@@ -6,10 +6,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Autonomous(name = "DemoLinearOpMode", group = "6209")
 public class DemoLinearOpMode extends BaseLinearOpMode
 {
-    @Override
     public void initialize()
     {
-        super.initialize();
+        super.initialize(true);
     }
 
     ElapsedTime eTime;

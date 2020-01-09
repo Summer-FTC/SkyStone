@@ -43,7 +43,8 @@ public class VenomUtilities {
      * @param targetValue
      * @return
      */
-    public static boolean isValueChangedAndEqualTo(String key, Object newValue, Object targetValue) {
+    public static boolean isValueChangedAndEqualTo(String key, Object newValue, Object targetValue)
+    {
         return (isValueChanged(key,newValue) && newValue==targetValue);
     }
     static public Properties props = new Properties();

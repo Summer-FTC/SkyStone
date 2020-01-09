@@ -29,7 +29,7 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
     public void initialize()
     {
-        super.initialize();
+        super.initialize(true);
     }
 
     @Override

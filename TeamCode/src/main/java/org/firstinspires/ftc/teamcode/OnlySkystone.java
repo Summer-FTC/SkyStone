@@ -63,7 +63,7 @@ public class OnlySkystone extends BaseLinearOpMode{
     @Override
     public void runOpMode() throws InterruptedException
     {
-        super.initialize();
+        super.initialize(true);
         configMode();
 
         telemetry.addData(">", "Press Play to start op mode");
@@ -105,7 +105,7 @@ public class OnlySkystone extends BaseLinearOpMode{
             }
 
             long durationMillis = System.currentTimeMillis() - startTime;
-            sleep(30000 - (8000 + durationMillis)); // sleep until 8 sec remaining
+            //dsleep(30000 - (8000 + durationMillis)); // sleep until 8 sec remaining
             moveForwardByInches(0.7, moveForwardInches);
             dropStone();
             parkOnlySkystone();

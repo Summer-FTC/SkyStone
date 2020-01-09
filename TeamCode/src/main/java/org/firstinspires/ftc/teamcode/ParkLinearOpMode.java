@@ -15,9 +15,8 @@ public class ParkLinearOpMode extends BaseLinearOpMode
     boolean isStartingBlue = true;
     boolean parkOnSide = true;
 
-    @Override
     public void initialize() {
-        super.initialize();
+        super.initialize(true);
     }
 
     ElapsedTime eTime;

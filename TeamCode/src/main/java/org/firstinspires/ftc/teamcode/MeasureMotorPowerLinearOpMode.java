@@ -18,7 +18,7 @@ import java.util.Map;
 public class MeasureMotorPowerLinearOpMode extends BaseLinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-        initialize();
+        initialize(true);
 
         waitForStart();
 

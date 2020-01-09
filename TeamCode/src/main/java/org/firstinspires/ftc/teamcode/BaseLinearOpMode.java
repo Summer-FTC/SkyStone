@@ -63,9 +63,9 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         }
     }
 
-    public void initialize()
+    public void initialize(boolean isAutonomous)
     {
-        robot.init(hardwareMap, telemetry, true);
+        robot.init(hardwareMap, telemetry, isAutonomous);
 
         initVuforia();
 

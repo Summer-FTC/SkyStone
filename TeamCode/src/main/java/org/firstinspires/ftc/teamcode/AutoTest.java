@@ -22,7 +22,7 @@ public class AutoTest extends BaseLinearOpMode
     @Override
     public void runOpMode() throws InterruptedException
     {
-        initialize();
+        initialize(true);
         HardwareMap hwMap = robot.driveTrain.hwMap;
         motorFR = hwMap.dcMotor.get("motorFR");
         motorFL = hwMap.dcMotor.get("motorFL");
