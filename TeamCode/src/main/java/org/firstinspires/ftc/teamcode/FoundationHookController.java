@@ -20,16 +20,22 @@ public class FoundationHookController
         leftHook = hwMap.servo.get("leftHook");
         rightHook = hwMap.servo.get("rightHook");
 
+<<<<<<< HEAD
      //   raiseHooks();
+=======
+        startRaiseHooks();
+>>>>>>> d2dd9ab1dd3809742a23a22110b0178e41a857dc
 
         telemetry.addData("Hook Servo Initialization Complete", "");
     }
 
 
-    public void raiseHooks()
     {
         leftHook.setPosition(1);
         rightHook.setPosition(0);
+    }
+
+
 
         // Wait for the hooks to raise.
         try {
