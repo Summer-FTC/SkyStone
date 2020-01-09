@@ -71,18 +71,12 @@ public class OnlySkystone extends BaseLinearOpMode{
         waitForStart();
         long startTime = System.currentTimeMillis();
 
-        // TODO: This assumes blue currently.
 
         if (opModeIsActive())
         {
             int moveForwardInches = 40;
 
             moveForwardByInches(0.5, 14);
-
-            if(isStartingBlue)
-                strafeRightByInches(0.5, 12);
-            else
-                strafeLeftByInches(0.5, 12);
 
             if (isSkystone(isStartingBlue))
                 grabAndTurn(isStartingBlue);
@@ -105,8 +99,7 @@ public class OnlySkystone extends BaseLinearOpMode{
             }
 
             long durationMillis = System.currentTimeMillis() - startTime;
-            //dsleep(30000 - (8000 + durationMillis)); // sleep until 8 sec remaining
-            sleep(30000 - (10000 + durationMillis)); // sleep until 10 sec remaining
+            //sleep(30000 - (10000 + durationMillis)); // sleep until 10 sec remaining
             moveForwardByInches(0.7, moveForwardInches);
             dropStone();
             parkOnlySkystone();

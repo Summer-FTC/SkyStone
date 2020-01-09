@@ -16,8 +16,8 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
     private static final int STRAFE_TO_SIDE_TO_PARK_INCHES = 21;
 
-    // new - was 36 before
-    private static final int MOVE_BACKWARD_TO_PARK_INCHES = 43;
+
+    private static final int MOVE_BACKWARD_TO_PARK_INCHES = 40;
     private static final int STRAFE_TO_CENTER_TO_PARK_INCHES = 16;
 
 
@@ -90,9 +90,11 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
         robot.hooks.lowerHooks();
 
+        strafeLeftByInches(0.75, 8);
+
         arcBackwardsToAbsoluteYaw(0.8, 15, 30, false); // TODO: It seems like this should be true???
         rotateToAbsoluteYaw(90);
-        moveForwardByInches(0.8, 5);
+        moveForwardByInches(0.8, 10);
 
         robot.hooks.raiseHooks();
     }
@@ -107,9 +109,11 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
         robot.hooks.lowerHooks();
 
+        strafeRightByInches(0.75, 8);
+
         arcBackwardsToAbsoluteYaw(0.8, 15, -30, true);
         rotateToAbsoluteYaw(-90);
-        moveForwardByInches(0.8, 5);
+        moveForwardByInches(0.8, 10);
 
         robot.hooks.raiseHooks();
     }
