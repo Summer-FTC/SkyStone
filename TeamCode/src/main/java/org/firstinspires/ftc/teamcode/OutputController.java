@@ -46,7 +46,7 @@ public class OutputController
     HardwareMap hwMap;
     Telemetry telemetry;
 
-    public void init(HardwareMap hwMap, Telemetry telemetry)
+    public void init(HardwareMap hwMap, Telemetry telemetry, boolean isAuto)
     {
         this.hwMap = hwMap;
         this.telemetry = telemetry;
@@ -70,9 +70,13 @@ public class OutputController
 
         motorLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motorLift.setPower(LIFT_TENSION_POWER);
-        sleep(LIFT_TENSION_DURATION);
-        motorLift.setPower(0);
+
+        if (isAuto) {
+            motorLift.setPower(LIFT_TENSION_POWER);
+            sleep(LIFT_TENSION_DURATION);
+            motorLift.setPower(0);
+        }
+
         // This MIGHT have caused the chain to break. Disable it just in case for now.
 //        motorLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // stops lift from drifting down
 

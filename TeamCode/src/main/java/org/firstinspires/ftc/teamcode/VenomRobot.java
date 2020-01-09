@@ -44,7 +44,7 @@ public class VenomRobot extends LinearOpMode
         hooks.init(hwMap, telemetry);
 
         output = new OutputController();
-        output.init(hwMap, telemetry);
+        output.init(hwMap, telemetry, isAuto);
 
         //intake = new IntakeController();
         //intake.init(hwMap, telemetry);
