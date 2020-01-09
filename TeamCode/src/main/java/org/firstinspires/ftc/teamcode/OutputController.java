@@ -70,11 +70,7 @@ public class OutputController
 
         motorLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-<<<<<<< HEAD
-    //    motorLift.setPower(LIFT_TENSION_POWER);
-     //   sleep(LIFT_TENSION_DURATION);
-    //    motorLift.setPower(0);
-=======
+
 
         if (isAuto) {
             motorLift.setPower(LIFT_TENSION_POWER);
@@ -82,7 +78,6 @@ public class OutputController
             motorLift.setPower(0);
         }
 
->>>>>>> d2dd9ab1dd3809742a23a22110b0178e41a857dc
         // This MIGHT have caused the chain to break. Disable it just in case for now.
 //        motorLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // stops lift from drifting down
 

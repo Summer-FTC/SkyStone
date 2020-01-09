@@ -105,11 +105,8 @@ public class OnlySkystone extends BaseLinearOpMode{
             }
 
             long durationMillis = System.currentTimeMillis() - startTime;
-<<<<<<< HEAD
             //dsleep(30000 - (8000 + durationMillis)); // sleep until 8 sec remaining
-=======
             sleep(30000 - (10000 + durationMillis)); // sleep until 10 sec remaining
->>>>>>> d2dd9ab1dd3809742a23a22110b0178e41a857dc
             moveForwardByInches(0.7, moveForwardInches);
             dropStone();
             parkOnlySkystone();
