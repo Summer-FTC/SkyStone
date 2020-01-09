@@ -440,13 +440,15 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     }
 
 
-    public void grabStoneInAuto(int backwards)
-    {
+    public void moveClampOutInAuto() {
         robot.output.moveClampOutOfRobot();
 
         robot.output.moveElbowToPosition(robot.output.ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN);
+    }
 
-        moveForwardByInches(.5, 14);
+    public void grabStoneInAuto(int backwards)
+    {
+        moveForwardByInches(.5, 12);
 
         robot.output.closeClampFully();
 
@@ -467,9 +469,9 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     public void strafeToStone(boolean isBlue)
     {
         if (isBlue)
-            strafeRightByInches(1, 8);
+            strafeRightByInches(0.7, 8);
         else
-            strafeLeftByInches(1, 8);
+            strafeLeftByInches(0.7, 8);
     }
 
 

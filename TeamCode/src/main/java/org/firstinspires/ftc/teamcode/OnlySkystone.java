@@ -74,33 +74,38 @@ public class OnlySkystone extends BaseLinearOpMode{
 
         if (opModeIsActive())
         {
-            int moveForwardInches = 40;
+            //int moveForwardInches = 40;
 
-            moveForwardByInches(0.5, 14);
+            moveForwardByInches(0.5, 16);
 
-            if (isSkystone(isStartingBlue))
+            if (isSkystone(isStartingBlue)) {
+                moveClampOutInAuto();
                 grabAndTurn(isStartingBlue);
+                moveForwardByInches(0.7, 40);
+            }
             else
             {
                 strafeToStone(isStartingBlue);
                 //moveForwardInches += 8;
 
                 if(isSkystone(isStartingBlue)) {
+                    moveClampOutInAuto();
                     grabAndTurn(isStartingBlue);
-                    moveForwardByInches(0.7, 8);
+                    moveForwardByInches(0.7, 48);
                 }
                 else
                 {
                     strafeToStone(isStartingBlue);
+                    moveClampOutInAuto();
                     //moveForwardInches += 8;
                     grabAndTurn(isStartingBlue);
-                    moveForwardByInches(0.7, 16);
+                    moveForwardByInches(0.7, 56);
                 }
             }
 
-            long durationMillis = System.currentTimeMillis() - startTime;
+            //long durationMillis = System.currentTimeMillis() - startTime;
             //sleep(30000 - (10000 + durationMillis)); // sleep until 10 sec remaining
-            moveForwardByInches(0.7, moveForwardInches);
+            //moveForwardByInches(0.7, moveForwardInches);
             dropStone();
             parkOnlySkystone();
         }

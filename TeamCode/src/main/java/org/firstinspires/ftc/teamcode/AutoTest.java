@@ -32,8 +32,8 @@ public class AutoTest extends BaseLinearOpMode
         waitForStart();
         log("runOpMode", "running");
         try {
-            arcFoundationUsingEncValues();
-            arcTest();
+            wristInAndOut();
+            //findBlockDistances();
         } catch(Exception e){
 
             log("exception", e);
@@ -64,6 +64,13 @@ public class AutoTest extends BaseLinearOpMode
         rotateToAbsoluteYaw(70);
         moveBackwardByInches(0.8, 33);
 
+    }
+
+    public void findBlockDistances() {
+        moveForwardByInches(0.5, 16);
+        strafeLeftByInches(0.7, 8);
+        sleep(5000);
+        strafeLeftByInches(0.7, 8);
     }
 
     public void arcFoundationUsingEncValues()
@@ -184,6 +191,14 @@ public class AutoTest extends BaseLinearOpMode
         motorBR.setPower(power);
         motorFL.setPower(power);
         motorFR.setPower(power);
+    }
+
+    public void wristInAndOut()
+    {
+        robot.output.moveWristToPosition(robot.output.WRIST_POSITION_OUTSIDE_ROBOT);
+        sleep(5000);
+        robot.output.moveWristToPosition(robot.output.WRIST_POSITION_INSIDE_ROBOT);
+        sleep(5000);
     }
 
     public void driveBackward(double power)
