@@ -32,8 +32,9 @@ public class AutoTest extends BaseLinearOpMode
         waitForStart();
         log("runOpMode", "running");
         try {
-            wristInAndOut();
-            //findBlockDistances();
+            while (opModeIsActive()) {
+                isSkystone(false);
+            }
         } catch(Exception e){
 
             log("exception", e);
@@ -68,9 +69,11 @@ public class AutoTest extends BaseLinearOpMode
 
     public void findBlockDistances() {
         moveForwardByInches(0.5, 16);
+        sleep(5000);
         strafeLeftByInches(0.7, 8);
         sleep(5000);
         strafeLeftByInches(0.7, 8);
+        sleep(5000);
     }
 
     public void arcFoundationUsingEncValues()

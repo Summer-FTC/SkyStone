@@ -525,11 +525,11 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
     public void grabAndTurn(boolean isBlue) {
         if (isBlue) {
-            grabStoneInAuto(10);
+            grabStoneInAuto(7);
             rotateToAbsoluteYaw(-70);
         }
         else {
-            grabStoneInAuto(10);
+            grabStoneInAuto(7);
             rotateToAbsoluteYaw(70);
         }
     }
@@ -558,13 +558,13 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                     if (recognition.getLabel().equals("Skystone") && recognition.getConfidence() > .20) {
                         double angle = recognition.estimateAngleToObject(AngleUnit.DEGREES);
                         if (isBlue) {
-                            if ((angle > -15) && (angle < 25))
+                            if ((angle > -25) && (angle < 15))
                                 return true;
                         } else {
                             // Red side
-                            if ((angle > -25) && (angle < 15))
+                            if ((angle > -10) && (angle < 25))
                                 return true;
-                        }
+                        } // return false if skystone seen but not in angle, saves time
                     }
                     i++;
                 }
