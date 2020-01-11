@@ -10,7 +10,6 @@ public class VenomTeleOp extends OpMode
     double intakePower = 1;
     double drivePower = 1;
 
-
     @Override
     public void init()
     {
@@ -93,8 +92,10 @@ public class VenomTeleOp extends OpMode
         {
             //robot.output.moveClampIntoRobot();
         }
+
         if (gamepad2.y)
         {
+            robot.driveTrain.stopDriveMotors();
             robot.output.moveClampOutOfRobot();
         }
 
@@ -102,11 +103,14 @@ public class VenomTeleOp extends OpMode
         {
             robot.output.startOpeningClamp();
         }
+
         else if (gamepad2.left_bumper)
         {
             robot.output.startClosingClamp();
         }
-        else {
+
+        else
+        {
             robot.output.stopClamp();
         }
 

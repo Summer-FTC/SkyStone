@@ -19,6 +19,7 @@ public class OutputController
     // Positions for the elbow servo.
     public static final double ELBOW_POSITION_INSIDE_ROBOT = 0;
     public static final double ELBOW_POSITION_OUTSIDE_ROBOT_PARALLEL = 0.8;
+    public static final double ELBOW_POSITION_OUTSIDE_ROBOT_DOWN_A_LITTLE = 0.8;
     public static final double ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN = 0.85;
     public static final double ELBOW_POSITION_OUTSIDE_ROBOT_AND_PARTIALLY_UP = 0.65;
 
@@ -304,7 +305,6 @@ public class OutputController
         }
 
         // Raise the lift some.
-
         startMoveLiftUp();
         sleep(MOVE_CLAMP_LIFT_DURATION);
         stopLift();
@@ -312,7 +312,7 @@ public class OutputController
         moveWristToPosition(WRIST_POSITION_SIDEWAYS);
         startOpeningClamp();
 
-        moveElbowToPosition(ELBOW_POSITION_OUTSIDE_ROBOT_PARALLEL);
+        moveElbowToPosition(ELBOW_POSITION_OUTSIDE_ROBOT_DOWN_A_LITTLE);
 
         moveWristToPosition(WRIST_POSITION_OUTSIDE_ROBOT);
 
