@@ -44,8 +44,8 @@ public class VenomRobot extends LinearOpMode
             hooks = new FoundationHookController();
             hooks.init(hwMap, telemetry);
 
-        output = new OutputController();
-        output.init(hwMap, telemetry, isAuto);
+            output = new OutputController();
+            output.init(hwMap, telemetry, isAuto);
 
             //intake = new IntakeController();
             //intake.init(hwMap, telemetry);
@@ -54,7 +54,8 @@ public class VenomRobot extends LinearOpMode
             imu.IMUinit(hwMap);
         }
 
-        else{
+        else
+            {
             driveTrain = new MecanumDriveController();
             driveTrain.init(hwMap, telemetry);
 

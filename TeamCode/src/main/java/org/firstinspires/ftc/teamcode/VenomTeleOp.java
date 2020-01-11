@@ -16,7 +16,6 @@ public class VenomTeleOp extends OpMode
         robot.init(hardwareMap, telemetry, false);
         telemetry.addData("Initialization complete", "");
         telemetry.update();
-
     }
 
     public void start()
