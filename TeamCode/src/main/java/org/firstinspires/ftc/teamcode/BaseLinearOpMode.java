@@ -480,9 +480,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         // TODO: Implement me.
         // turn wrist down
         robot.output.moveElbowToPosition(OutputController.ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN);
-        robot.output.startOpeningClamp();
-        sleep(300); // can do this while lowering hooks
-        // can have more time for OnlySkystone
+        robot.output.openClampFully();
         robot.output.stopClamp();
         robot.output.moveElbowToPosition(OutputController.ELBOW_POSITION_OUTSIDE_ROBOT_PARALLEL);
     }
