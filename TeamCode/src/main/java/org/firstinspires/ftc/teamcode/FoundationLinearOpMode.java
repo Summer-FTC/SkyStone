@@ -32,6 +32,10 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         super.initialize(true);
     }
 
+
+    // TODO: do we need to move forward more when hitting the foundation? it seemed like we cut
+    // it close a couple of times at AML 3
+
     @Override
     public void runOpMode() throws InterruptedException
     {
@@ -56,28 +60,6 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         telemetry.update();
     }
 
-    private void moveRedFoundationOld()
-    {
-        moveForwardByInches(0.25, MOVE_AWAY_FROM_WALL_INCHES);
-        strafeRightByInches(0.5, STRAFE_ALONG_WALL_INCHES);
-        moveForwardByInches(0.5, MOVE_FORWARD_TO_PLATFORM_INCHES);
-
-        // Make sure we are hitting the platform.
-        moveForwardByInches(0.5, MOVE_FORWARD_TO_TOUCH_PLATFORM_INCHES);
-
-        robot.hooks.lowerHooks();
-
-        moveBackwardByInches(0.5, 32);
-
-        // new
-        strafeLeftByInches(0.5, 12);
-
-        rotateToAbsoluteYaw(90);
-
-        robot.hooks.raiseHooks();
-
-        moveBackwardByInches(0.5, MOVE_BACKWARD_FROM_PLATFORM_INCHES);
-    }
 
     private void moveRedFoundation()
     {
@@ -119,7 +101,6 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
     }
 
 
-
     public void runSideRed()
     {
         log("runSideRed");
@@ -130,9 +111,6 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
         moveBackwardByInches(0.7, MOVE_BACKWARD_TO_PARK_INCHES);
     }
-
-
-
 
 
     public void runSideBlue() {
@@ -219,6 +197,5 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         }
 
     }
-
 
 }

@@ -53,18 +53,7 @@ public class CustomLinearOpMode extends LinearOpMode {
     public DcMotor motorFL;
     public DcMotor motorBR;
     public DcMotor motorBL;
-  //  public DcMotor motorIntakeL;
-    //public DcMotor motorIntakeR;
-    //public DcMotor motorLift;
-    //public DcMotor motorOutput;
 
-    // Declare servos
-    // public Servo servoClamp;
-    // public Servo servoTwist;
-    // public Servo servoHookL;
-    // public Servo servoHookR;
-
-    // ModernRoboticsI2cRangeSensor rangeSensorB;
 
     ElapsedTime eTime;
     protected ElapsedTime time = new ElapsedTime();

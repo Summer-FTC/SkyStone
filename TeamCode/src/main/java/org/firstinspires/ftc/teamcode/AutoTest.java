@@ -87,66 +87,7 @@ public class AutoTest extends BaseLinearOpMode
         telemetry.addData("Status", "Running Autonomous!");
         telemetry.update();
         rotate(90, 1);
-        //pullFoundationStraightBack();
 
-    //    arcBackwardsToAbsoluteYaw(.8, 15, 30, true);
-
-//        robot.output.moveClampOutOfRobot();
-
-
-//       moveForwardByInches(1, 12);
-
-        //strafeRightWithEncoders(0.3, 5000);
-
-//
-//        for (int i = 0; i < 5; i++)
-//        {
-//            strafeRightByInches(0.3, 4);
-//            sleep(1000);
-//        }
-//
-//        sleep(3000);
-//
-//        for (int i = 0; i < 5; i++)
-//        {
-//            strafeRightByInches(0.8, 4);
-//            sleep(1000);
-//        }
-//
-//           robot.output.moveClampOutOfRobot();
-//
-//           robot.output.moveElbowToPosition(1);
-//        robot.output.openClampFully();
-//
-//        moveForwardByInches(.5, 14);
-//
-//        robot.output.closeClampPartway();
-//
-//        robot.output.startMoveLiftUp();
-//        sleep(100);
-//
-//        moveBackwardByInches(.5,3);
-//
-//        strafeLeftByInches(0.75, 8);
-
-
-//        robot.output.test();
-//        sleep(2000);
-
-     //   robot.output.moveClampIntoRobot();
-    //    sleep(2000);
-
-//        robot.output.moveElbowToPosition(OutputController.ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN);
-//        sleep(2000);
-//
-//        robot.output.moveElbowToPosition(OutputController.ELBOW_POSITION_INSIDE_ROBOT);
-//        sleep(2000);
-//
-//        robot.output.moveElbowToPosition(OutputController.ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN);
-//        sleep(2000);
-
-//        robot.output.moveElbowToPosition(OutputController.ELBOW_POSITION_INSIDE_ROBOT);
-//        sleep(2000);
     }
 
     public void arcTest()

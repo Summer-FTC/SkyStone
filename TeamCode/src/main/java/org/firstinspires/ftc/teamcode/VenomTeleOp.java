@@ -18,16 +18,6 @@ public class VenomTeleOp extends OpMode
         telemetry.update();
     }
 
-    public void start()
-    {
-        // add later
-    }
-
-    public void stop()
-    {
-        // add later
-    }
-
     public void loop()
     {
         doDrive();
@@ -87,6 +77,8 @@ public class VenomTeleOp extends OpMode
             robot.output.stopLift();
         }
 
+        // TODO: do we want to be able to do this?
+        // also x is now used for hooks
         if (gamepad2.x)
         {
             //robot.output.moveClampIntoRobot();
@@ -127,15 +119,6 @@ public class VenomTeleOp extends OpMode
         }
     }
 
-//    public void doFoundationOld()
-//    {
-//        if()
-//            robot.hooks.lowerHooks();
-//
-//        if(){
-//            robot.hooks.raiseHooks();
-//        }
-//
 //    }
 }
 
