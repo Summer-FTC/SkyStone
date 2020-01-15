@@ -17,8 +17,9 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
     private static final int STRAFE_TO_SIDE_TO_PARK_INCHES = 21;
 
 
-    private static final int MOVE_BACKWARD_TO_PARK_INCHES = 40;
-    private static final int STRAFE_TO_CENTER_TO_PARK_INCHES = 16;
+    private static final int MOVE_BACKWARD_TO_PARK_INCHES1 = 20;
+    private static final int MOVE_BACKWARD_TO_PARK_INCHES2 = 20;
+    private static final int STRAFE_TO_CENTER_TO_PARK_INCHES = 26;
 
 
     boolean configOnly = false;
@@ -109,7 +110,9 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
         strafeRightByInches(0.7, 10);
 
-        moveBackwardByInches(0.7, MOVE_BACKWARD_TO_PARK_INCHES);
+        moveBackwardByInches(0.7, MOVE_BACKWARD_TO_PARK_INCHES1);
+        moveClampOutInAuto();
+        moveBackwardByInches(0.7, MOVE_BACKWARD_TO_PARK_INCHES2);
     }
 
 
@@ -120,7 +123,9 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
         strafeLeftByInches(0.7, 10);
 
-        moveBackwardByInches(0.7, MOVE_BACKWARD_TO_PARK_INCHES);
+        moveBackwardByInches(0.7, MOVE_BACKWARD_TO_PARK_INCHES1);
+        moveClampOutInAuto();
+        moveBackwardByInches(0.7, MOVE_BACKWARD_TO_PARK_INCHES2);
     }
 
 
@@ -133,8 +138,11 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         // Strafe into the wall to reset the distances
         strafeRightByInches(0.7, 14);
 
-        strafeLeftByInches(0.7, 26);
-        moveBackwardByInches(0.7, MOVE_BACKWARD_TO_PARK_INCHES);
+        strafeLeftByInches(0.7, STRAFE_TO_CENTER_TO_PARK_INCHES);
+
+        moveBackwardByInches(0.7, MOVE_BACKWARD_TO_PARK_INCHES1);
+        moveClampOutInAuto();
+        moveBackwardByInches(0.7, MOVE_BACKWARD_TO_PARK_INCHES2);
     }
 
 
@@ -148,8 +156,11 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         // Strafe into the wall to reset the distances
         strafeLeftByInches(0.7, 14);
 
-        strafeRightByInches(0.5, 26);
-        moveBackwardByInches(0.5, MOVE_BACKWARD_TO_PARK_INCHES);
+        strafeRightByInches(0.7, STRAFE_TO_CENTER_TO_PARK_INCHES);
+
+        moveBackwardByInches(0.7, MOVE_BACKWARD_TO_PARK_INCHES1);
+        moveClampOutInAuto();
+        moveBackwardByInches(0.7, MOVE_BACKWARD_TO_PARK_INCHES2);
     }
 
 
