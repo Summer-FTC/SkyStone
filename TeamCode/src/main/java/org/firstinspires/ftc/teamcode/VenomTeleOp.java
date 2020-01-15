@@ -42,6 +42,7 @@ public class VenomTeleOp extends OpMode
 
     public void slowDown() {
 
+        //TODO: ask David what button he wants to override this for when the hooks are down
         if(gamepad1.right_trigger > 0.7 || robot.hooks.areHooksDown())
             drivePower = 0.5;
 
