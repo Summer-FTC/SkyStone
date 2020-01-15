@@ -62,4 +62,13 @@ public class FoundationHookController
         }
     }
 
+    public boolean areHooksDown()
+    {
+        if (leftHook.getPosition() < 0.4 && rightHook.getPosition()>0.8)
+        {
+            return true;
+        }
+        return false;
+    }
+
 }

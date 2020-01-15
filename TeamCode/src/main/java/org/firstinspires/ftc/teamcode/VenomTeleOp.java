@@ -39,12 +39,13 @@ public class VenomTeleOp extends OpMode
 
     }
 
+
     public void slowDown() {
 
-        if(gamepad1.right_trigger > 0.7)
+        if(gamepad1.right_trigger > 0.7 || robot.hooks.areHooksDown())
             drivePower = 0.5;
 
-        else if (gamepad1.left_trigger > 0.7)
+        else if (gamepad1.left_trigger > 0.7 )
             drivePower = 0.25;
 
         else
