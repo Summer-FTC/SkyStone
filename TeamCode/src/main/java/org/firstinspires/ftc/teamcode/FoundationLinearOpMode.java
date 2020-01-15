@@ -34,8 +34,7 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
     }
 
 
-    // TODO: do we need to move forward more when hitting the foundation? it seemed like we cut
-    // it close a couple of times at AML 3
+    // TODO: do we need to move forward more when hitting the foundation? it seemed like we cut it close
 
     @Override
     public void runOpMode() throws InterruptedException
@@ -129,7 +128,6 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
     }
 
 
-
     public void runCenterRed() {
         log("runCenterRed");
 
@@ -141,10 +139,11 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         strafeLeftByInches(0.7, STRAFE_TO_CENTER_TO_PARK_INCHES);
 
         moveBackwardByInches(0.7, MOVE_BACKWARD_TO_PARK_INCHES1);
+
+        // Test this, will save us some time for teleop
         moveClampOutInAuto();
         moveBackwardByInches(0.7, MOVE_BACKWARD_TO_PARK_INCHES2);
     }
-
 
 
     public void runCenterBlue() {
@@ -162,7 +161,6 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         moveClampOutInAuto();
         moveBackwardByInches(0.7, MOVE_BACKWARD_TO_PARK_INCHES2);
     }
-
 
 
     public void configMode() {
@@ -184,7 +182,6 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         telemetry.update();
 
         RobotLog.i("configMode() stop");
-
     }
 
 

@@ -9,10 +9,11 @@ public class DoubleSkystone extends BaseLinearOpMode
 {
 
         boolean configOnly = false;
-
-        // Boolean Values for input
         boolean isStartingBlue = true;
         boolean parkOnSide = true;
+
+        // TODO: test these distances
+        // TODO: change this to work with the new mechanism
 
         @Override
         public void runOpMode() throws InterruptedException
@@ -23,7 +24,6 @@ public class DoubleSkystone extends BaseLinearOpMode
             telemetry.addData(">", "Press Play to start op mode");
             telemetry.update();
             waitForStart();
-            long startTime = System.currentTimeMillis();
 
             if (opModeIsActive())
             {
