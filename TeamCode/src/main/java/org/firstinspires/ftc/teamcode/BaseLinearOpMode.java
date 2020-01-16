@@ -10,6 +10,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,13 +30,18 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     private VuforiaLocalizer vuforia;
 
     /**
+     * hello my friend
+     */
+
+
+    /**
      * {@link #tfod} is the variable we will use to store our instance of the TensorFlow Object
      * Detection engine.
      */
     private TFObjectDetector tfod;
 
     // This power will move the robot slowly.
-    private static double MIN_POWER = 0.20;
+    private static double MIN_POWER = 0.10;
     private static double RAMP_UP_MS = 500;
     private static double RAMP_DOWN_MS = 1000;
 
@@ -105,10 +111,9 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         power = Math.abs(power);
 
         long stopTime = msTimeOut + System.currentTimeMillis();
-        long startTime = System.currentTimeMillis();
 
-        Map<DcMotor, Integer> motorToEncoder = new HashMap<>();
-        Map<DcMotor, Double> motorToPowerRatio = new HashMap<>();
+        Map<DcMotor, Integer> motorToEncoder = new LinkedHashMap<>();
+        Map<DcMotor, Double> motorToPowerRatio = new LinkedHashMap<>();
 
         motorToEncoder.put(robot.driveTrain.motorFL, encFL);
         motorToEncoder.put(robot.driveTrain.motorFR, encFR);
@@ -120,10 +125,8 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         {
             maxEnc = Math.max(Math.abs(enc), maxEnc);
         }
-
         robot.driveTrain.resetEncoders();
-        robot.driveTrain.runUsingEncoders();
-        
+
         robot.log("Starting loop to move " + direction);
 
         double initialYaw = robot.imu.getYaw();
@@ -134,42 +137,56 @@ public abstract class BaseLinearOpMode extends LinearOpMode
             m.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             // Scale each motor power relative to encoder ticks
             motorToPowerRatio.put(m, ((double)motorToEncoder.get(m)/maxEnc));
+        }
 
+        // Set the motors altogether here rather than in the loop above
+        // so that we are starting them at close to the same time.
+        for (DcMotor m : motorToEncoder.keySet())
+        {
             m.setPower(MIN_POWER);
         }
 
         boolean active = true;
 
+        long startTime = System.currentTimeMillis();
+        long totalMotorSetTime = 0;
+        int loopCount = 0;
         while (System.currentTimeMillis() < stopTime && active && opModeIsActive())
         {
+            loopCount++;
+
             StringBuilder message = new StringBuilder();
             message.append("Moving " + direction + "\n");
 
             active = true;
             double maxTicksRemaining = 0;
+
+            // The power that we want to set for each motor.
+            Map<DcMotor,Double> motorToDesiredPower = new HashMap<>();
+
             for(DcMotor m : motorToEncoder.keySet())
             {
                 int encoderTicks = motorToEncoder.get(m);
+                int currentPosition = m.getCurrentPosition();
 
                 // Sometimes the motor is not busy right at the start, so assume we are
                 // busy if we haven't moved half of the encoder ticks.
                 // Stop when we get close.
-                double ticksRemaining = Math.abs(encoderTicks - m.getCurrentPosition());
+                double ticksRemaining = Math.abs(encoderTicks - currentPosition);
                 maxTicksRemaining = Math.max(maxTicksRemaining, ticksRemaining);
 
-                // Sometimes the motor is not busy at the very start.
-                // If any motor is not busy and we have covered half of the distance, then
-                // we should stop.
-                if (!m.isBusy() && ticksRemaining < Math.abs(encoderTicks / 2))
+
+                if (ticksRemaining <= 2)
                 {
                     active = false;
                 }
 
                 double powerToSet = 0;
-                if (((encoderTicks < 0) && (m.getCurrentPosition() > encoderTicks)) ||
-                        ((encoderTicks > 0) && (m.getCurrentPosition() < encoderTicks))) {
+                if (((encoderTicks < 0) && (currentPosition > encoderTicks)) ||
+                        ((encoderTicks > 0) && (currentPosition < encoderTicks))) {
                     // Accelerate slowly at the start.
-                    double rampUpMaxPower = MIN_POWER + (System.currentTimeMillis()-startTime) / RAMP_UP_MS;
+                    long millisSinceStart = System.currentTimeMillis()-startTime;
+                    double rampUpMaxPower = MIN_POWER + (millisSinceStart / RAMP_UP_MS);
 
                     // Figuring out how to ramp down is more complicated.
 
@@ -179,6 +196,10 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                     // 12 inches = .5 * a * .5^2
                     // a = 12 inches / .5^3.
                     // a = 96 inches per second per second.
+                    //
+                    // BUT ramping down isn't symmetric to ramping up because we have
+                    // momentum, so we should increase RAMP_DOWN_MS even more.
+                    //
 
                     double inchesToEnd  = ticksRemaining * (1.0 / moveInchtoEnc(1));
                     double rampDownAcclerationInchesPerSecond2 = 96;
@@ -189,10 +210,11 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                     powerToSet = Math.min(power,
                             Math.min(rampUpMaxPower, rampDownMaxPower));
 
+                    message.append("msSinceStart: " + millisSinceStart + "\n");
                     message.append("inchesToEnd: " + inchesToEnd + "\n");
                     message.append("msToEnd: " + msToEnd + "\n");
-                    message.append("rampDownMaxPower: " + rampDownMaxPower + "\n");
                     message.append("rampUpMaxPower: " + rampUpMaxPower + "\n");
+                    message.append("rampDownMaxPower: " + rampDownMaxPower + "\n");
                 }
 
                 // If we are rotating, then we can stop the loop once we achieve the desired yaw
@@ -214,7 +236,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                         active = false;
                     }
 
-                    // Scale with PID within 30 degrees.
+                    // Scale with PID within  30 degrees.
                     double absYawRemaining = Math.abs(targetYawChange) - Math.abs(currentYawChange);
                     double scaleAtYawRemaining = 30;
                     if (absYawRemaining < scaleAtYawRemaining) {
@@ -224,28 +246,39 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                 }
 
                 message.append("Setting power to " + powerToSet + " since m.getCurrentPosition()=" +
-                        m.getCurrentPosition() + " encoderTicks=" + encoderTicks + "\n");
+                        currentPosition + " encoderTicks=" + encoderTicks + "\n");
 
-                m.setPower(powerToSet * motorToPowerRatio.get(m));
+                motorToDesiredPower.put(m, powerToSet * motorToPowerRatio.get(m));
             }
+
+            // Set the motor powers all at the end, so we are adjusting at the same time.
+            long startMotorSet = System.currentTimeMillis();
+            for (DcMotor m: motorToDesiredPower.keySet()) {
+                m.setPower(motorToDesiredPower.get(m));
+            }
+            totalMotorSetTime += System.currentTimeMillis() - startMotorSet;
+
             robot.log(message.toString());
-            idle();
 
             // If all of the encoders are close, then set a timeout to 1 second from now.
-
             if(maxTicksRemaining < 100){
                 stopTime = Math.min(stopTime,System.currentTimeMillis() + 1000);
+            }
+
+            // If the motors are very close, then timeout 20 ms from now.
+            if(maxTicksRemaining < 10){
+                stopTime = Math.min(stopTime,System.currentTimeMillis() + 20);
             }
         }
 
         for (DcMotor m : motorToEncoder.keySet())
         {
             m.setPower(0);
+            telemetry.addData(m.getDeviceName(), m.getCurrentPosition());
         }
-
-        // Why reset here?
-        robot.driveTrain.resetEncoders();
-        robot.driveTrain.runWithoutEncoders();
+        telemetry.addData("Loop count", loopCount);
+        telemetry.addData("totalMotorSetTime", totalMotorSetTime);
+        telemetry.update();
     }
 
     public void moveForwardWithEncoders(double power, int encoderTicks)

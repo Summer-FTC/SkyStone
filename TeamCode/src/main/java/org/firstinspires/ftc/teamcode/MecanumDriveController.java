@@ -148,7 +148,7 @@ public class MecanumDriveController
 
     public void resetEncoders()
     {
-        log("Resetting encoders");
+        //log("Resetting encoders");
 
         for (DcMotor m : motors)
         {
@@ -164,7 +164,7 @@ public class MecanumDriveController
 
     public void runWithoutEncoders()
     {
-        log("Run without encoders");
+        //log("Run without encoders");
 
         for (DcMotor m : motors)
         {

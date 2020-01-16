@@ -37,35 +37,23 @@ public class VenomRobot extends LinearOpMode
 
         log("VenomRobot::init");
 
+        driveTrain = new MecanumDriveController();
+        driveTrain.init(hwMap, telemetry);
+
+        hooks = new FoundationHookController();
+        hooks.init(hwMap, telemetry);
+
+        output = new OutputController();
+        output.init(hwMap, telemetry, isAuto);
+
         if(isAuto) {
-            driveTrain = new MecanumDriveController();
-            driveTrain.init(hwMap, telemetry);
-
-            hooks = new FoundationHookController();
-            hooks.init(hwMap, telemetry);
-
-            output = new OutputController();
-            output.init(hwMap, telemetry, isAuto);
-
-            //intake = new IntakeController();
-            //intake.init(hwMap, telemetry);
+            // Hold the position in zero power in auto.
+            driveTrain.setHaltModeCoast(false);
 
             imu = new IMU(hwMap.get(BNO055IMU.class, "imu"));
             imu.IMUinit(hwMap);
         }
-
-        else
-            {
-            driveTrain = new MecanumDriveController();
-            driveTrain.init(hwMap, telemetry);
-
-            hooks = new FoundationHookController();
-            hooks.init(hwMap, telemetry);
-
-            output = new OutputController();
-            output.init(hwMap, telemetry, false);
-        }
-  }
+   }
 
     public void setMotorFL(double power)
     {

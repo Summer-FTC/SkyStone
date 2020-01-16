@@ -30,15 +30,20 @@ public class AutoTest extends BaseLinearOpMode
         motorBL = hwMap.dcMotor.get("motorBL");
 
         waitForStart();
-        log("runOpMode", "running");
-        try {
-            while (opModeIsActive()) {
-                isSkystone(false);
-            }
-        } catch(Exception e){
+//        log("runOpMode", "running");
+//        try {
+//            while (opModeIsActive()) {
+//                isSkystone(false);
+//            }
+//        } catch(Exception e){
+//
+//            log("exception", e);
+//        }
 
-            log("exception", e);
-        }
+        strafeRightByInches(0.7, 30);
+        sleep(10_000);
+        strafeLeftByInches(0.4, 30);
+        sleep(10_000);
     }
 
     // TODO:
