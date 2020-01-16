@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -42,8 +43,8 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
     // This power will move the robot slowly.
     private static double MIN_POWER = 0.10;
-    private static double RAMP_UP_MS = 500;
-    private static double RAMP_DOWN_MS = 1000;
+    private static double RAMP_UP_MS = 750;
+    private static double RAMP_DOWN_MS = 1500;
 
     VenomRobot robot = new VenomRobot();
     double newPower;
@@ -98,6 +99,8 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         // int maxEnc = Math.max(Math.max(Math.abs(encFL), encFR), Math.max(encBL, encBR));
         // msTimeOut = Math.max(msTimeOut, (int)Math.ceil(maxEnc / power));
 
+        long methodStartMillis = System.currentTimeMillis();
+
         // TODO: Take this out.
         msTimeOut = Math.max(10000, msTimeOut);
 
@@ -143,7 +146,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         // so that we are starting them at close to the same time.
         for (DcMotor m : motorToEncoder.keySet())
         {
-            m.setPower(MIN_POWER);
+            m.setPower(Math.min(MIN_POWER, power));
         }
 
         boolean active = true;
@@ -181,6 +184,45 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                     active = false;
                 }
 
+                // If we are rotating, then we can stop the loop once we achieve the desired yaw
+                // change.
+                if (targetYawChange != null) {
+                    double yawTrueDiff = robot.imu.getTrueDiff(initialYaw);
+
+                    message.append("initYaw=" + hundredths(initialYaw) + "  ");
+                    message.append("true diff=" + hundredths(yawTrueDiff) + "\n");
+
+                    double currentYawChange = yawTrueDiff;
+                    if (Math.abs(currentYawChange) >= Math.abs(targetYawChange)) {
+                        active = false;
+                    } else {
+                        active = true;
+                    }
+
+                    // When targeting values close to 180 or -180, we have to worry about the
+                    // difference becoming negative or positive. So if the yaw change is large (>150)
+                    // and the signs are different, then we've wrapped around.
+
+                    if ((Math.abs(currentYawChange) > 150) && Math.signum(currentYawChange) != Math.signum(targetYawChange)) {
+                        active = false;
+                    }
+
+                    if (active) {
+                        // If we have moved half of our target distance, then extrapolate what
+                        // the encoders will be when we get to the target rotation and set
+                        // the encoders to that. This also lets us ramp down the power.
+                        if (Math.abs(currentYawChange) >=  Math.abs(targetYawChange) / 2) {
+                            // Adjust the encoder ticks based on what we have done so far.
+
+                            double fractionComplete = Math.abs(currentYawChange) / Math.abs(targetYawChange);
+                            int estimatedTargetedTicks = (int)Math.round(currentPosition / fractionComplete);
+                            m.setTargetPosition(estimatedTargetedTicks);
+                            motorToEncoder.put(m, estimatedTargetedTicks);
+                        }
+                    }
+                }
+                encoderTicks = motorToEncoder.get(m);
+
                 double powerToSet = 0;
                 if (((encoderTicks < 0) && (currentPosition > encoderTicks)) ||
                         ((encoderTicks > 0) && (currentPosition < encoderTicks))) {
@@ -210,43 +252,15 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                     powerToSet = Math.min(power,
                             Math.min(rampUpMaxPower, rampDownMaxPower));
 
-                    message.append("msSinceStart: " + millisSinceStart + "\n");
-                    message.append("inchesToEnd: " + inchesToEnd + "\n");
-                    message.append("msToEnd: " + msToEnd + "\n");
-                    message.append("rampUpMaxPower: " + rampUpMaxPower + "\n");
-                    message.append("rampDownMaxPower: " + rampDownMaxPower + "\n");
+                    message.append("msSinceStart: " + Math.round(millisSinceStart) + "  ");
+                    message.append("msToEnd: " + Math.round(msToEnd) + "\n");
+                    message.append("inchesToEnd: " + hundredths(inchesToEnd) + "\n");
+                    message.append("rampUpPwr: " + hundredths(rampUpMaxPower) + "  ");
+                    message.append("rampDownPwr: " + hundredths(rampDownMaxPower) + "\n");
                 }
 
-                // If we are rotating, then we can stop the loop once we achieve the desired yaw
-                // change.
-                if (targetYawChange != null) {
-                    message.append("yaw: " + robot.imu.getYaw() + " initYaw: " + initialYaw + "\n");
-                    message.append("true diff" + robot.imu.getTrueDiff(initialYaw) + "\n");
-
-                    double currentYawChange = robot.imu.getTrueDiff(initialYaw);
-                    if (Math.abs(currentYawChange) >= Math.abs(targetYawChange)) {
-                        active = false;
-                    }
-
-                    // When targeting values close to 180 or -180, we have to worry about the
-                    // difference becoming negative or positive. So if the yaw change is large (>150)
-                    // and the signs are different, then we've wrapped around.
-
-                    if ((Math.abs(currentYawChange) > 150) && Math.signum(currentYawChange) != Math.signum(targetYawChange)) {
-                        active = false;
-                    }
-
-                    // Scale with PID within  30 degrees.
-                    double absYawRemaining = Math.abs(targetYawChange) - Math.abs(currentYawChange);
-                    double scaleAtYawRemaining = 30;
-                    if (absYawRemaining < scaleAtYawRemaining) {
-                        double scale = absYawRemaining / scaleAtYawRemaining;
-                        powerToSet = Math.max(MIN_POWER, scale * power);
-                    }
-                }
-
-                message.append("Setting power to " + powerToSet + " since m.getCurrentPosition()=" +
-                        currentPosition + " encoderTicks=" + encoderTicks + "\n");
+                message.append("Power=" + hundredths(powerToSet) + ", curTicks=" +
+                        currentPosition + " targetTicks=" + encoderTicks + "\n");
 
                 motorToDesiredPower.put(m, powerToSet * motorToPowerRatio.get(m));
             }
@@ -276,9 +290,19 @@ public abstract class BaseLinearOpMode extends LinearOpMode
             m.setPower(0);
             telemetry.addData(m.getDeviceName(), m.getCurrentPosition());
         }
+
         telemetry.addData("Loop count", loopCount);
         telemetry.addData("totalMotorSetTime", totalMotorSetTime);
+        telemetry.addData("Yaw: ", robot.imu.getYaw());
+        telemetry.addData("Initial Yaw: ", initialYaw);
+        telemetry.addData("Yaw change: ", robot.imu.getTrueDiff(initialYaw));
+        telemetry.addData("Method time: ", (System.currentTimeMillis() - methodStartMillis) + " ms");
         telemetry.update();
+    }
+
+    final DecimalFormat hundredthsFormat = new DecimalFormat("0.00");
+    private String hundredths(double value) {
+        return hundredthsFormat.format(value);
     }
 
     public void moveForwardWithEncoders(double power, int encoderTicks)
@@ -324,16 +348,13 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     {
         double targetYawChange = robot.imu.getTrueDiff(yawDegrees);
         rotate(targetYawChange);
-
-        double actualYaw = robot.imu.getYaw();
-        log("Targeting yaw=" + yawDegrees + " actual yaw=" + actualYaw);
     }
 
 
     // positive is left, negative is right
     public void rotate(double degrees)
     {
-        rotate(degrees, 0.3);
+        rotate(degrees, 0.5);
 
     }
 

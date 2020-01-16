@@ -39,11 +39,47 @@ public class AutoTest extends BaseLinearOpMode
 //
 //            log("exception", e);
 //        }
+//
+//        strafeRightByInches(0.7, 30);
+//        sleep(10_000);
+//        strafeLeftByInches(0.4, 30);
+//        sleep(10_000);
 
-        strafeRightByInches(0.7, 30);
-        sleep(10_000);
-        strafeLeftByInches(0.4, 30);
-        sleep(10_000);
+        rotateToAbsoluteYaw(90);
+        sleep(2000);
+        rotateToAbsoluteYaw(0);
+        sleep(2000);
+
+        rotateToAbsoluteYaw(90);
+        sleep(2000);
+        rotateToAbsoluteYaw(0);
+        sleep(2000);
+
+//
+//        int rotateTicks = 1400;
+//        while (opModeIsActive())
+//        {
+//            moveWithEncoders("Manual", 0.3, 10_000,
+//                    rotateTicks, -rotateTicks, rotateTicks, -rotateTicks);
+//            sleep(2_000);
+//            rotateTicks = -rotateTicks;
+//        }
+//
+//        rotateTicks = 1400;
+//        moveWithEncoders("Manual", 0.3, 10_000,
+//                rotateTicks, -rotateTicks, rotateTicks, -rotateTicks);
+
+//        rotateToAbsoluteYaw(90);
+//        sleep(5_000);
+//
+//        rotateToAbsoluteYaw(0);
+//        sleep(5_000);
+//
+//        rotate(90, .5);
+//        sleep(5_000);
+//
+//        rotate(-90, .5);
+//        sleep(5_000);
     }
 
     // TODO:
