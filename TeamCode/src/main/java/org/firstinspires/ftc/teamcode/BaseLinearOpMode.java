@@ -199,21 +199,27 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                         active = true;
                     }
 
-                    // When targeting values close to 180 or -180, we have to worry about the
-                    // difference becoming negative or positive. So if the yaw change is large (>150)
-                    // and the signs are different, then we've wrapped around.
+                    /**
+                     *  When targeting values close to 180 or -180, we have to worry about the
+                     *  difference becoming negative or positive. So if the yaw change is large (>150)
+                     *  and the signs are different, then we've wrapped around.
+                     **/
 
                     if ((Math.abs(currentYawChange) > 150) && Math.signum(currentYawChange) != Math.signum(targetYawChange)) {
                         active = false;
                     }
 
-                    if (active) {
-                        // If we have moved half of our target distance, then extrapolate what
-                        // the encoders will be when we get to the target rotation and set
-                        // the encoders to that. This also lets us ramp down the power.
-                        if (Math.abs(currentYawChange) >=  Math.abs(targetYawChange) / 2) {
-                            // Adjust the encoder ticks based on what we have done so far.
+                    if (active)
+                    {
+                        /**
+                         * If we have moved half of our target distance, then extrapolate what
+                         * the encoders will be when we get to the target rotation and set
+                         * the encoders to that. This also lets us ramp down the power.
+                         **/
 
+                        if (Math.abs(currentYawChange) >=  Math.abs(targetYawChange) / 2) {
+
+                            // Adjusts the encoder ticks based on what we have done so far.
                             double fractionComplete = Math.abs(currentYawChange) / Math.abs(targetYawChange);
                             int estimatedTargetedTicks = (int)Math.round(currentPosition / fractionComplete);
                             m.setTargetPosition(estimatedTargetedTicks);
@@ -230,22 +236,21 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                     long millisSinceStart = System.currentTimeMillis()-startTime;
                     double rampUpMaxPower = MIN_POWER + (millisSinceStart / RAMP_UP_MS);
 
-                    // Figuring out how to ramp down is more complicated.
-
-                    // At a ramp of 500ms, we got to max power in 12 inches.
-                    // distance = .5 * a * t^2
-                    // Start ramping down from full power at 12 inches.
-                    // 12 inches = .5 * a * .5^2
-                    // a = 12 inches / .5^3.
-                    // a = 96 inches per second per second.
-                    //
-                    // BUT ramping down isn't symmetric to ramping up because we have
-                    // momentum, so we should increase RAMP_DOWN_MS even more.
-                    //
+                    /**
+                     * Figuring out how to ramp down is more complicated.
+                     * At a ramp of 500ms, we got to max power in 12 inches.
+                     * distance = .5 * a * t^2
+                     * Start ramping down from full power at 12 inches.
+                     * 12 inches = .5 * a * .5^2
+                     * a = 12 inches / .5^3.
+                     * a = 96 inches per second per second.
+                     * BUT ramping down isn't symmetric to ramping up because we have
+                     * momentum, so we should increase RAMP_DOWN_MS even more.
+                     **/
 
                     double inchesToEnd  = ticksRemaining * (1.0 / moveInchtoEnc(1));
                     double rampDownAcclerationInchesPerSecond2 = 96;
-                    double secondsToEnd  = Math.sqrt(2.0 * inchesToEnd / rampDownAcclerationInchesPerSecond2); // d = .5 a * t^2
+                    double secondsToEnd  = Math.sqrt(2.0 * inchesToEnd / rampDownAcclerationInchesPerSecond2);
                     double msToEnd = 1000 * secondsToEnd;
                     double rampDownMaxPower = MIN_POWER + (msToEnd) / RAMP_DOWN_MS;
 
@@ -296,7 +301,8 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         telemetry.addData("Yaw: ", robot.imu.getYaw());
         telemetry.addData("Initial Yaw: ", initialYaw);
         telemetry.addData("Yaw change: ", robot.imu.getTrueDiff(initialYaw));
-        telemetry.addData("Method time: ", (System.currentTimeMillis() - methodStartMillis) + " ms");
+        telemetry.addData("Method time: ", (System.currentTimeMillis()
+                - methodStartMillis) + " ms");
         telemetry.update();
     }
 
@@ -371,7 +377,6 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                 encoderSign * maxEncoder, encoderSign * -maxEncoder,
                 encoderSign * maxEncoder, encoderSign * -maxEncoder,
                 degrees);
-
     }
 
     private int strafeTimeoutFromTicks(double power, int encoderTicks)
@@ -461,7 +466,6 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     }
 
 
-
     public void displayIMU(int msTimeOut)
     {
         double initialYaw = robot.imu.getYaw();
@@ -475,7 +479,6 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                 "true diff: " + robot.imu.getTrueDiff(initialYaw)
                 // "PITCH : " + robot.imu.getPitch() + "\n" +
                 // "ROLL : " + robot.imu.getRoll() + "\n"
-
             );
         }
     }
@@ -486,6 +489,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
         robot.output.moveElbowToPosition(robot.output.ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN);
     }
+
 
     public void grabStoneInAuto(int backwards)
     {
@@ -525,6 +529,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         robot.output.stopClamp();
     }
 
+
     public void pullFoundationAndPark(boolean isBlue, boolean side)
     {
         robot.hooks.lowerHooks();
@@ -561,6 +566,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         }
     }
 
+
     public void grabAndTurn(boolean isBlue) {
         if (isBlue) {
             grabStoneInAuto(7);
@@ -571,6 +577,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
             rotateToAbsoluteYaw(70);
         }
     }
+
 
     public boolean isSkystone(boolean isBlue)
     {
@@ -611,6 +618,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         return false;
     }
 
+
     /**
      * Initialize the Vuforia localization engine.
      */
@@ -628,6 +636,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
         // Loading trackables is not necessary for the TensorFlow Object Detection engine.
     }
+
 
     /**
      * Initialize the TensorFlow Object Detection engine.

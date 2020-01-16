@@ -7,16 +7,8 @@ import com.qualcomm.robotcore.util.RobotLog;
 public class FoundationLinearOpMode extends BaseLinearOpMode
 {
     private static final int MOVE_AWAY_FROM_WALL_INCHES = 3;
-    private static final int STRAFE_ALONG_WALL_INCHES = 24;
     private static final int MOVE_FORWARD_TO_PLATFORM_INCHES = 25;
     private static final int MOVE_FORWARD_TO_TOUCH_PLATFORM_INCHES = 3;
-    private static final int STRAFE_PLATFORM_AWAY_FROM_WALL_INCHES = 14;
-    private static final int STRAFE_PLATFORM_TO_CORNER_INCHES = 8;
-    private static final int MOVE_BACKWARD_FROM_PLATFORM_INCHES = 3;
-
-    private static final int STRAFE_TO_SIDE_TO_PARK_INCHES = 21;
-
-
     private static final int MOVE_BACKWARD_TO_PARK_INCHES1 = 20;
     private static final int MOVE_BACKWARD_TO_PARK_INCHES2 = 20;
     private static final int STRAFE_TO_CENTER_TO_PARK_INCHES = 26;
@@ -34,7 +26,7 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
     }
 
 
-    // TODO: do we need to move forward more when hitting the foundation? it seemed like we cut it close
+    // TODO: do we need to move forward more when hitting the foundation? it seemed like we cut it kinda close last time
 
     @Override
     public void runOpMode() throws InterruptedException
@@ -203,7 +195,5 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
             RobotLog.i(modes);
             lastModes=modes;
         }
-
     }
-
 }

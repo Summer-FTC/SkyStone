@@ -16,7 +16,7 @@ public class DoubleSkystone extends BaseLinearOpMode
         // TODO: change this to work with the new mechanism
 
         @Override
-        public void runOpMode() throws InterruptedException
+        public void runOpMode()
         {
             super.initialize(true);
             configMode();
@@ -43,6 +43,7 @@ public class DoubleSkystone extends BaseLinearOpMode
 
                     parkOnlySkystone();
                 }
+
                 else
                 {
                     // goes to the next stone

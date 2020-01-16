@@ -1,11 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.VenomRobot;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class MecanumDriveController
@@ -29,6 +27,7 @@ public class MecanumDriveController
         this.color = "red";
     }
 
+
     public MecanumDriveController(String color)
     {
         this.color = color;
@@ -42,6 +41,7 @@ public class MecanumDriveController
             telemetry.update();
         }
     }
+
 
     public void init(HardwareMap hwMap, Telemetry telemetry)
     {
@@ -75,12 +75,14 @@ public class MecanumDriveController
         }
     }
 
+
     public void stopDriveMotors()
     {
         for (DcMotor m : motors) {
             m.setPower(0);
         }
     }
+
 
     public void setHaltModeCoast(boolean coastModeOn)
     {
@@ -108,24 +110,19 @@ public class MecanumDriveController
         double BL = 0.0;
         double BR = 0.0;
 
-        // change tolerance, maybe make stop method so that brakes as approaching zero speed
         if (((Math.abs(Math.hypot(strafe, forward))) > 0.1) ||
                 Math.abs(Math.atan2(forward, strafe) - Math.PI / 4) > .1)
         {
-            // r can be sqrt(2)/2
             double r = Math.hypot(strafe, forward);
             double theta = Math.atan2(forward, -strafe) - Math.PI / 4;
             double rightX = -rotate;
 
-            // as per unit circle cos gives x, sin gives you y
             FL = r * Math.cos(theta) + rightX;
             FR = r * Math.sin(theta) - rightX;
             BL = r * Math.sin(theta) + rightX;
             BR = r * Math.cos(theta) - rightX;
 
-            // Don't give a value greater than 1 so scale them all down
-            // would we ever get a value greater than 1? root2?
-            // this might be Jank, fix later
+
             if (((Math.abs(FL) > 1) || (Math.abs(BL) > 1)) || ((Math.abs(FR) > 1) || (Math.abs(BR) > 1))) {
                 FL /= Math.max(Math.max(Math.abs(FL), Math.abs(FR)), Math.max(Math.abs(BL), Math.abs(BR)));
                 BL /= Math.max(Math.max(Math.abs(FL), Math.abs(FR)), Math.max(Math.abs(BL), Math.abs(BR)));
@@ -146,9 +143,9 @@ public class MecanumDriveController
         motorBR.setPower(BR);
     }
 
+
     public void resetEncoders()
     {
-        //log("Resetting encoders");
 
         for (DcMotor m : motors)
         {
@@ -156,15 +153,9 @@ public class MecanumDriveController
         }
     }
 
-    public void resetEnc2()
-    {
-        motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-    }
 
     public void runWithoutEncoders()
     {
-        //log("Run without encoders");
 
         for (DcMotor m : motors)
         {
@@ -190,7 +181,7 @@ public class MecanumDriveController
         }
     }
 
-    public double getEncoderTicks()
+    public double getAvgEncoderTicks()
     {
         double avg = 0.0;
         avg += motorFL.getCurrentPosition();

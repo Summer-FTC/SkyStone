@@ -51,8 +51,9 @@ import java.util.List;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
+
 @Autonomous(name = "SkystoneAndPlatform", group = "6209")
-public class TensorFlowSkyStone extends BaseLinearOpMode{
+public class SkystoneAndPlatform extends BaseLinearOpMode{
 
     boolean configOnly = false;
 

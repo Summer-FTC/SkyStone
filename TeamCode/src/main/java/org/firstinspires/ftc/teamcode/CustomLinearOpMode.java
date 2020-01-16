@@ -2,38 +2,19 @@ package org.firstinspires.ftc.teamcode;
 
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-import com.vuforia.Image;
-import com.vuforia.PIXEL_FORMAT;
-import com.vuforia.Vuforia;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 import static android.graphics.Color.blue;
 import static android.graphics.Color.red;
-import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
 
 @Autonomous
 @Disabled
@@ -292,7 +273,7 @@ public class CustomLinearOpMode extends LinearOpMode {
         // Scan last three stones
         // If second Skystone still there, get
         // If in last three, ally already got first Skystone, get second
-        TensorFlowSkyStone tf = new TensorFlowSkyStone();
+        SkystoneAndPlatform tf = new SkystoneAndPlatform();
         tf.runOpMode();
     }
 
