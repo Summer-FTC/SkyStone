@@ -10,6 +10,8 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.text.DecimalFormat;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -618,6 +620,34 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         return false;
     }
 
+    public void printRecognitions()
+    {
+        List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+        if (updatedRecognitions != null) {
+            telemetry.addData("# Object Detected", updatedRecognitions.size());
+            Collections.sort(updatedRecognitions, new Comparator<Recognition>() {
+                        @Override
+                        public int compare(Recognition o1, Recognition o2) {
+                            return Double.compare(o1.estimateAngleToObject(AngleUnit.DEGREES),
+                                    o2.estimateAngleToObject(AngleUnit.DEGREES));
+                        }
+                    });
+                    // step through the list of recognitions and display boundary info.
+            int i = 1;
+
+            StringBuilder sb = new StringBuilder();
+
+            for (Recognition recognition : updatedRecognitions) {
+                sb.append(recognition.getLabel() + " " + hundredths(recognition.estimateAngleToObject(AngleUnit.DEGREES))
+                        + " " + hundredths(recognition.getConfidence()) + "\n");
+            }
+
+            telemetry.addData(sb.toString(), " ");
+            telemetry.update();
+
+        }
+
+    }
 
     /**
      * Initialize the Vuforia localization engine.
