@@ -15,8 +15,108 @@ public class DoubleSkystone extends BaseLinearOpMode
         // TODO: test these distances
         // TODO: change this to work with the new mechanism
 
+        private static int MOVE_OFF_OF_WALL_DISTANCE = 2;
+        private static int STRAFE_TO_POS_1_OR_2_DIST = 6;
+        private static int MOVE_FORWARD_TO_GET_STONE_DIST = 30;
+        private static int MOVE_BACKWARD_AFTER_GRAB_DIST = 8;
+        private static int STRAFE_UNDER_BRIDGE_DIST = 36;
+
         @Override
         public void runOpMode()
+        {
+            int position = 1;
+
+            // using park on side to change this for now
+            // but eventually we will use the value returned from findSkystonePosition();
+
+            super.initialize(true);
+            configMode();
+
+            telemetry.addData(">", "Press Play to start op mode");
+            telemetry.update();
+            waitForStart();
+
+            if (opModeIsActive()) {
+                if (isStartingBlue)
+                {
+                    if (position == 1)
+                    {
+                        getOneOrTwo(isStartingBlue);
+                        robot.hooks.lowerOneHook("R");
+
+
+                    }
+                    if (position == 2)
+                    {
+                        getOneOrTwo(isStartingBlue);
+                        robot.hooks.lowerOneHook("L");
+                    }
+
+                    else{
+
+                    }
+
+                    deposit(isStartingBlue, parkOnSide);
+
+                }
+                else
+                {
+                    if(position == 1)
+                    {
+                        getOneOrTwo(isStartingBlue);
+                        robot.hooks.lowerOneHook("R");
+                    }
+                    if (position == 2)
+                    {
+                        getOneOrTwo(isStartingBlue);
+                        robot.hooks.lowerOneHook("L");
+                    }
+                }
+
+                deposit(isStartingBlue, parkOnSide);
+            }
+
+        }
+
+        // EVERYTHING IS FLIPPED BECAUSE ROBOT IS BACKWARDS
+        public void getOneOrTwo(boolean isStartingBlue)
+        {
+            if(isStartingBlue)
+            {
+                moveBackwardByInches(0.3, MOVE_OFF_OF_WALL_DISTANCE);
+                strafeRightByInches(0.7, STRAFE_TO_POS_1_OR_2_DIST);
+                moveBackwardByInches(1, MOVE_FORWARD_TO_GET_STONE_DIST);
+
+            }
+            else{
+                moveBackwardByInches(0.3, MOVE_OFF_OF_WALL_DISTANCE);
+                strafeLeftByInches(0.7, STRAFE_TO_POS_1_OR_2_DIST);
+                moveBackwardByInches(1, MOVE_FORWARD_TO_GET_STONE_DIST);
+
+            }
+
+        }
+
+        // EVERYTHING IS FLIPPED BECAUSE ROBOT IS BACKWARDS!
+        public void deposit(boolean isStartingBlue, boolean parkOnSide)
+        {
+            moveForwardByInches(0.5, MOVE_BACKWARD_AFTER_GRAB_DIST);
+            if(parkOnSide)
+            {
+                moveForwardByInches(0.5, 22);
+
+            }
+            if(isStartingBlue){
+                strafeRightByInches(1, STRAFE_UNDER_BRIDGE_DIST);
+
+            }
+            else{
+                strafeLeftByInches(1, STRAFE_UNDER_BRIDGE_DIST);
+            }
+            robot.hooks.raiseHooks();
+        }
+
+        public void runOpMode2()
         {
             super.initialize(true);
             configMode();

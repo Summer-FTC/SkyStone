@@ -34,6 +34,48 @@ public class FoundationHookController
         rightHook.setPosition(0);
     }
 
+    public void raiseOneHook(String LorR)
+    {
+        if(LorR.equals("R"))
+        {
+            rightHook.setPosition(0);
+        }
+
+        else{
+            leftHook.setPosition(1);
+        }
+
+        // Wait for the hooks to raise.
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            // This is important to propagate the interrupt up.
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    public void lowerOneHook(String LorR)
+    {
+        if(LorR.equals("R"))
+        {
+            rightHook.setPosition(1);
+        }
+
+        else{
+            leftHook.setPosition(0.21);
+        }
+
+        // Wait for the hooks to raise.
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            // This is important to propagate the interrupt up.
+            Thread.currentThread().interrupt();
+        }
+    }
+
+
+
 
     public void raiseHooks()
     {
