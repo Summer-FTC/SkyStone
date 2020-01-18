@@ -46,18 +46,20 @@ public class DoubleSkystone extends BaseLinearOpMode
                 if (position == 3) {
                     driveTo3();
                     lowerHook();
-                    deposit3();
+                    STRAFE_UNDER_BRIDGE_1ST_STONE_DIST += 6;
+                    deposit123();
                     driveTo456();
-                    deposit6();
+                    STRAFE_UNDER_BRIDGE_2ND_STONE_DIST += 8;
+                    deposit456();
                     park();
                 }
 
                 else {
                     driveTo1Or2();
                     lowerHook();
-                    deposit1or2();
+                    deposit123();
                     driveTo456();
-                    deposit4or5();
+                    deposit456();
                     park();
                     // make compatible with blue
 
@@ -90,13 +92,10 @@ public class DoubleSkystone extends BaseLinearOpMode
                 moveBackwardByInches(0.5, MOVE_OFF_OF_WALL_DISTANCE);
                 strafeRightByInches(0.85, STRAFE_TO_POS_1_OR_2_DIST);
                 moveBackwardByInches(1, MOVE_FORWARD_TO_GET_1ST_STONE_DIST);
-
-            }
-            else{
+            } else{
                 moveBackwardByInches(0.5, MOVE_OFF_OF_WALL_DISTANCE);
                 strafeLeftByInches(0.85, STRAFE_TO_POS_1_OR_2_DIST);
                 moveBackwardByInches(1, MOVE_FORWARD_TO_GET_1ST_STONE_DIST);
-
             }
 
         }
@@ -117,26 +116,31 @@ public class DoubleSkystone extends BaseLinearOpMode
 
         public void driveTo456 ()
         {
-            if(isStartingBlue){
-                if(position == 3)
+            if(isStartingBlue) {
+                if (position == 3) {
                     strafeLeftByInches(1, STRAFE_BACK_TO_GET_STONE_45_DIST + 8);
-                else
+                    moveBackwardByInches(1, MOVE_FORWARD_TO_GET_STONE_6_DIST);
+                } else {
                     strafeLeftByInches(1, STRAFE_BACK_TO_GET_STONE_45_DIST);
-                moveBackwardByInches(1, MOVE_FORWARD_TO_GET_STONE_45_DIST);
+                    moveBackwardByInches(1, MOVE_FORWARD_TO_GET_STONE_45_DIST);
+                }
             }
             else {
-                if(position == 3)
+                if(position == 3) {
                     strafeRightByInches(1, STRAFE_BACK_TO_GET_STONE_45_DIST + 8);
-                else
+                    moveBackwardByInches(1, MOVE_FORWARD_TO_GET_STONE_6_DIST);
+                }
+                else {
                     strafeRightByInches(1, STRAFE_BACK_TO_GET_STONE_45_DIST);
-                moveBackwardByInches(1, MOVE_FORWARD_TO_GET_STONE_6_DIST);
+                    moveBackwardByInches(1, MOVE_FORWARD_TO_GET_STONE_45_DIST);
+                }
             }
 
             lowerHook();
         }
 
         // EVERYTHING IS FLIPPED BECAUSE ROBOT IS BACKWARDS!
-        public void deposit1or2()
+        public void deposit123()
         {
             moveForwardByInches(0.85, MOVE_BACKWARD_AFTER_GRAB_DIST);
 
@@ -148,18 +152,7 @@ public class DoubleSkystone extends BaseLinearOpMode
             robot.hooks.raiseHooks();
         }
 
-        public void deposit3() {
-            moveForwardByInches(0.85, MOVE_BACKWARD_AFTER_GRAB_DIST);
-
-            if (isStartingBlue)
-                strafeRightByInches(1, STRAFE_UNDER_BRIDGE_1ST_STONE_DIST + 6);
-            else
-                strafeLeftByInches(1, STRAFE_UNDER_BRIDGE_1ST_STONE_DIST + 6);
-
-            robot.hooks.raiseHooks();
-        }
-
-        public void deposit4or5()
+        public void deposit456()
         {
             moveForwardByInches(0.85, MOVE_BACKWARD_AFTER_GRAB_DIST);
 
@@ -167,18 +160,6 @@ public class DoubleSkystone extends BaseLinearOpMode
                 strafeRightByInches(1, STRAFE_UNDER_BRIDGE_2ND_STONE_DIST);
             else
                 strafeLeftByInches(1, STRAFE_UNDER_BRIDGE_2ND_STONE_DIST);
-
-            robot.hooks.raiseHooks();
-        }
-
-        public void deposit6()
-        {
-            moveForwardByInches(0.85, MOVE_BACKWARD_AFTER_GRAB_DIST);
-
-            if (isStartingBlue)
-                strafeRightByInches(1, STRAFE_UNDER_BRIDGE_2ND_STONE_DIST + 8);
-            else
-                strafeLeftByInches(1, STRAFE_UNDER_BRIDGE_2ND_STONE_DIST + 8);
 
             robot.hooks.raiseHooks();
         }
