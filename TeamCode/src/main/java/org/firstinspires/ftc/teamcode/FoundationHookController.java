@@ -60,7 +60,6 @@ public class FoundationHookController
         {
             rightHook.setPosition(1);
         }
-
         else{
             leftHook.setPosition(0.21);
         }

@@ -16,16 +16,22 @@ public class DoubleSkystone extends BaseLinearOpMode
         // TODO: change this to work with the new mechanism
 
         private static int MOVE_OFF_OF_WALL_DISTANCE = 2;
-        private static int STRAFE_TO_POS_1_OR_2_DIST = 6;
-        private static int MOVE_FORWARD_TO_GET_STONE_DIST = 30;
-        private static int MOVE_BACKWARD_AFTER_GRAB_DIST = 8;
-        private static int STRAFE_UNDER_BRIDGE_DIST = 36;
+        private static int STRAFE_TO_POS_1_OR_2_DIST = 9;
+        private static int STRAFE_TO_POS_3_DIST = 3;
+        private static int MOVE_FORWARD_TO_GET_1ST_STONE_DIST = 27;
+        private static int MOVE_BACKWARD_AFTER_GRAB_DIST = 12;
+        private static int STRAFE_UNDER_BRIDGE_1ST_STONE_DIST = 48;
+        private static int STRAFE_BACK_TO_GET_STONE_45_DIST = 72;
+        private static int MOVE_FORWARD_TO_GET_STONE_45_DIST = 13;
+        private static int MOVE_FORWARD_TO_GET_STONE_6_DIST = 11;
+        private static int STRAFE_UNDER_BRIDGE_2ND_STONE_DIST = 73;
+        private static int STRAFE_TO_PARK_DIST = 20;
+
+        int position = 3;
 
         @Override
         public void runOpMode()
         {
-            int position = 1;
-
             // using park on side to change this for now
             // but eventually we will use the value returned from findSkystonePosition();
 
@@ -37,83 +43,151 @@ public class DoubleSkystone extends BaseLinearOpMode
             waitForStart();
 
             if (opModeIsActive()) {
-                if (isStartingBlue)
-                {
-                    if (position == 1)
-                    {
-                        getOneOrTwo(isStartingBlue);
-                        robot.hooks.lowerOneHook("R");
-
-
-                    }
-                    if (position == 2)
-                    {
-                        getOneOrTwo(isStartingBlue);
-                        robot.hooks.lowerOneHook("L");
-                    }
-
-                    else{
-
-                    }
-
-                    deposit(isStartingBlue, parkOnSide);
-
-                }
-                else
-                {
-                    if(position == 1)
-                    {
-                        getOneOrTwo(isStartingBlue);
-                        robot.hooks.lowerOneHook("R");
-                    }
-                    if (position == 2)
-                    {
-                        getOneOrTwo(isStartingBlue);
-                        robot.hooks.lowerOneHook("L");
-                    }
+                if (position == 3) {
+                    driveTo3();
+                    lowerHook();
+                    deposit3();
+                    driveTo456();
+                    deposit6();
+                    park();
                 }
 
-                deposit(isStartingBlue, parkOnSide);
+                else {
+                    driveTo1Or2();
+                    lowerHook();
+                    deposit1or2();
+                    driveTo456();
+                    deposit4or5();
+                    park();
+                    // make compatible with blue
+
+                }
             }
 
         }
 
+
+
+        public void lowerHook()
+        {
+            if (isStartingBlue) {
+                if (position == 1)
+                    robot.hooks.lowerOneHook("R");
+                else
+                    robot.hooks.lowerOneHook("L");
+            } else {
+                if (position == 1)
+                    robot.hooks.lowerOneHook("L");
+                else
+                    robot.hooks.lowerOneHook("R");
+            }
+        }
         // EVERYTHING IS FLIPPED BECAUSE ROBOT IS BACKWARDS
-        public void getOneOrTwo(boolean isStartingBlue)
+        public void driveTo1Or2()
         {
             if(isStartingBlue)
             {
-                moveBackwardByInches(0.3, MOVE_OFF_OF_WALL_DISTANCE);
-                strafeRightByInches(0.7, STRAFE_TO_POS_1_OR_2_DIST);
-                moveBackwardByInches(1, MOVE_FORWARD_TO_GET_STONE_DIST);
+                moveBackwardByInches(0.5, MOVE_OFF_OF_WALL_DISTANCE);
+                strafeRightByInches(0.85, STRAFE_TO_POS_1_OR_2_DIST);
+                moveBackwardByInches(1, MOVE_FORWARD_TO_GET_1ST_STONE_DIST);
 
             }
             else{
-                moveBackwardByInches(0.3, MOVE_OFF_OF_WALL_DISTANCE);
-                strafeLeftByInches(0.7, STRAFE_TO_POS_1_OR_2_DIST);
-                moveBackwardByInches(1, MOVE_FORWARD_TO_GET_STONE_DIST);
+                moveBackwardByInches(0.5, MOVE_OFF_OF_WALL_DISTANCE);
+                strafeLeftByInches(0.85, STRAFE_TO_POS_1_OR_2_DIST);
+                moveBackwardByInches(1, MOVE_FORWARD_TO_GET_1ST_STONE_DIST);
 
             }
 
         }
 
-        // EVERYTHING IS FLIPPED BECAUSE ROBOT IS BACKWARDS!
-        public void deposit(boolean isStartingBlue, boolean parkOnSide)
+        public void driveTo3()
         {
-            moveForwardByInches(0.5, MOVE_BACKWARD_AFTER_GRAB_DIST);
-            if(parkOnSide)
+            if(isStartingBlue)
             {
-                moveForwardByInches(0.5, 22);
-
+                moveBackwardByInches(0.5, MOVE_OFF_OF_WALL_DISTANCE);
+                strafeRightByInches(0.85, STRAFE_TO_POS_3_DIST);
+                moveBackwardByInches(1, MOVE_FORWARD_TO_GET_1ST_STONE_DIST);
+            } else {
+                moveBackwardByInches(0.5, MOVE_OFF_OF_WALL_DISTANCE);
+                strafeLeftByInches(0.85, STRAFE_TO_POS_3_DIST);
+                moveBackwardByInches(1, MOVE_FORWARD_TO_GET_1ST_STONE_DIST);
             }
+        }
+
+        public void driveTo456 ()
+        {
             if(isStartingBlue){
-                strafeRightByInches(1, STRAFE_UNDER_BRIDGE_DIST);
+                if(position == 3)
+                    strafeLeftByInches(1, STRAFE_BACK_TO_GET_STONE_45_DIST + 8);
+                else
+                    strafeLeftByInches(1, STRAFE_BACK_TO_GET_STONE_45_DIST);
+                moveBackwardByInches(1, MOVE_FORWARD_TO_GET_STONE_45_DIST);
+            }
+            else {
+                if(position == 3)
+                    strafeRightByInches(1, STRAFE_BACK_TO_GET_STONE_45_DIST + 8);
+                else
+                    strafeRightByInches(1, STRAFE_BACK_TO_GET_STONE_45_DIST);
+                moveBackwardByInches(1, MOVE_FORWARD_TO_GET_STONE_6_DIST);
+            }
 
-            }
-            else{
-                strafeLeftByInches(1, STRAFE_UNDER_BRIDGE_DIST);
-            }
+            lowerHook();
+        }
+
+        // EVERYTHING IS FLIPPED BECAUSE ROBOT IS BACKWARDS!
+        public void deposit1or2()
+        {
+            moveForwardByInches(0.85, MOVE_BACKWARD_AFTER_GRAB_DIST);
+
+            if (isStartingBlue)
+                strafeRightByInches(1, STRAFE_UNDER_BRIDGE_1ST_STONE_DIST);
+            else
+                strafeLeftByInches(1, STRAFE_UNDER_BRIDGE_1ST_STONE_DIST);
+
             robot.hooks.raiseHooks();
+        }
+
+        public void deposit3() {
+            moveForwardByInches(0.85, MOVE_BACKWARD_AFTER_GRAB_DIST);
+
+            if (isStartingBlue)
+                strafeRightByInches(1, STRAFE_UNDER_BRIDGE_1ST_STONE_DIST + 6);
+            else
+                strafeLeftByInches(1, STRAFE_UNDER_BRIDGE_1ST_STONE_DIST + 6);
+
+            robot.hooks.raiseHooks();
+        }
+
+        public void deposit4or5()
+        {
+            moveForwardByInches(0.85, MOVE_BACKWARD_AFTER_GRAB_DIST);
+
+            if (isStartingBlue)
+                strafeRightByInches(1, STRAFE_UNDER_BRIDGE_2ND_STONE_DIST);
+            else
+                strafeLeftByInches(1, STRAFE_UNDER_BRIDGE_2ND_STONE_DIST);
+
+            robot.hooks.raiseHooks();
+        }
+
+        public void deposit6()
+        {
+            moveForwardByInches(0.85, MOVE_BACKWARD_AFTER_GRAB_DIST);
+
+            if (isStartingBlue)
+                strafeRightByInches(1, STRAFE_UNDER_BRIDGE_2ND_STONE_DIST + 8);
+            else
+                strafeLeftByInches(1, STRAFE_UNDER_BRIDGE_2ND_STONE_DIST + 8);
+
+            robot.hooks.raiseHooks();
+        }
+
+        public void park() {
+            if (isStartingBlue)
+                strafeLeftByInches(1, STRAFE_TO_PARK_DIST);
+            else
+                strafeRightByInches(1, STRAFE_TO_PARK_DIST);
         }
 
         public void runOpMode2()
