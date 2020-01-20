@@ -28,12 +28,22 @@ public class AutoTest extends BaseLinearOpMode
         motorBR = hwMap.dcMotor.get("motorBR");
         motorBL = hwMap.dcMotor.get("motorBL");
 
+        robot.output.motorLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.output.motorLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
         waitForStart();
 
-        while (opModeIsActive()) {
-            printRecognitions();
-            sleep(100);
+        robot.output.motorLift.setTargetPosition(-15);
+        robot.output.motorLift.setPower(0.5);
+
+        while(opModeIsActive() && robot.output.motorLift.isBusy())
+        {
+            telemetry.addData("Lift encoder values : ", robot.output.motorLift);
+            telemetry.update();
+            idle();
         }
+
+        robot.output.motorLift.setPower(0);
 
     }
 
