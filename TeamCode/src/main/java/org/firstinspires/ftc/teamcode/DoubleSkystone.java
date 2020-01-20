@@ -11,10 +11,9 @@ public class DoubleSkystone extends BaseLinearOpMode
         boolean configOnly = false;
         boolean isStartingBlue = true;
         boolean parkOnSide = true;
+        int position = 3;
 
-        // TODO: test these distances
         // TODO: change this to work with the new mechanism
-
         private static int MOVE_OFF_OF_WALL_DISTANCE = 2;
         private static int STRAFE_TO_POS_1_OR_2_DIST = 9;
         private static int STRAFE_TO_POS_3_DIST = 3;
@@ -26,8 +25,6 @@ public class DoubleSkystone extends BaseLinearOpMode
         private static int MOVE_FORWARD_TO_GET_STONE_6_DIST = 11;
         private static int STRAFE_UNDER_BRIDGE_2ND_STONE_DIST = 73;
         private static int STRAFE_TO_PARK_DIST = 20;
-
-        int position = 3;
 
         @Override
         public void runOpMode()
@@ -43,6 +40,7 @@ public class DoubleSkystone extends BaseLinearOpMode
             waitForStart();
 
             if (opModeIsActive()) {
+
                 if (position == 3) {
                     driveTo3();
                     lowerHook();
@@ -52,23 +50,16 @@ public class DoubleSkystone extends BaseLinearOpMode
                     STRAFE_UNDER_BRIDGE_2ND_STONE_DIST += 8;
                     deposit456();
                     park();
-                }
-
-                else {
+                } else {
                     driveTo1Or2();
                     lowerHook();
                     deposit123();
                     driveTo456();
                     deposit456();
                     park();
-                    // make compatible with blue
-
                 }
             }
-
         }
-
-
 
         public void lowerHook()
         {
@@ -97,7 +88,6 @@ public class DoubleSkystone extends BaseLinearOpMode
                 strafeLeftByInches(0.85, STRAFE_TO_POS_1_OR_2_DIST);
                 moveBackwardByInches(1, MOVE_FORWARD_TO_GET_1ST_STONE_DIST);
             }
-
         }
 
         public void driveTo3()
@@ -120,12 +110,12 @@ public class DoubleSkystone extends BaseLinearOpMode
                 if (position == 3) {
                     strafeLeftByInches(1, STRAFE_BACK_TO_GET_STONE_45_DIST + 8);
                     moveBackwardByInches(1, MOVE_FORWARD_TO_GET_STONE_6_DIST);
-                } else {
+                }
+                else {
                     strafeLeftByInches(1, STRAFE_BACK_TO_GET_STONE_45_DIST);
                     moveBackwardByInches(1, MOVE_FORWARD_TO_GET_STONE_45_DIST);
                 }
-            }
-            else {
+            } else {
                 if(position == 3) {
                     strafeRightByInches(1, STRAFE_BACK_TO_GET_STONE_45_DIST + 8);
                     moveBackwardByInches(1, MOVE_FORWARD_TO_GET_STONE_6_DIST);
@@ -164,7 +154,8 @@ public class DoubleSkystone extends BaseLinearOpMode
             robot.hooks.raiseHooks();
         }
 
-        public void park() {
+        public void park()
+        {
             if (isStartingBlue)
                 strafeLeftByInches(1, STRAFE_TO_PARK_DIST);
             else
@@ -185,7 +176,8 @@ public class DoubleSkystone extends BaseLinearOpMode
                 moveForwardByInches(0.6, 14);
 
                 // IF IT'S THE FIRST STONE
-                if (isSkystone(isStartingBlue)) {
+                if (isSkystone(isStartingBlue))
+                {
                     moveClampOutInAuto();
                     grabAndTurn(isStartingBlue);
                     moveForwardByInches(1, 30);
@@ -198,7 +190,6 @@ public class DoubleSkystone extends BaseLinearOpMode
 
                     parkOnlySkystone();
                 }
-
                 else
                 {
                     // goes to the next stone
