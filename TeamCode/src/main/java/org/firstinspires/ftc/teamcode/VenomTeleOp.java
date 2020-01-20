@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp(name = "VenomTeleOp", group = "6209")
 public class VenomTeleOp extends OpMode
@@ -14,8 +15,11 @@ public class VenomTeleOp extends OpMode
     public void init()
     {
         robot.init(hardwareMap, telemetry, false);
+        robot.output.motorLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.output.motorLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         telemetry.addData("Initialization complete", "");
         telemetry.update();
+
     }
 
     public void loop()
@@ -24,6 +28,15 @@ public class VenomTeleOp extends OpMode
         doFoundation();
         // doIntake();
         doOutput();
+        encoderTelemetry();
+
+    }
+
+    public void encoderTelemetry()
+    {
+        int liftEnc = robot.output.motorLift.getCurrentPosition();
+        telemetry.addData("lift encoder", liftEnc);
+        telemetry.update();
     }
 
     void doDrive()
