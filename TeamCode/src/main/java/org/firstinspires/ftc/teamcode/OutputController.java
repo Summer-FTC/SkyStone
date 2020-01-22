@@ -60,7 +60,12 @@ public class OutputController
         elbowL = hwMap.servo.get("elbow2");
 
         // This is necessary so that we can detect when the wrist is in and out of the robot.
+<<<<<<< HEAD
      //
+=======
+        if (isAuto)
+            setElbowPositions(ELBOW_POSITION_INSIDE_ROBOT);
+>>>>>>> d4ce048ade5e147b08b4c5cdce80b6798e9cf225
 
         // wrist rotates block
         wrist = hwMap.servo.get("wrist");
