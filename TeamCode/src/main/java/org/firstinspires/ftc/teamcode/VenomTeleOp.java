@@ -4,6 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 @TeleOp(name = "VenomTeleOp", group = "6209")
 public class VenomTeleOp extends OpMode
 {
@@ -14,11 +17,25 @@ public class VenomTeleOp extends OpMode
     @Override
     public void init()
     {
-        robot.init(hardwareMap, telemetry, false);
-        robot.output.motorLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.output.motorLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        telemetry.addData("Initialization complete", "");
-        telemetry.update();
+        try {
+            robot.init(hardwareMap, telemetry, false);
+            robot.output.motorLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.output.motorLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            telemetry.addData("Initialization complete", "");
+            telemetry.update();
+        } catch (Exception e) {
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);
+            telemetry.addData(sw.toString().substring(0, Math.min(500, sw.toString().length())), "");
+            telemetry.update();
+            try {
+                Thread.sleep(10_000);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+            throw new RuntimeException(e);
+        }
 
     }
 
@@ -28,7 +45,7 @@ public class VenomTeleOp extends OpMode
         doFoundation();
         // doIntake();
         doOutput();
-        encoderTelemetry();
+     //   encoderTelemetry();
 
     }
 

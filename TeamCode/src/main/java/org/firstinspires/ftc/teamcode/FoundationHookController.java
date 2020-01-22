@@ -17,9 +17,9 @@ public class FoundationHookController
         this.hwMap = hardwareMap;
         this.telemetry = telemetry;
 
-        leftHook = hwMap.servo.get("leftHook");
+     //   leftHook = hwMap.servo.get("leftHook");\
         rightHook = hwMap.servo.get("rightHook");
-
+        leftHook = rightHook;
 
      //   raiseHooks();
         startRaiseHooks();

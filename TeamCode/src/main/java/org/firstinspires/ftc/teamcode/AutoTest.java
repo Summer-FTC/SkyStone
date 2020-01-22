@@ -33,17 +33,26 @@ public class AutoTest extends BaseLinearOpMode
 
         waitForStart();
 
-        robot.output.motorLift.setTargetPosition(-15);
-        robot.output.motorLift.setPower(0.5);
-
-        while(opModeIsActive() && robot.output.motorLift.isBusy())
-        {
-            telemetry.addData("Lift encoder values : ", robot.output.motorLift);
-            telemetry.update();
-            idle();
+        while(opModeIsActive()){
+            testElbowsTogether();
         }
+//
+//        while(opModeIsActive()){
+//            printRecognitions();
+//        }
 
-        robot.output.motorLift.setPower(0);
+//        robot.output.motorLift.setTargetPosition(-15);
+//        robot.output.motorLift.setPower(0.5);
+//
+//        while(opModeIsActive() && robot.output.motorLift.isBusy())
+//        {
+//            telemetry.addData("Lift encoder values : ", robot.output.motorLift);
+//            telemetry.update();
+//            idle();
+//        }
+//
+//        robot.output.motorLift.setPower(0);
+
 
     }
 
@@ -142,6 +151,22 @@ public class AutoTest extends BaseLinearOpMode
         motorBR.setPower(power);
         motorFL.setPower(power);
         motorFR.setPower(power);
+    }
+
+    public void testElbowsTogether(){
+        robot.output.setElbowPositions(1);
+        sleep(2000);
+        robot.output.setElbowPositions(0);
+        sleep(2000);
+    }
+    public void testElbows(){
+        robot.output.elbowR.setPosition(1);
+        sleep(2000);
+        robot.output.elbowR.setPosition(0);
+        sleep(2000);
+        robot.output.elbowL.setPosition(1);
+        sleep(2000);
+        robot.output.elbowL.setPosition(0);
     }
 
     public void wristInAndOut()
