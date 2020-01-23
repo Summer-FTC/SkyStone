@@ -599,7 +599,8 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                             recognition.getLeft(), recognition.getTop());
                     telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
                             recognition.getRight(), recognition.getBottom());
-                    telemetry.addData("  Angle", String.format(" %.0f degrees", recognition.estimateAngleToObject(AngleUnit.DEGREES)));
+                    telemetry.addData("  Angle", String.format(" %.0f degrees",
+                            recognition.estimateAngleToObject(AngleUnit.DEGREES)));
                     telemetry.update();
 
                     if (recognition.getLabel().equals("Skystone") && recognition.getConfidence() > .20) {
