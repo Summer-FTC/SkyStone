@@ -30,12 +30,17 @@ public class DoubleSkystone extends BaseLinearOpMode
         int position = 3;
 
         @Override
+        protected boolean usesVuforia() {
+            return true;
+        }
+
+        @Override
         public void runOpMode()
         {
             // using park on side to change this for now
             // but eventually we will use the value returned from findSkystonePosition();
 
-            super.initialize(true);
+            initialize(true);
             configMode();
 
             telemetry.addData(">", "Press Play to start op mode");
@@ -173,7 +178,7 @@ public class DoubleSkystone extends BaseLinearOpMode
 
         public void runOpMode2()
         {
-            super.initialize(true);
+            initialize(true);
             configMode();
 
             telemetry.addData(">", "Press Play to start op mode");

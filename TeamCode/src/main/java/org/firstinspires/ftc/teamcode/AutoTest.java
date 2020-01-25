@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -8,6 +9,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+
+import static android.graphics.Color.blue;
+import static android.graphics.Color.green;
+import static android.graphics.Color.red;
 
 
 @Autonomous(name = "Test Run" , group = "6209")
@@ -28,14 +34,22 @@ public class AutoTest extends BaseLinearOpMode
         motorBR = hwMap.dcMotor.get("motorBR");
         motorBL = hwMap.dcMotor.get("motorBL");
 
-        robot.output.motorLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.output.motorLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        printBitMapInfoUntilStarted();
 
+//        robot.output.motorLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        robot.output.motorLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
         waitForStart();
+
 
         while(opModeIsActive()){
             printRecognitions();
         }
+
+//
+//        while(opModeIsActive()){
+//            testElbowsTogether();
+//        }
 //
 //        while(opModeIsActive()){
 //            printRecognitions();
@@ -52,10 +66,26 @@ public class AutoTest extends BaseLinearOpMode
 //        }
 //
 //        robot.output.motorLift.setPower(0);
-
-
     }
 
+    @Override
+    protected boolean usesTensorFlow() {
+        return false;
+    }
+
+    @Override
+    protected boolean usesVuforia() {
+        return true;
+    }
+
+    private void printBitMapInfoUntilStarted() throws InterruptedException {
+        while (!isStarted()) {
+            Bitmap bitmap = getBitmap();
+
+            // Image is 1280 x 720. Starting from the top left. So look at the middle 100x100 square.
+            calculateBlueRatioForRegion(bitmap, 1280/2, 720/2, 100, 100);
+        }
+    }
 
     // TODO:
     //

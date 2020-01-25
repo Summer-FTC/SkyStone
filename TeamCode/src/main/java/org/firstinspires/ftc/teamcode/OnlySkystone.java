@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -52,6 +53,7 @@ import java.util.List;
  * is explained below.
  */
 @Autonomous(name = "OnlySkystone", group = "6209")
+@Disabled
 public class OnlySkystone extends BaseLinearOpMode{
 
     boolean configOnly = false;
@@ -63,7 +65,7 @@ public class OnlySkystone extends BaseLinearOpMode{
     @Override
     public void runOpMode() throws InterruptedException
     {
-        super.initialize(true);
+        initialize(true);
         configMode();
 
         telemetry.addData(">", "Press Play to start op mode");
@@ -109,6 +111,11 @@ public class OnlySkystone extends BaseLinearOpMode{
             dropStone();
             parkOnlySkystone();
         }
+    }
+
+    @Override
+    protected boolean usesTensorFlow() {
+        return true;
     }
 
     public void configMode() {

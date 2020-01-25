@@ -1,7 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Bitmap;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.vuforia.Image;
+import com.vuforia.PIXEL_FORMAT;
+import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -10,12 +15,17 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import static android.graphics.Color.blue;
+import static android.graphics.Color.green;
+import static android.graphics.Color.red;
 
 public abstract class BaseLinearOpMode extends LinearOpMode
 {
@@ -56,33 +66,38 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     {
         if (telemetry != null)
         {
-            telemetry.addData(message, "");
+            telemetry.addLine(message);
             telemetry.update();
         }
     }
 
+    // We have the isAutonomous option to simulate teleop initialization in AutoTest.
     public void initialize(boolean isAutonomous)
     {
         robot.init(hardwareMap, telemetry, isAutonomous);
 
-        initVuforia();
+        if (isAutonomous) {
+            if (usesVuforia() || usesTensorFlow()) {
+                initVuforia();
+            }
 
-        if (ClassFactory.getInstance().canCreateTFObjectDetector())
-            initTfod();
-
-        else
-            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
-
-        /**
-         * Activate TensorFlow Object Detection before we wait for the start command.
-         * Do it here so that the Camera Stream window will have the TensorFlow annotations visible.
-         **/
-        if (tfod != null)
-            tfod.activate();
+            if (usesTensorFlow()) {
+                initTfod();
+            }
+        }
 
         log("BaseLinearOpMode::initialize complete");
     }
 
+    // Subclasses override this to return true if they use Vuforia.
+    protected boolean usesVuforia() {
+        return false;
+    }
+
+    // Subclasses override this to return true if they use Tensor Flow.
+    protected boolean usesTensorFlow() {
+        return false;
+    }
 
     public void moveWithEncoders(String direction, double power, int msTimeOut,
                                   int encFL, int encFR, int encBL, int encBR)
@@ -654,6 +669,9 @@ public abstract class BaseLinearOpMode extends LinearOpMode
      * Initialize the Vuforia localization engine.
      */
     public void initVuforia() {
+        log("Initializing Vuforia");
+        long startMillis = System.currentTimeMillis();
+
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
          */
@@ -665,9 +683,93 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
 
-        // Loading trackables is not necessary for the TensorFlow Object Detection engine.
+        // Allows us to capture pictures from the phone.
+        vuforia.enableConvertFrameToBitmap();
+        Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true);
+        vuforia.setFrameQueueCapacity(4);
+        vuforia.enableConvertFrameToBitmap();
+
+        log("Initializing Vuforia took " + (System.currentTimeMillis() - startMillis) + " ms");
     }
 
+
+    public Bitmap getBitmap() throws InterruptedException {
+
+        VuforiaLocalizer.CloseableFrame picture;
+        picture = vuforia.getFrameQueue().take();
+        Image rgb = picture.getImage(1);
+
+        long numImages = picture.getNumImages();
+
+        List<Integer> formats = new ArrayList<>();
+        int format = 0;
+        for (int i = 0; i < numImages; i++) {
+            format = picture.getImage(i).getFormat();
+            formats.add(format);
+            rgb = picture.getImage(i);
+            if (format == PIXEL_FORMAT.RGB565) {
+                break;
+            }
+        }
+
+        if (format != PIXEL_FORMAT.RGB565) {
+            telemetry.addLine("Didn't find correct RGB format (" + PIXEL_FORMAT.RGB565 +
+                    "). Got formats=" + formats);
+            telemetry.update();
+        }
+
+        Bitmap imageBitmap = Bitmap.createBitmap(rgb.getWidth(), rgb.getHeight(), Bitmap.Config.RGB_565);
+        imageBitmap.copyPixelsFromBuffer(rgb.getPixels());
+
+        picture.close();
+
+        return imageBitmap;
+    }
+
+    /**
+     * Calculates the average Blue divided by Red + Green for the region of the
+     * image. Yellow stones will have a smaller value relative to Skystones. We can use this to
+     * compare the middle of three different stones to find the one that is most likely the
+     * Skystone.
+     */
+    public double calculateBlueRatioForRegion(Bitmap bitmap, int leftPixel, int topPixel,
+                                              int width, int height) {
+        long startMillis = System.currentTimeMillis();
+        // Size is 1280 x 720. Starting from the top left.
+        double totalR = 0;
+        double totalG = 0;
+        double totalB = 0;
+        for (int i = leftPixel; i < (leftPixel + width); i++) {
+            for (int j = topPixel; j < (topPixel + height); j++) {
+                int pixel = bitmap.getPixel(i, j);
+                int redPixel = red(pixel);
+                int greenPixel = green(pixel);
+                int bluePixel = blue(pixel);
+
+                totalR += redPixel;
+                totalG += greenPixel;
+                totalB += bluePixel;
+            }
+        }
+        long durationMillis = System.currentTimeMillis() - startMillis;
+
+        int total = width * height;
+
+        double blueRatio = totalB / (Math.max(1, totalR + totalG));
+
+        telemetry.addLine("Calculated blue ratio for region in " + durationMillis + " ms");
+        telemetry.addData("leftPixel=", leftPixel);
+        telemetry.addData("topPixel=", topPixel);
+        telemetry.addData("width=", width);
+        telemetry.addData("height=", height);
+        telemetry.addData("avg R=", Math.round(totalR / total));
+        telemetry.addData("avg G=", Math.round(totalG / total));
+        telemetry.addData("avg B=", Math.round(totalB / total));
+        telemetry.addData("B/(R+G)", blueRatio);
+        telemetry.update();
+
+        return blueRatio;
+    }
 
     /**
      * Initialize the TensorFlow Object Detection engine.
@@ -679,5 +781,11 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         tfodParameters.minimumConfidence = 0.8;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
+
+        /*
+         * Activate TensorFlow Object Detection before we wait for the start command.
+         * Do it here so that the Camera Stream window will have the TensorFlow annotations visible.
+         */
+        tfod.activate();
     }
 }

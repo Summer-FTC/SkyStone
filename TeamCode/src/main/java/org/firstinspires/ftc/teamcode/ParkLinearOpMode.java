@@ -16,7 +16,7 @@ public class ParkLinearOpMode extends BaseLinearOpMode
     boolean parkOnSide = true;
 
     public void initialize() {
-        super.initialize(true);
+        initialize(true);
     }
 
     ElapsedTime eTime;

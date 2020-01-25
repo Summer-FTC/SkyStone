@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.RobotLog;
 
 
@@ -45,6 +46,7 @@ import com.qualcomm.robotcore.util.RobotLog;
  */
 
 @Autonomous(name = "SkystoneAndPlatform", group = "6209")
+@Disabled
 public class SkystoneAndPlatform extends BaseLinearOpMode{
 
     boolean configOnly = false;
@@ -56,7 +58,7 @@ public class SkystoneAndPlatform extends BaseLinearOpMode{
     @Override
     public void runOpMode() throws InterruptedException
     {
-        super.initialize(true);
+        initialize(true);
         configMode();
 
         telemetry.addData(">", "Press Play to start op mode");
@@ -100,6 +102,11 @@ public class SkystoneAndPlatform extends BaseLinearOpMode{
 
             pullFoundationAndPark(isStartingBlue, parkOnSide);
         }
+    }
+
+    @Override
+    protected boolean usesTensorFlow() {
+        return true;
     }
 
     public void configMode() {
