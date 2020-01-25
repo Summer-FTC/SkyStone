@@ -107,17 +107,18 @@ public class DoubleSkystone extends BaseLinearOpMode
 
         public void driveTo3()
         {
+            moveBackwardByInches(0.5, MOVE_OFF_OF_WALL_DISTANCE);
+
             if(isStartingBlue)
             {
-                moveBackwardByInches(0.5, MOVE_OFF_OF_WALL_DISTANCE);
                 strafeRightByInches(0.85, STRAFE_TO_POS_3_DIST);
-                moveBackwardByInches(1, MOVE_FORWARD_TO_GET_1ST_STONE_DIST);
             } else {
-                moveBackwardByInches(0.5, MOVE_OFF_OF_WALL_DISTANCE);
                 strafeLeftByInches(0.85, STRAFE_TO_POS_3_DIST);
-                moveBackwardByInches(1, MOVE_FORWARD_TO_GET_1ST_STONE_DIST);
             }
+            moveBackwardByInches(1, MOVE_FORWARD_TO_GET_1ST_STONE_DIST);
         }
+
+
 
         public void driveTo456 ()
         {

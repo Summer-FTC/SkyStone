@@ -47,7 +47,7 @@ public class AutoTest extends BaseLinearOpMode
 
     @Override
     protected boolean usesTensorFlow() {
-        return false;
+        return true;
     }
 
     @Override
@@ -57,13 +57,9 @@ public class AutoTest extends BaseLinearOpMode
 
     private void printSkystonePositionUntilStarted() throws InterruptedException {
         while (!isStarted()) {
-
-
             StonePosition sp = getSkystonePosition();
 
-            telemetry.addData("Skystone position : ", sp);
-            telemetry.update();
-            sleep(2000);
+            sleep(500);
         }
     }
 

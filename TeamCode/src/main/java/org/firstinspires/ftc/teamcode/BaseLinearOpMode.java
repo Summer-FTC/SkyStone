@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -13,7 +14,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,11 +63,18 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     private static double RAMP_UP_MS = 750;
     private static double RAMP_DOWN_MS = 1500;
 
-    // Bitmap dimension constants
-    static int MIDDLE_OF_BLOCK_TO_TOP_OF_IMAGE = 442;
-    static int MIDDLE_OF_LEFT_BLOCK_TO_LEFT_EDGE = 350;
-    static int MIDDLE_OF_MIDDLE_BLOCK_TO_LEFT_EDGE = 625;
-    static int MIDDLE_OF_RIGHT_BLOCK_TO_LEFT_EDGE = 900;
+    // Bitmap dimension constants.
+    // THE IMAGE THAT IS CAPTURED IS UPSIDE DOWN!!!
+    static int MIDDLE_OF_BLOCK_TO_TOP_OF_IMAGE = 273;
+    static int MIDDLE_OF_LEFT_BLOCK_TO_LEFT_EDGE = 940;
+    static int MIDDLE_OF_MIDDLE_BLOCK_TO_LEFT_EDGE = 671;
+    static int MIDDLE_OF_RIGHT_BLOCK_TO_LEFT_EDGE = 390;
+
+    // If the image weren't upside down.
+//    static int MIDDLE_OF_BLOCK_TO_TOP_OF_IMAGE = 442;
+//    static int MIDDLE_OF_LEFT_BLOCK_TO_LEFT_EDGE = 350;
+//    static int MIDDLE_OF_MIDDLE_BLOCK_TO_LEFT_EDGE = 625;
+//    static int MIDDLE_OF_RIGHT_BLOCK_TO_LEFT_EDGE = 900;
 
     private static int HEIGHT_OF_RECTANGLE = 30;
     private static int WIDTH_OF_RECTANGLE = 60;
@@ -732,7 +744,6 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         imageBitmap.copyPixelsFromBuffer(rgb.getPixels());
 
         picture.close();
-
         return imageBitmap;
     }
 
@@ -753,6 +764,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         double totalR = 0;
         double totalG = 0;
         double totalB = 0;
+
         for (int i = leftPixel; i < (leftPixel + width); i++) {
             for (int j = topPixel; j < (topPixel + height); j++) {
                 int pixel = bitmap.getPixel(i, j);
@@ -771,20 +783,30 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
         double blueRatio = totalB / (Math.max(1, totalR + totalG));
 
-        telemetry.addLine("Calculated blue ratio for region in " + durationMillis + " ms");
-        telemetry.addData("leftPixel=", leftPixel);
-        telemetry.addData("topPixel=", topPixel);
-        telemetry.addData("width=", width);
-        telemetry.addData("height=", height);
-        telemetry.addData("avg R=", Math.round(totalR / total));
-        telemetry.addData("avg G=", Math.round(totalG / total));
-        telemetry.addData("avg B=", Math.round(totalB / total));
-        telemetry.addData("B/(R+G)", blueRatio);
-        telemetry.update();
-
-        sleep(1000);
+//        telemetry.addLine("Calculated blue ratio for region in " + durationMillis + " ms");
+//        telemetry.addData("leftPixel=", leftPixel);
+//        telemetry.addData("topPixel=", topPixel);
+//        telemetry.addData("width=", width);
+//        telemetry.addData("height=", height);
+//        telemetry.addData("avg R=", Math.round(totalR / total));
+//        telemetry.addData("avg G=", Math.round(totalG / total));
+//        telemetry.addData("avg B=", Math.round(totalB / total));
+//        telemetry.addData("B/(R+G)", blueRatio);
+//        telemetry.update();
 
         return blueRatio;
+    }
+
+    public void colorRegion (Bitmap bitmap, int centerX, int centerY,
+                             int width, int height, int color){
+        int leftPixel = centerX - (width/2);
+        int topPixel = centerY - (height/2);
+
+        for (int i = leftPixel; i < (leftPixel + width); i++) {
+            for (int j = topPixel; j < (topPixel + height); j++) {
+                bitmap.setPixel(i, j, color);
+            }
+        }
     }
 
     public StonePosition getSkystonePosition() throws InterruptedException {
@@ -793,11 +815,34 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         Bitmap bm = getBitmap();
         for(StonePosition pos : StonePosition.values()){
             double ratio = calculateBlueRatioForRegion(bm, pos.getCenterX(), pos.getCenterY(), WIDTH_OF_RECTANGLE, HEIGHT_OF_RECTANGLE);
-            if(ratio > max){
+            if(ratio >= max){
                 max = ratio;
                 skystone = pos;
             }
+
+            telemetry.addData("Stone " + pos + " blue ratio", ratio);
+
+            // This shows us what regions we are looking at in the images.
+            colorRegion(bm, pos.getCenterX(), pos.getCenterY(), WIDTH_OF_RECTANGLE, HEIGHT_OF_RECTANGLE, pos.getColor());
         }
+
+        telemetry.addData("SkyStone", skystone);
+        telemetry.update();
+
+        // This shows us what region is the SkyStone.
+        colorRegion(bm, skystone.getCenterX(), skystone.getCenterY(), WIDTH_OF_RECTANGLE, HEIGHT_OF_RECTANGLE, Color.WHITE);
+
+        // Enable this code to write out the images that we are detecting and what
+        // portion of the image that we are checking.
+//        File file = AppUtil.getInstance().getSettingsFile("bmPic-" + System.currentTimeMillis() + ".png");
+//        try(FileOutputStream out = new FileOutputStream((file))){
+//            bm.compress(Bitmap.CompressFormat.PNG, 100, out);
+//        } catch(IOException e) {
+//            telemetry.addLine(e.toString());
+//        }
+//        telemetry.addData("file", file.getAbsolutePath());
+//        telemetry.update();
+
         return skystone;
     }
 
