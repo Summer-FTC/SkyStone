@@ -34,7 +34,7 @@ public class AutoTest extends BaseLinearOpMode
         waitForStart();
 
         while(opModeIsActive()){
-            testElbowsTogether();
+            printRecognitions();
         }
 //
 //        while(opModeIsActive()){

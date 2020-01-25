@@ -126,6 +126,7 @@ public class OutputController
         sleep(1000);
         stopClamp();
     }
+
     public void startOpeningClamp()
     {
         clamp.setPower(1);
@@ -152,13 +153,13 @@ public class OutputController
     {
         long startMillis = System.currentTimeMillis();
 
-        if (! isClampInRobot())
-        {
-            telemetry.addData("WARNING. Clamp is not in robot!" +
-                    " L elbow=" + getLeftElbowPos() + "  R elbow=" + getRightElbowPos(), "");
-            telemetry.update();
-            return;
-        }
+//        if (! isClampInRobot())
+//        {
+//            telemetry.addData("WARNING. Clamp is not in robot!" +
+//                    " L elbow=" + getLeftElbowPos() + "  R elbow=" + getRightElbowPos(), "");
+//            telemetry.update();
+//            return;
+//        }
 
         // Raise the lift some.
         startMoveLiftUp();
