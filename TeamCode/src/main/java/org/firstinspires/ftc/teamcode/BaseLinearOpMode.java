@@ -58,6 +58,16 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     private static double RAMP_UP_MS = 750;
     private static double RAMP_DOWN_MS = 1500;
 
+    // Bitmap dimension constants
+    static int MIDDLE_OF_BLOCK_TO_TOP_OF_IMAGE = 442;
+    static int MIDDLE_OF_LEFT_BLOCK_TO_LEFT_EDGE = 350;
+    static int MIDDLE_OF_MIDDLE_BLOCK_TO_LEFT_EDGE = 625;
+    static int MIDDLE_OF_RIGHT_BLOCK_TO_LEFT_EDGE = 900;
+
+    private static int HEIGHT_OF_RECTANGLE = 30;
+    private static int WIDTH_OF_RECTANGLE = 60;
+
+
     VenomRobot robot = new VenomRobot();
     double newPower;
 
@@ -732,8 +742,12 @@ public abstract class BaseLinearOpMode extends LinearOpMode
      * compare the middle of three different stones to find the one that is most likely the
      * Skystone.
      */
-    public double calculateBlueRatioForRegion(Bitmap bitmap, int leftPixel, int topPixel,
+    public double calculateBlueRatioForRegion(Bitmap bitmap, int centerX, int centerY,
                                               int width, int height) {
+
+        int leftPixel = centerX - (width/2);
+        int topPixel = centerY - (height/2);
+
         long startMillis = System.currentTimeMillis();
         // Size is 1280 x 720. Starting from the top left.
         double totalR = 0;
@@ -768,8 +782,25 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         telemetry.addData("B/(R+G)", blueRatio);
         telemetry.update();
 
+        sleep(1000);
+
         return blueRatio;
     }
+
+    public StonePosition getSkystonePosition() throws InterruptedException {
+        double max = 0;
+        StonePosition skystone = null;
+        Bitmap bm = getBitmap();
+        for(StonePosition pos : StonePosition.values()){
+            double ratio = calculateBlueRatioForRegion(bm, pos.getCenterX(), pos.getCenterY(), WIDTH_OF_RECTANGLE, HEIGHT_OF_RECTANGLE);
+            if(ratio > max){
+                max = ratio;
+                skystone = pos;
+            }
+        }
+        return skystone;
+    }
+
 
     /**
      * Initialize the TensorFlow Object Detection engine.

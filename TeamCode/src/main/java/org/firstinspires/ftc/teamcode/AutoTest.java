@@ -34,11 +34,8 @@ public class AutoTest extends BaseLinearOpMode
         motorBR = hwMap.dcMotor.get("motorBR");
         motorBL = hwMap.dcMotor.get("motorBL");
 
-        printBitMapInfoUntilStarted();
+        printSkystonePositionUntilStarted();
 
-//        robot.output.motorLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.output.motorLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//
         waitForStart();
 
 
@@ -46,26 +43,6 @@ public class AutoTest extends BaseLinearOpMode
             printRecognitions();
         }
 
-//
-//        while(opModeIsActive()){
-//            testElbowsTogether();
-//        }
-//
-//        while(opModeIsActive()){
-//            printRecognitions();
-//        }
-
-//        robot.output.motorLift.setTargetPosition(-15);
-//        robot.output.motorLift.setPower(0.5);
-//
-//        while(opModeIsActive() && robot.output.motorLift.isBusy())
-//        {
-//            telemetry.addData("Lift encoder values : ", robot.output.motorLift);
-//            telemetry.update();
-//            idle();
-//        }
-//
-//        robot.output.motorLift.setPower(0);
     }
 
     @Override
@@ -78,12 +55,15 @@ public class AutoTest extends BaseLinearOpMode
         return true;
     }
 
-    private void printBitMapInfoUntilStarted() throws InterruptedException {
+    private void printSkystonePositionUntilStarted() throws InterruptedException {
         while (!isStarted()) {
-            Bitmap bitmap = getBitmap();
 
-            // Image is 1280 x 720. Starting from the top left. So look at the middle 100x100 square.
-            calculateBlueRatioForRegion(bitmap, 1280/2, 720/2, 100, 100);
+
+            StonePosition sp = getSkystonePosition();
+
+            telemetry.addData("Skystone position : ", sp);
+            telemetry.update();
+            sleep(2000);
         }
     }
 
