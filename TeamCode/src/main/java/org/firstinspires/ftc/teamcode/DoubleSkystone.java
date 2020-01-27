@@ -12,7 +12,6 @@ public class DoubleSkystone extends BaseLinearOpMode
         boolean parkOnSide = true;
 
         // TODO: test these distances
-        // TODO: change this to work with the new mechanism
 
         private static int MOVE_OFF_OF_WALL_DISTANCE = 2;
         private static int STRAFE_TO_POS_1_OR_2_DIST = 4;
@@ -66,6 +65,7 @@ public class DoubleSkystone extends BaseLinearOpMode
 
         public void lowerHook()
         {
+            // Remember R and L are relative to the front of the robot, and we're lowering them from the back.
             if (isBlue) {
                 if (position == 1)
                     robot.stoneHooks.lowerOneHook("R");
