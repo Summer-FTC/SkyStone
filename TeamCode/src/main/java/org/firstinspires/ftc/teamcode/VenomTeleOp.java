@@ -85,7 +85,7 @@ public class VenomTeleOp extends OpMode
 
         if (gamepad1.left_trigger > 0.5) {
             drivePower = 0.25;
-        } else if (gamepad1.right_trigger > 0.5 || robot.hooks.areHooksDown()) {
+        } else if (gamepad1.right_trigger > 0.5 || robot.foundationHooks.areHooksDown()) {
             drivePower = 0.5;
         } else {
             drivePower = 1;
@@ -155,11 +155,11 @@ public class VenomTeleOp extends OpMode
     {
         if(gamepad2.a||gamepad1.a)
         {
-            robot.hooks.lowerHooks();
+            robot.foundationHooks.lowerHooks();
         }
         else if(gamepad2.x || gamepad1.x)
         {
-            robot.hooks.raiseHooks();
+            robot.foundationHooks.raiseHooks();
         }
     }
 

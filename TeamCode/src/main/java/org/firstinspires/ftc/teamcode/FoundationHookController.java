@@ -17,11 +17,13 @@ public class FoundationHookController
         this.hwMap = hardwareMap;
         this.telemetry = telemetry;
 
-     //   leftHook = hwMap.servo.get("leftHook");\
+        // TODO: Fix this once we have the leftHook attached.
+
+        // We only have one servo connected, so treat all of the hooks the same.
         rightHook = hwMap.servo.get("rightHook");
         leftHook = rightHook;
+//        leftHook = hwMap.servo.get("leftHook");
 
-     //   raiseHooks();
         startRaiseHooks();
 
         telemetry.addData("Hook Servo Initialization Complete", "");
@@ -33,48 +35,6 @@ public class FoundationHookController
         leftHook.setPosition(1);
         rightHook.setPosition(0);
     }
-
-    public void raiseOneHook(String LorR)
-    {
-        if(LorR.equals("R"))
-        {
-            rightHook.setPosition(0);
-        }
-
-        else{
-            leftHook.setPosition(1);
-        }
-
-        // Wait for the hooks to raise.
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException e) {
-            // This is important to propagate the interrupt up.
-            Thread.currentThread().interrupt();
-        }
-    }
-
-    public void lowerOneHook(String LorR)
-    {
-        if(LorR.equals("R"))
-        {
-            rightHook.setPosition(1);
-        }
-        else{
-            leftHook.setPosition(0.21);
-        }
-
-        // Wait for the hooks to raise.
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException e) {
-            // This is important to propagate the interrupt up.
-            Thread.currentThread().interrupt();
-        }
-    }
-
-
-
 
     public void raiseHooks()
     {

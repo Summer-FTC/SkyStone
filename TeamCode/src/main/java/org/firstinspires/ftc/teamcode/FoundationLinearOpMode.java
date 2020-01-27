@@ -62,7 +62,7 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         // Make sure we are hitting the platform.
         moveForwardByInches(0.9, MOVE_FORWARD_TO_TOUCH_PLATFORM_INCHES);
 
-        robot.hooks.lowerHooks();
+        robot.foundationHooks.lowerHooks();
 
         strafeLeftByInches(0.75, 8);
 
@@ -70,7 +70,7 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         rotateToAbsoluteYaw(90);
         moveForwardByInches(0.8, 10);
 
-        robot.hooks.raiseHooks();
+        robot.foundationHooks.raiseHooks();
     }
 
     private void moveBlueFoundation() {
@@ -81,7 +81,7 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         // Make sure we are hitting the platform.
         moveForwardByInches(0.9, MOVE_FORWARD_TO_TOUCH_PLATFORM_INCHES);
 
-        robot.hooks.lowerHooks();
+        robot.foundationHooks.lowerHooks();
 
         strafeRightByInches(0.75, 8);
 
@@ -89,7 +89,7 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         rotateToAbsoluteYaw(-90);
         moveForwardByInches(0.8, 10);
 
-        robot.hooks.raiseHooks();
+        robot.foundationHooks.raiseHooks();
     }
 
 

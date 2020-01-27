@@ -14,11 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -571,12 +567,12 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
     public void pullFoundationAndPark(boolean isBlue, boolean side)
     {
-        robot.hooks.lowerHooks();
+        robot.foundationHooks.lowerHooks();
         moveBackwardByInches(0.8, 42);
 
         if (isBlue) {
             rotate(20);
-            robot.hooks.raiseHooks();
+            robot.foundationHooks.raiseHooks();
             strafeRightByInches(1, 10);
             rotateToAbsoluteYaw(-70);
 
@@ -591,7 +587,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
         else {
             rotate(-20);
-            robot.hooks.raiseHooks();
+            robot.foundationHooks.raiseHooks();
             strafeLeftByInches(1, 10);
             rotateToAbsoluteYaw(70);
 

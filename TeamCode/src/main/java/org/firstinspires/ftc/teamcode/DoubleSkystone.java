@@ -46,26 +46,20 @@ public class DoubleSkystone extends BaseLinearOpMode
             if (opModeIsActive()) {
                 if (position == 3) {
                     driveTo3();
-                    lowerHook();
+                    // Adjust the remaining strafe movements by the width of a block.
                     STRAFE_UNDER_BRIDGE_1ST_STONE_DIST += 8;
-                    deposit123();
                     STRAFE_BACK_TO_GET_2ND_STONE_DIST += 8;
-                    driveTo456();
-                    lowerHook();
                     STRAFE_UNDER_BRIDGE_2ND_STONE_DIST += 8;
-                    deposit456();
-                    park();
                 }
-
                 else {
                     driveTo1Or2();
-                    lowerHook();
-                    deposit123();
-                    driveTo456();
-                    lowerHook();
-                    deposit456();
-                    park();
                 }
+                lowerHook();
+                deposit123();
+                driveTo456();
+                lowerHook();
+                deposit456();
+                park();
             }
         }
 
@@ -74,14 +68,14 @@ public class DoubleSkystone extends BaseLinearOpMode
         {
             if (isBlue) {
                 if (position == 1)
-                    robot.hooks.lowerOneHook("R");
+                    robot.stoneHooks.lowerOneHook("R");
                 else
-                    robot.hooks.lowerOneHook("L");
+                    robot.stoneHooks.lowerOneHook("L");
             } else {
                 if (position == 1)
-                    robot.hooks.lowerOneHook("L");
+                    robot.stoneHooks.lowerOneHook("L");
                 else
-                    robot.hooks.lowerOneHook("R");
+                    robot.stoneHooks.lowerOneHook("R");
             }
         }
 
@@ -139,7 +133,7 @@ public class DoubleSkystone extends BaseLinearOpMode
             else
                 strafeLeftByInches(1, STRAFE_UNDER_BRIDGE_1ST_STONE_DIST);
 
-            robot.hooks.raiseHooks();
+            robot.stoneHooks.raiseHooks();
         }
 
         public void deposit456()
@@ -151,7 +145,7 @@ public class DoubleSkystone extends BaseLinearOpMode
             else
                 strafeLeftByInches(1, STRAFE_UNDER_BRIDGE_2ND_STONE_DIST);
 
-            robot.hooks.raiseHooks();
+            robot.stoneHooks.raiseHooks();
         }
 
         public void park() {
@@ -321,18 +315,17 @@ public class DoubleSkystone extends BaseLinearOpMode
 
     @Override
     public synchronized void waitForStart() {
-        while (!isStarted()) {
-            synchronized (this) {
-                try {
-                    StonePosition sp = getSkystonePosition();
-                    position = sp.getPosition(isBlue);
-                    this.wait(50);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    return;
-                }
+        do {
+            // Make sure that we go through this at least once.
+            try {
+                StonePosition sp = getSkystonePosition();
+                position = sp.getPosition(isBlue);
+                this.wait(50);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return;
             }
-        }
+        } while (!isStarted());
     }
 
 }

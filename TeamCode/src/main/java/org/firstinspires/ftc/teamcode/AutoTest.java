@@ -1,11 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
 import android.annotation.SuppressLint;
-import android.graphics.Bitmap;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -79,10 +76,10 @@ public class AutoTest extends BaseLinearOpMode
 
     public void pullFoundationStraightBack()
     {
-        robot.hooks.lowerHooks();
+        robot.foundationHooks.lowerHooks();
         moveBackwardByInches(0.8, 36);
         rotate(-20);
-        robot.hooks.raiseHooks();
+        robot.foundationHooks.raiseHooks();
         strafeLeftByInches(0.8, 10);
         rotateToAbsoluteYaw(70);
         moveBackwardByInches(0.8, 33);
@@ -100,7 +97,7 @@ public class AutoTest extends BaseLinearOpMode
 
     public void arcFoundationUsingEncValues()
     {
-        robot.hooks.lowerHooks();
+        robot.foundationHooks.lowerHooks();
         moveWithEncoders("Backwards", 1, 10_000, -2 * 2710, -2 *332, -2*-1005, -2*-486, 90.0);
     }
 
@@ -114,7 +111,7 @@ public class AutoTest extends BaseLinearOpMode
 
     public void arcTest()
     {
-        robot.hooks.lowerHooks();
+        robot.foundationHooks.lowerHooks();
         resetEncoders();
         while (opModeIsActive())
         {
