@@ -22,13 +22,8 @@ public class StoneHookController
         this.hwMap = hardwareMap;
         this.telemetry = telemetry;
 
-        // Temporarily use the right platform hook since it's the only thing we have hooked up.
-        rightStoneHook = hwMap.servo.get("rightHook");
-        leftStoneHook = rightStoneHook;
-
-        // TODO: Once the servos are hooked up and in the hardware map uncomment this code.
-//        rightStoneHook = hwMap.servo.get("rightStoneHook");
-//        leftStoneHook = hwMap.servo.get("leftStoneHook");
+        rightStoneHook = hwMap.servo.get("rightStoneHook");
+        leftStoneHook = hwMap.servo.get("leftStoneHook");
 
         startRaiseHooks();
 

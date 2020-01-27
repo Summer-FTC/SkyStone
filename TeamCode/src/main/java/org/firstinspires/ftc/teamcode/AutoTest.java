@@ -37,7 +37,7 @@ public class AutoTest extends BaseLinearOpMode
 
 
         while(opModeIsActive()){
-            printRecognitions();
+            testStoneHooks();
         }
 
     }
@@ -58,6 +58,33 @@ public class AutoTest extends BaseLinearOpMode
 
             sleep(500);
         }
+    }
+
+    public void testStoneHooks(){
+        robot.stoneHooks.raiseHooks();
+        sleep(1000);
+        robot.stoneHooks.lowerOneHook("R");
+        sleep(1000);
+        robot.stoneHooks.lowerOneHook("L");
+        sleep(1000);
+        robot.stoneHooks.raiseHooks();
+        sleep(1000);
+        robot.stoneHooks.raiseHooks();
+        sleep(1000);
+        robot.stoneHooks.lowerOneHook("L");
+        sleep(1000);
+        robot.stoneHooks.lowerOneHook("R");
+        sleep(1000);
+        robot.stoneHooks.raiseHooks();
+        sleep(1000);
+        robot.stoneHooks.raiseHooks();
+        sleep(1000);
+        robot.stoneHooks.lowerOneHook("R");
+        sleep(1000);
+        robot.stoneHooks.lowerOneHook("L");
+        sleep(1000);
+        robot.stoneHooks.raiseHooks();
+        sleep(1000);
     }
 
     // TODO:

@@ -17,12 +17,8 @@ public class FoundationHookController
         this.hwMap = hardwareMap;
         this.telemetry = telemetry;
 
-        // TODO: Fix this once we have the leftHook attached.
-
-        // We only have one servo connected, so treat all of the hooks the same.
         rightHook = hwMap.servo.get("rightHook");
-        leftHook = rightHook;
-//        leftHook = hwMap.servo.get("leftHook");
+        leftHook = hwMap.servo.get("leftHook");
 
         startRaiseHooks();
 
