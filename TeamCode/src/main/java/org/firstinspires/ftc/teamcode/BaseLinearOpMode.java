@@ -385,6 +385,8 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
 
     // This is useful to move to an absolute position based on where you started.
+    // A positive value is clockwise.
+    // A negative value is counterclockwise.
     public void rotateToAbsoluteYaw(double yawDegrees)
     {
         double targetYawChange = robot.imu.getTrueDiff(yawDegrees);

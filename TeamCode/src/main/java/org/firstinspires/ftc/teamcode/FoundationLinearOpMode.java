@@ -9,10 +9,12 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
     private static final int MOVE_AWAY_FROM_WALL_INCHES = 3;
     private static final int MOVE_FORWARD_TO_PLATFORM_INCHES = 25;
     private static final int MOVE_FORWARD_TO_TOUCH_PLATFORM_INCHES = 3;
-    private static final int MOVE_BACKWARD_TO_PARK_INCHES1 = 20;
-    private static final int MOVE_BACKWARD_TO_PARK_INCHES2 = 20;
+    private static final int MOVE_BACKWARD_TO_PARK_INCHES1 = 10;
+    private static final int MOVE_BACKWARD_TO_PARK_INCHES2 = 30;
     private static final int STRAFE_TO_CENTER_TO_PARK_INCHES = 26;
 
+
+    private static final int MAX_PARKING_DURATION_MILLIS = 5_000;
 
     boolean configOnly = false;
 
@@ -38,6 +40,11 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         configMode();
         waitForStart();
 
+        // Autos are 30 seconds, so we work backwards from that to decide when to park.
+        // We wait as long as possible to stay out of the way of a robot that's bringing over
+        // stones.
+        long parkTimeMillis = System.currentTimeMillis() + (30_000 - MAX_PARKING_DURATION_MILLIS);
+
         if (!isStartingBlue && parkOnSide) {
             runSideRed();
         } else if (!isStartingBlue && !parkOnSide) {
@@ -47,6 +54,17 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         } else if (isStartingBlue && !parkOnSide) {
             runCenterBlue();
         }
+
+        moveBackwardByInches(0.7, MOVE_BACKWARD_TO_PARK_INCHES1);
+        moveClampOutInAuto();
+
+        long millisUntilPark = parkTimeMillis - System.currentTimeMillis();
+        if (millisUntilPark > 0) {
+            log("Sleeping " + millisUntilPark + " before parking to give other robot room.");
+            sleep(millisUntilPark);
+        }
+
+        moveBackwardByInches(0.7, MOVE_BACKWARD_TO_PARK_INCHES2);
 
         telemetry.addData("After running", "");
         telemetry.update();
@@ -100,10 +118,6 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         moveRedFoundation();
 
         strafeRightByInches(0.7, 10);
-
-        moveBackwardByInches(0.7, MOVE_BACKWARD_TO_PARK_INCHES1);
-        moveClampOutInAuto();
-        moveBackwardByInches(0.7, MOVE_BACKWARD_TO_PARK_INCHES2);
     }
 
 
@@ -113,10 +127,6 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         moveBlueFoundation();
 
         strafeLeftByInches(0.7, 10);
-
-        moveBackwardByInches(0.7, MOVE_BACKWARD_TO_PARK_INCHES1);
-        moveClampOutInAuto();
-        moveBackwardByInches(0.7, MOVE_BACKWARD_TO_PARK_INCHES2);
     }
 
 
@@ -129,12 +139,6 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         strafeRightByInches(0.7, 14);
 
         strafeLeftByInches(0.7, STRAFE_TO_CENTER_TO_PARK_INCHES);
-
-        moveBackwardByInches(0.7, MOVE_BACKWARD_TO_PARK_INCHES1);
-
-        // Test this, will save us some time for teleop
-        moveClampOutInAuto();
-        moveBackwardByInches(0.7, MOVE_BACKWARD_TO_PARK_INCHES2);
     }
 
 
@@ -148,15 +152,10 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         strafeLeftByInches(0.7, 14);
 
         strafeRightByInches(0.7, STRAFE_TO_CENTER_TO_PARK_INCHES);
-
-        moveBackwardByInches(0.7, MOVE_BACKWARD_TO_PARK_INCHES1);
-        moveClampOutInAuto();
-        moveBackwardByInches(0.7, MOVE_BACKWARD_TO_PARK_INCHES2);
     }
 
 
     public void configMode() {
-        String lastModes = "";
         telemetry.addData("Entering " , "ConfigMode");
         telemetry.update();
         do {
@@ -170,7 +169,12 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         }
 
         while (!gamepad1.right_bumper && !isStarted() &&  !isStopRequested());
-        telemetry.addData("ConfigMode" , lastModes);
+
+        String lastModes = "";
+        lastModes+=", Alliance="+(isStartingBlue?"Blue":"Red");
+        lastModes+=", Park="+(parkOnSide?"Side":"Center");
+
+        telemetry.addData("Final ConfigMode" , lastModes);
         telemetry.update();
 
         RobotLog.i("configMode() stop");
@@ -181,8 +185,8 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
     void logConfigModes(boolean update) {
         String modes="";
         //  modes+="Alliance="+(isRedAlliance?"Red":"Blue");
-        modes+=", Starting="+(isStartingBlue?"Blue":"Red");
-        modes+=", Starting="+(parkOnSide?"Side":"Center");
+        modes+=", Alliance="+(isStartingBlue?"Blue":"Red");
+        modes+=", Park="+(parkOnSide?"Side":"Center");
 
 
         telemetry.addData("Alliance (Y)", isStartingBlue?"Blue":"Red");

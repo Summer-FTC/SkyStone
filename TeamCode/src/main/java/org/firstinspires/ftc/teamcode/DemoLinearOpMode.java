@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name = "DemoLinearOpMode", group = "6209")
+@Disabled
 public class DemoLinearOpMode extends BaseLinearOpMode
 {
     public void initialize()
