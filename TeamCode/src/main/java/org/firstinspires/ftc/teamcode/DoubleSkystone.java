@@ -51,6 +51,7 @@ public class DoubleSkystone extends BaseLinearOpMode
                     deposit123();
                     STRAFE_BACK_TO_GET_2ND_STONE_DIST += 8;
                     driveTo456();
+                    lowerHook();
                     STRAFE_UNDER_BRIDGE_2ND_STONE_DIST += 8;
                     deposit456();
                     park();
@@ -67,7 +68,6 @@ public class DoubleSkystone extends BaseLinearOpMode
                 }
             }
         }
-
 
 
         public void lowerHook()

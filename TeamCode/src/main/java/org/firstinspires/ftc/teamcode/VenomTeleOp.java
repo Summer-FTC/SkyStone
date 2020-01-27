@@ -33,6 +33,7 @@ public class VenomTeleOp extends OpMode
                 Thread.sleep(10_000);
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
+                Thread.currentThread().interrupt();
             }
             throw new RuntimeException(e);
         }
@@ -43,21 +44,22 @@ public class VenomTeleOp extends OpMode
     {
         doDrive();
         doFoundation();
-        // doIntake();
         doOutput();
-     //   encoderTelemetry();
-
     }
 
-    public void encoderTelemetry()
-    {
-        int liftEnc = robot.output.motorLift.getCurrentPosition();
-        telemetry.addData("lift encoder", liftEnc);
-        telemetry.update();
-    }
+//    public void encoderTelemetry()
+//    {
+//        int liftEnc = robot.output.motorLift.getCurrentPosition();
+//        telemetry.addData("lift encoder", liftEnc);
+//        telemetry.update();
+//    }
 
     void doDrive()
     {
+        doBrake();
+        if(robot.driveTrain.isBraking()){
+            return;
+        }
         slowDown();
 
         double forward = -gamepad1.left_stick_y * drivePower;
@@ -65,22 +67,32 @@ public class VenomTeleOp extends OpMode
         double rotate = gamepad1.right_stick_x * drivePower;
 
         robot.driveTrain.arcadeDrive(forward, strafe, rotate);
-        robot.driveTrain.arcadeDrive(forward, strafe, rotate);
-
     }
 
+    public void doBrake(){
+
+        if(gamepad1.dpad_down || gamepad1.dpad_up || gamepad1.dpad_left || gamepad1.dpad_right ||
+                gamepad2.right_trigger > 0.5 || gamepad2.left_trigger > 0.5 || gamepad2.left_bumper || gamepad2.right_bumper){
+            robot.driveTrain.brake();
+        }
+        else {
+            robot.driveTrain.unbrake();
+        }
+    }
 
     public void slowDown() {
-
         //TODO: ask David what button he wants to override this for when the hooks are down
-        if(gamepad1.right_trigger > 0.7 || robot.hooks.areHooksDown())
-            drivePower = 0.5;
 
-        else if (gamepad1.left_trigger > 0.7 )
+        if (gamepad1.left_trigger > 0.5) {
             drivePower = 0.25;
-
-        else
+        } else if (gamepad1.right_trigger > 0.5 || robot.hooks.areHooksDown()) {
+            drivePower = 0.5;
+        } else {
             drivePower = 1;
+        }
+
+        // Coast if and only if we are at full power.
+        robot.driveTrain.setHaltModeCoast(drivePower == 1);
     }
 
     /** public void doIntake()

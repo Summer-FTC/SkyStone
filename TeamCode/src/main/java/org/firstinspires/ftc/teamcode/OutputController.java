@@ -91,8 +91,11 @@ public class OutputController
 
     private void setLiftPower(double liftPower) {
         motorLift.setPower(liftPower);
-        telemetry.addData("Lift Power", "" + liftPower);
-        telemetry.update();
+        if (liftPower != 0) {
+            telemetry.addData("Lift Power", liftPower);
+            telemetry.addData("Lift encoder", motorLift.getCurrentPosition());
+            telemetry.update();
+        }
     }
 
     public void startMoveLiftUp() {

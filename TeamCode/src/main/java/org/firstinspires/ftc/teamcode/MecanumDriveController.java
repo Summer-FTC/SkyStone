@@ -15,6 +15,10 @@ public class MecanumDriveController
     DcMotor motorBL;
     String color;
 
+    private boolean isBraking = false;
+
+    private DcMotor.ZeroPowerBehavior currentZeroPowerBehavior = DcMotor.ZeroPowerBehavior.UNKNOWN;
+
     HardwareMap hwMap = null;
     Telemetry telemetry = null;
 
@@ -37,7 +41,7 @@ public class MecanumDriveController
     {
         if (telemetry != null)
         {
-            telemetry.addData(message, "");
+            telemetry.addLine(message);
             telemetry.update();
         }
     }
@@ -75,6 +79,9 @@ public class MecanumDriveController
         }
     }
 
+    public boolean isBraking(){
+        return isBraking;
+    }
 
     public void stopDriveMotors()
     {
@@ -87,18 +94,16 @@ public class MecanumDriveController
     public void setHaltModeCoast(boolean coastModeOn)
     {
         DcMotor.ZeroPowerBehavior behavior;
-        if (coastModeOn)
-        {
+        if (coastModeOn) {
             behavior = DcMotor.ZeroPowerBehavior.FLOAT;
-        }
-        else
-         {
+        } else {
             behavior = DcMotor.ZeroPowerBehavior.BRAKE;
-         }
+        }
 
-        for (DcMotor m : motors)
-        {
-            m.setZeroPowerBehavior(behavior);
+        if (behavior != currentZeroPowerBehavior) {
+            for (DcMotor m : motors) {
+                m.setZeroPowerBehavior(behavior);
+            }
         }
     }
 
@@ -191,6 +196,27 @@ public class MecanumDriveController
         avg /= 4;
 
         return avg;
+    }
+
+
+    public void brake(){
+        if(!isBraking) {
+            setHaltModeCoast(false);
+            // If the powers are already at 0, then it won't stop. So set a very small
+            // power first so setting it 0 will do something.
+            setPowers(0.01);
+            stopDriveMotors();
+            isBraking = true;
+            log("Braked");
+        }
+    }
+
+    public void unbrake(){
+        if(isBraking) {
+            setHaltModeCoast(true);
+            isBraking = false;
+            log("Unbraked");
+        }
     }
 }
 
