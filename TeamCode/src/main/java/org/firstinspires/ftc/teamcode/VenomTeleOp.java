@@ -45,6 +45,8 @@ public class VenomTeleOp extends OpMode
         doDrive();
         doFoundation();
         doOutput();
+        doBrake();
+        doStoneHooks();
     }
 
 //    public void encoderTelemetry()
@@ -56,7 +58,7 @@ public class VenomTeleOp extends OpMode
 
     void doDrive()
     {
-        doBrake();
+      //  doBrake();
         if(robot.driveTrain.isBraking()){
             return;
         }
@@ -71,14 +73,28 @@ public class VenomTeleOp extends OpMode
 
     public void doBrake(){
 
-        if(gamepad1.dpad_down || gamepad1.dpad_up || gamepad1.dpad_left || gamepad1.dpad_right ||
-                gamepad2.right_trigger > 0.5 || gamepad2.left_trigger > 0.5 || gamepad2.left_bumper || gamepad2.right_bumper){
+        if(gamepad1.dpad_down || gamepad1.dpad_up || gamepad1.dpad_left || gamepad1.dpad_right){
             robot.driveTrain.brake();
         }
         else {
             robot.driveTrain.unbrake();
         }
     }
+
+    public void doStoneHooks()
+    {
+        if(gamepad2.right_trigger > 0.5){
+            robot.stoneHooks.lowerOneHook("L");
+        } else {
+            robot.stoneHooks.raiseOneHook("L");
+        }
+        if(gamepad2.left_trigger > 0.5){
+            robot.stoneHooks.lowerOneHook("R");
+        } else {
+            robot.stoneHooks.raiseOneHook("R");
+        }
+    }
+
 
     public void slowDown() {
         //TODO: ask David what button he wants to override this for when the hooks are down
@@ -107,6 +123,7 @@ public class VenomTeleOp extends OpMode
 
     public void doOutput()
     {
+
         // lift --> dpad
         if (gamepad2.dpad_up)
         {

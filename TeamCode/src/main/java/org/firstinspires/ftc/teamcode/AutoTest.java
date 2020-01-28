@@ -61,30 +61,14 @@ public class AutoTest extends BaseLinearOpMode
     }
 
     public void testStoneHooks(){
-        robot.stoneHooks.raiseHooks();
-        sleep(1000);
-        robot.stoneHooks.lowerOneHook("R");
-        sleep(1000);
+        robot.stoneHooks.raiseOneHook("L");
+        sleep(2500);
+        robot.stoneHooks.raiseOneHook("R");
+        sleep(2500);
         robot.stoneHooks.lowerOneHook("L");
-        sleep(1000);
-        robot.stoneHooks.raiseHooks();
-        sleep(1000);
-        robot.stoneHooks.raiseHooks();
-        sleep(1000);
-        robot.stoneHooks.lowerOneHook("L");
-        sleep(1000);
+        sleep(2500);
         robot.stoneHooks.lowerOneHook("R");
-        sleep(1000);
-        robot.stoneHooks.raiseHooks();
-        sleep(1000);
-        robot.stoneHooks.raiseHooks();
-        sleep(1000);
-        robot.stoneHooks.lowerOneHook("R");
-        sleep(1000);
-        robot.stoneHooks.lowerOneHook("L");
-        sleep(1000);
-        robot.stoneHooks.raiseHooks();
-        sleep(1000);
+        sleep(2500);
     }
 
     // TODO:

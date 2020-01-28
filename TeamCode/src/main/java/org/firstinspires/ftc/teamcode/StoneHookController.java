@@ -33,7 +33,7 @@ public class StoneHookController
 
     public void startRaiseHooks()
     {
-        leftStoneHook.setPosition(0);
+        leftStoneHook.setPosition(1);
         rightStoneHook.setPosition(0);
     }
 
@@ -45,7 +45,7 @@ public class StoneHookController
         }
 
         else{
-            leftStoneHook.setPosition(0);
+            leftStoneHook.setPosition(1);
         }
 
         // Wait for the hooks to raise.
@@ -64,7 +64,7 @@ public class StoneHookController
             rightStoneHook.setPosition(1);
         }
         else{
-            leftStoneHook.setPosition(1);
+            leftStoneHook.setPosition(0);
         }
 
         // Wait for the hooks to raise.

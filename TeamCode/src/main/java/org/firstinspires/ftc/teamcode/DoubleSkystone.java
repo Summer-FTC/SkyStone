@@ -11,7 +11,6 @@ public class DoubleSkystone extends BaseLinearOpMode
     boolean isBlue = true;
     boolean parkOnSide = false; // This doesn't do anything. We always park center.
 
-    // TODO: test these distances
 
     private static int MOVE_OFF_OF_WALL_DISTANCE = 2;
     private static int STRAFE_TO_POS_1_OR_2_DIST = 4;
@@ -61,9 +60,6 @@ public class DoubleSkystone extends BaseLinearOpMode
 
             deposit456WithTurning();
             parkWhenTurned();
-
-//            deposit456WithStrafing();
-//            parkWithStrafing();
         }
     }
 
@@ -73,14 +69,14 @@ public class DoubleSkystone extends BaseLinearOpMode
         // Remember R and L are relative to the front of the robot, and we're lowering them from the back.
         if (isBlue) {
             if (position == 1)
-                robot.stoneHooks.lowerOneHook("R");
-            else
                 robot.stoneHooks.lowerOneHook("L");
+            else
+                robot.stoneHooks.lowerOneHook("R");
         } else {
             if (position == 1)
-                robot.stoneHooks.lowerOneHook("L");
-            else
                 robot.stoneHooks.lowerOneHook("R");
+            else
+                robot.stoneHooks.lowerOneHook("L");
         }
     }
 
