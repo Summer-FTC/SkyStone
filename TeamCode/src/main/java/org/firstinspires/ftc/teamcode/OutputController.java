@@ -14,7 +14,7 @@ public class OutputController
     public static final double WRIST_POSITION_INSIDE_ROBOT = 0;
     public static final double WRIST_POSITION_OUTSIDE_ROBOT= 0.97;
     public static final long WRIST_POSITION_DURATION = 200;
-    public static final long ELBOW_POSITION_DURATION = 900;
+    public static final long ELBOW_POSITION_DURATION = 1500;
 
     // Positions for the elbow servo.
     public static final double ELBOW_POSITION_INSIDE_ROBOT = 0;
@@ -34,7 +34,7 @@ public class OutputController
     // How long to move the lift up and then down when moving the clamp in or out of the robot.
     private static final long MOVE_CLAMP_LIFT_DURATION = 150;
 
-    private static final long OPEN_CLAMP_FULLY_DURATION = 3000;
+    private static final long OPEN_CLAMP_FULLY_DURATION = 1500; // This isn't fully.
     private static final long CLOSE_CLAMP_FULLY_DURATION = 3200;
 
 
@@ -165,9 +165,9 @@ public class OutputController
 
         // It should always start sideways now.
 //        moveWristToPosition(WRIST_POSITION_SIDEWAYS);
-        startOpeningClamp();
-
         moveElbowToPosition(ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN);
+
+        startOpeningClamp();
 
         moveWristToPosition(WRIST_POSITION_OUTSIDE_ROBOT);
 
