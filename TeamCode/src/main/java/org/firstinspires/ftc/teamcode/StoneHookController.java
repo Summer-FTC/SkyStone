@@ -37,7 +37,7 @@ public class StoneHookController
         rightStoneHook.setPosition(0);
     }
 
-    public void raiseOneHook(String LorR)
+    public void startRaiseOneHook(String LorR)
     {
         if(LorR.equals("R"))
         {
@@ -47,6 +47,12 @@ public class StoneHookController
         else{
             leftStoneHook.setPosition(1);
         }
+    }
+
+
+    public void raiseOneHook(String LorR)
+    {
+        startRaiseOneHook(LorR);
 
         // Wait for the hooks to raise.
         try {
@@ -57,7 +63,7 @@ public class StoneHookController
         }
     }
 
-    public void lowerOneHook(String LorR)
+    public void startLowerOneHook(String LorR)
     {
         if(LorR.equals("R"))
         {
@@ -66,6 +72,12 @@ public class StoneHookController
         else{
             leftStoneHook.setPosition(0);
         }
+    }
+
+
+    public void lowerOneHook(String LorR)
+    {
+        startLowerOneHook(LorR);
 
         // Wait for the hooks to raise.
         try {

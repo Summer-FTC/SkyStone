@@ -84,14 +84,14 @@ public class VenomTeleOp extends OpMode
     public void doStoneHooks()
     {
         if(gamepad2.right_trigger > 0.5){
-            robot.stoneHooks.lowerOneHook("L");
+            robot.stoneHooks.startLowerOneHook("L");
         } else {
-            robot.stoneHooks.raiseOneHook("L");
+            robot.stoneHooks.startRaiseOneHook("L");
         }
         if(gamepad2.left_trigger > 0.5){
-            robot.stoneHooks.lowerOneHook("R");
+            robot.stoneHooks.startLowerOneHook("R");
         } else {
-            robot.stoneHooks.raiseOneHook("R");
+            robot.stoneHooks.startRaiseOneHook("R");
         }
     }
 
