@@ -12,7 +12,7 @@ public class OutputController
     // Positions for the wrist servo.
     public static final double WRIST_POSITION_SIDEWAYS = 0.45;
     public static final double WRIST_POSITION_INSIDE_ROBOT = 0;
-    public static final double WRIST_POSITION_OUTSIDE_ROBOT= 1;
+    public static final double WRIST_POSITION_OUTSIDE_ROBOT= 0.97;
     public static final long WRIST_POSITION_DURATION = 200;
     public static final long ELBOW_POSITION_DURATION = 900;
 
@@ -163,7 +163,8 @@ public class OutputController
         sleep(MOVE_CLAMP_LIFT_DURATION);
         stopLift();
 
-        moveWristToPosition(WRIST_POSITION_SIDEWAYS);
+        // It should always start sideways now.
+//        moveWristToPosition(WRIST_POSITION_SIDEWAYS);
         startOpeningClamp();
 
         moveElbowToPosition(ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN);
