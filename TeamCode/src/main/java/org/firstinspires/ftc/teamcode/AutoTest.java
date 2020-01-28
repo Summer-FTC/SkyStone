@@ -37,7 +37,7 @@ public class AutoTest extends BaseLinearOpMode
 
 
         while(opModeIsActive()){
-            testStoneHooks();
+            testWrist();
         }
 
     }
@@ -94,7 +94,13 @@ public class AutoTest extends BaseLinearOpMode
         strafeLeftByInches(0.8, 10);
         rotateToAbsoluteYaw(70);
         moveBackwardByInches(0.8, 33);
+    }
 
+    public void testWrist(){
+        robot.output.wrist.setPosition(0);
+        sleep(2000);
+        robot.output.wrist.setPosition(1);
+        sleep(2000);
     }
 
     public void findBlockDistances() {

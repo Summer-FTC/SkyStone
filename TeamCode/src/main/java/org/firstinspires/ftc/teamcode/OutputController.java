@@ -18,10 +18,10 @@ public class OutputController
 
     // Positions for the elbow servo.
     public static final double ELBOW_POSITION_INSIDE_ROBOT = 0;
-    public static final double ELBOW_POSITION_OUTSIDE_ROBOT_PARALLEL = 0.8;
-    public static final double ELBOW_POSITION_OUTSIDE_ROBOT_DOWN_A_LITTLE = 0.8;
-    public static final double ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN = 0.85;
-    public static final double ELBOW_POSITION_OUTSIDE_ROBOT_AND_PARTIALLY_UP = 0.65;
+    public static final double ELBOW_POSITION_OUTSIDE_ROBOT_PARALLEL = 0.9;
+    public static final double ELBOW_POSITION_OUTSIDE_ROBOT_DOWN_A_LITTLE = 0.95;
+    public static final double ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN = 1;
+    public static final double ELBOW_POSITION_OUTSIDE_ROBOT_AND_PARTIALLY_UP = 0.75;
 
     public static final double LIFT_POWER_UP = -1;
     public static final double LIFT_TENSION_POWER = -0.15;
@@ -59,11 +59,6 @@ public class OutputController
         elbowR = hwMap.servo.get("elbow1");
         elbowL = hwMap.servo.get("elbow2");
 
-        // This is necessary so that we can detect when the wrist is in and out of the robot.
-
-        if (isAuto)
-            setElbowPositions(ELBOW_POSITION_INSIDE_ROBOT);
-
         // wrist rotates block
         wrist = hwMap.servo.get("wrist");
         // clamp opens and closes on block
@@ -79,7 +74,6 @@ public class OutputController
             motorLift.setPower(LIFT_TENSION_POWER);
             sleep(LIFT_TENSION_DURATION);
             motorLift.setPower(0);
-            setElbowPositions(ELBOW_POSITION_INSIDE_ROBOT);
         }
 
         // This MIGHT have caused the chain to break. Disable it just in case for now.
@@ -172,7 +166,7 @@ public class OutputController
         moveWristToPosition(WRIST_POSITION_SIDEWAYS);
         startOpeningClamp();
 
-        moveElbowToPosition(ELBOW_POSITION_OUTSIDE_ROBOT_DOWN_A_LITTLE);
+        moveElbowToPosition(ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN);
 
         moveWristToPosition(WRIST_POSITION_OUTSIDE_ROBOT);
 
