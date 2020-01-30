@@ -19,8 +19,8 @@ public class DoubleSkystone extends BaseLinearOpMode
     private static int MOVE_BACKWARD_AFTER_GRAB_DIST = 12;
     private static int MOVE_BACKWARD_AFTER_GRAB_BEFORE_TURN_DIST = 6;
     private static int STRAFE_UNDER_BRIDGE_1ST_STONE_DIST = 48;
-    private static int STRAFE_BACK_TO_GET_2ND_STONE_DIST = 72;
-    private static int MOVE_FORWARD_TO_GET_2ND_STONE_DIST = 13;
+    private static int STRAFE_BACK_TO_GET_2ND_STONE_DIST = 70;
+    private static int MOVE_FORWARD_TO_GET_2ND_STONE_DIST = 16;
     private static int DEPOSIT_UNDER_BRIDGE_2ND_STONE_DIST = 73;
     private static int PARK_DIST = 20;
 
@@ -150,11 +150,13 @@ public class DoubleSkystone extends BaseLinearOpMode
         // Ideally the yaws would be 90, but we overshoot it a bit.
         if (isBlue) {
             strafeRightByInches(1, strafeAwayFromWallInches);
-            rotateToAbsoluteYaw(-87);
+            rotate(-87, 0.3);
+           // rotateToAbsoluteYaw(-87);
         }
         else {
             strafeLeftByInches(1, strafeAwayFromWallInches);
-            rotateToAbsoluteYaw(87);
+           // rotateToAbsoluteYaw(87);
+            rotate(87, 0.3);
         }
 
         moveBackwardByInches(1, DEPOSIT_UNDER_BRIDGE_2ND_STONE_DIST - strafeAwayFromWallInches);

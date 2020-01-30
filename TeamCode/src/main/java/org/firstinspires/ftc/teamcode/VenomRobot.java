@@ -52,7 +52,7 @@ public class VenomRobot extends LinearOpMode
             // Hold the position in zero power in auto.
             driveTrain.setHaltModeCoast(false);
 
-            imu = new IMU(hwMap.get(BNO055IMU.class, "imu"));
+            imu = new IMU(hwMap.get(BNO055IMU.class, "imu 1"));
             imu.IMUinit(hwMap);
         }
    }
