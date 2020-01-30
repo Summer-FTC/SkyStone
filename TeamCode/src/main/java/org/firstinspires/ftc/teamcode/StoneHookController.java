@@ -65,7 +65,7 @@ public class StoneHookController
 
     public void startLowerOneHook(String LorR)
     {
-        if(LorR.equals("R"))
+        if(LorR.equals("L"))
         {
             rightStoneHook.setPosition(1);
         }

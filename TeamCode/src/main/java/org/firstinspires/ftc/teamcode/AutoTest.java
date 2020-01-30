@@ -37,7 +37,7 @@ public class AutoTest extends BaseLinearOpMode
 
 
         while(opModeIsActive()){
-            testWrist();
+            robot.output.moveWristToPosition(0.9);
         }
 
     }
@@ -118,12 +118,24 @@ public class AutoTest extends BaseLinearOpMode
         moveWithEncoders("Backwards", 1, 10_000, -2 * 2710, -2 *332, -2*-1005, -2*-486, 90.0);
     }
 
-    public void test() {
+    public void testTurn() {
 
         telemetry.addData("Status", "Running Autonomous!");
         telemetry.update();
         rotate(90, 1);
 
+    }
+
+
+    public void testStoneHooks2(){
+        robot.stoneHooks.lowerOneHook("L");
+        sleep(1000);
+        robot.stoneHooks.lowerOneHook("R");
+        sleep(1000);
+        robot.stoneHooks.lowerOneHook("L");
+        sleep(1000);
+        robot.stoneHooks.lowerOneHook("R");
+        sleep(1000);
     }
 
     public void arcTest()

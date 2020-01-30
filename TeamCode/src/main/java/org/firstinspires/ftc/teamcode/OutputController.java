@@ -150,25 +150,16 @@ public class OutputController
     {
         long startMillis = System.currentTimeMillis();
 
-//        if (! isClampInRobot())
-//        {
-//            telemetry.addData("WARNING. Clamp is not in robot!" +
-//                    " L elbow=" + getLeftElbowPos() + "  R elbow=" + getRightElbowPos(), "");
-//            telemetry.update();
-//            return;
-//        }
 
         // Raise the lift some.
         startMoveLiftUp();
         sleep(MOVE_CLAMP_LIFT_DURATION);
         stopLift();
 
-        // It should always start sideways now.
-//        moveWristToPosition(WRIST_POSITION_SIDEWAYS);
+
         moveElbowToPosition(ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN);
 
         startOpeningClamp();
-
         moveWristToPosition(WRIST_POSITION_OUTSIDE_ROBOT);
 
         // Lower the lift back down.
