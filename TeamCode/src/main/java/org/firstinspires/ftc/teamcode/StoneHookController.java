@@ -39,13 +39,17 @@ public class StoneHookController
 
     public void startRaiseOneHook(String LorR)
     {
-        if(LorR.equals("R"))
+        if(LorR.equals("L")) // TODO: Fix this.
         {
-            rightStoneHook.setPosition(0);
+            if (rightStoneHook.getPosition() != 0) {
+                rightStoneHook.setPosition(0);
+            }
         }
 
         else{
-            leftStoneHook.setPosition(1);
+            if (leftStoneHook.getPosition() != 1) {
+                leftStoneHook.setPosition(1);
+            }
         }
     }
 
@@ -65,12 +69,16 @@ public class StoneHookController
 
     public void startLowerOneHook(String LorR)
     {
-        if(LorR.equals("L"))
+        if(LorR.equals("L")) // TODO: Fix this.
         {
-            rightStoneHook.setPosition(1);
+            if (rightStoneHook.getPosition() != 1.0) {
+                rightStoneHook.setPosition(1);
+            }
         }
         else{
-            leftStoneHook.setPosition(0);
+            if (leftStoneHook.getPosition() != 0) {
+                leftStoneHook.setPosition(0);
+            }
         }
     }
 

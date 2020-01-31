@@ -10,7 +10,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class OutputController
 {
     // Positions for the wrist servo.
-    public static final double WRIST_POSITION_SIDEWAYS = 0.45;
+    public static final double WRIST_POSITION_SIDEWAYS = 0.66;
     public static final double WRIST_POSITION_INSIDE_ROBOT = 0;
     public static final double WRIST_POSITION_OUTSIDE_ROBOT= 0.97;
     public static final long WRIST_POSITION_DURATION = 200;
@@ -194,8 +194,6 @@ public class OutputController
         moveWristToPosition(WRIST_POSITION_SIDEWAYS);
 
         moveElbowToPosition(ELBOW_POSITION_INSIDE_ROBOT);
-
-        moveWristToPosition(WRIST_POSITION_INSIDE_ROBOT);
 
         // Lower the lift back down.
         startMoveLiftDown();

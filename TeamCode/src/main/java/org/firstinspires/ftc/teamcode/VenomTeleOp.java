@@ -21,6 +21,10 @@ public class VenomTeleOp extends OpMode
             robot.init(hardwareMap, telemetry, false);
             robot.output.motorLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             robot.output.motorLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            robot.stoneHooks.startRaiseOneHook("L");
+            robot.stoneHooks.startRaiseOneHook("R");
+
             telemetry.addData("Initialization complete", "");
             telemetry.update();
         } catch (Exception e) {
@@ -81,17 +85,22 @@ public class VenomTeleOp extends OpMode
         }
     }
 
+
     public void doStoneHooks()
     {
+        telemetry.addData("right_trigger", gamepad2.right_trigger);
+        telemetry.addData("left_trigger", gamepad2.left_trigger);
+        telemetry.update();
+
         if(gamepad2.right_trigger > 0.5){
-            robot.stoneHooks.startLowerOneHook("L");
-        } else {
-            robot.stoneHooks.startRaiseOneHook("L");
-        }
-        if(gamepad2.left_trigger > 0.5){
             robot.stoneHooks.startLowerOneHook("R");
         } else {
             robot.stoneHooks.startRaiseOneHook("R");
+        }
+        if(gamepad2.left_trigger > 0.5){
+            robot.stoneHooks.startLowerOneHook("L");
+        } else {
+            robot.stoneHooks.startRaiseOneHook("L");
         }
     }
 
@@ -136,15 +145,16 @@ public class VenomTeleOp extends OpMode
             robot.output.stopLift();
         }
 
-        // TODO: do we want to be able to do this?
-        // also x is now used for hooks
-        if (gamepad2.x)
+        if (gamepad2.b)
         {
-            //robot.output.moveClampIntoRobot();
+            if (gamepad2.y)
+            {
+                robot.output.moveClampIntoRobot();
+            }
         }
-
-        if (gamepad2.y)
+        else if (gamepad2.y)
         {
+
             robot.driveTrain.stopDriveMotors();
             robot.output.moveClampOutOfRobot();
         }

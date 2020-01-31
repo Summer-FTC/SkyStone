@@ -11,6 +11,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import static android.graphics.Color.blue;
 import static android.graphics.Color.green;
 import static android.graphics.Color.red;
+import static org.firstinspires.ftc.teamcode.OutputController.WRIST_POSITION_OUTSIDE_ROBOT;
+import static org.firstinspires.ftc.teamcode.OutputController.WRIST_POSITION_SIDEWAYS;
 
 
 @Autonomous(name = "Test Run" , group = "6209")
@@ -35,9 +37,11 @@ public class AutoTest extends BaseLinearOpMode
 
         waitForStart();
 
-
         while(opModeIsActive()){
-            robot.output.moveWristToPosition(0.9);
+            robot.output.moveWristToPosition(WRIST_POSITION_OUTSIDE_ROBOT);
+            Thread.sleep(2000);
+            robot.output.moveWristToPosition(WRIST_POSITION_SIDEWAYS);
+            Thread.sleep(2000);
         }
 
     }
@@ -203,7 +207,7 @@ public class AutoTest extends BaseLinearOpMode
 
     public void wristInAndOut()
     {
-        robot.output.moveWristToPosition(robot.output.WRIST_POSITION_OUTSIDE_ROBOT);
+        robot.output.moveWristToPosition(WRIST_POSITION_OUTSIDE_ROBOT);
         sleep(5000);
         robot.output.moveWristToPosition(robot.output.WRIST_POSITION_INSIDE_ROBOT);
         sleep(5000);
