@@ -14,7 +14,7 @@ public class OutputController
     public static final double WRIST_POSITION_INSIDE_ROBOT = 0;
     public static final double WRIST_POSITION_OUTSIDE_ROBOT= 0.97;
     public static final long WRIST_POSITION_DURATION = 200;
-    public static final long ELBOW_POSITION_DURATION = 1500;
+    public static final long ELBOW_POSITION_DURATION = 2500;
 
     // Positions for the elbow servo.
     public static final double ELBOW_POSITION_INSIDE_ROBOT = 0;
@@ -145,6 +145,46 @@ public class OutputController
         telemetry.update();
     }
 
+    /**
+     * This is just to demo moving out the clamp in the most impressive way possible.
+     * With the output controller pull either joystick over and while it's held down, push Y.
+     */
+    public void moveClampOutOfRobotForJudges(VenomRobot robot)
+    {
+        long startMillis = System.currentTimeMillis();
+
+
+        robot.stoneHooks.leftStoneHook.setPosition(0.5); // 1 is raised and 0 is lowered
+        robot.stoneHooks.rightStoneHook.setPosition(0.5); // 0 is raised and 1 is lowered.
+        sleep(600);
+
+        // Raise the lift some.
+        startMoveLiftUp();
+        sleep(MOVE_CLAMP_LIFT_DURATION);
+        stopLift();
+
+        moveWristToPosition(WRIST_POSITION_SIDEWAYS);
+        startOpeningClamp();
+
+        moveElbowToPosition(ELBOW_POSITION_OUTSIDE_ROBOT_AND_DOWN);
+
+        robot.stoneHooks.startRaiseHooks();
+
+        moveWristToPosition(WRIST_POSITION_OUTSIDE_ROBOT);
+
+        // Lower the lift back down.
+        startMoveLiftDown();
+        sleep(MOVE_CLAMP_LIFT_DURATION);
+        stopLift();
+
+        long durationMillis = System.currentTimeMillis() - startMillis;
+
+        sleep(OPEN_CLAMP_FULLY_DURATION - durationMillis);
+        stopClamp();
+
+        telemetry.addData("Moving clamp out took " + durationMillis + " ms", "");
+        telemetry.update();
+    }
 
     public void moveClampOutOfRobot()
     {

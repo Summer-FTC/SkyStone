@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
 
-@Autonomous(name = "ParkLinearOpMode" , group = "6209")
+@Autonomous(name = "HideParkLinearOpMode" , group = "6209")
 
 public class HideParkLinearOpMode extends BaseLinearOpMode {
     boolean configOnly = false;

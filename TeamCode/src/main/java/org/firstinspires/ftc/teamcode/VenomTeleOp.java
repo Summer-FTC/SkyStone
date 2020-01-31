@@ -150,9 +150,16 @@ public class VenomTeleOp extends OpMode
         }
         else if (gamepad2.y)
         {
-
             robot.driveTrain.stopDriveMotors();
-            robot.output.moveClampOutOfRobot();
+
+            if (Math.max(Math.max(Math.abs(gamepad2.left_stick_x), Math.abs(gamepad2.right_stick_x)),
+                    Math.max(Math.abs(gamepad2.left_stick_y), Math.abs(gamepad2.right_stick_y))) > 0.5) {
+                robot.output.moveClampOutOfRobotForJudges(robot);
+            } else {
+
+                // This is the normal one.
+                robot.output.moveClampOutOfRobot();
+            }
         }
 
         if (gamepad2.right_bumper)
