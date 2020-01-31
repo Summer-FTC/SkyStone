@@ -53,7 +53,7 @@ public class VenomRobot extends LinearOpMode
             driveTrain.setHaltModeCoast(false);
 
             imu = new IMU(hwMap.get(BNO055IMU.class, "imu 1"));
-            imu.IMUinit(hwMap);
+            imu.IMUinit(hwMap, "imu 1");
         }
    }
 

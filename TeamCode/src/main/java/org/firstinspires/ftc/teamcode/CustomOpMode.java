@@ -93,7 +93,7 @@ public class CustomOpMode extends OpMode
        telemetry.addData("Servo Initialization Complete", "");
 
        imu = new IMU(hardwareMap.get(BNO055IMU.class, "imu"));
-       imu.IMUinit(hardwareMap);
+       imu.IMUinit(hardwareMap, "imu");
 
        telemetry.addData("IMU Initialization Complete", "");
 

@@ -176,7 +176,7 @@ public class CustomLinearOpMode extends LinearOpMode {
     //    rangeSensorB = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensorB");
 
         imu = new IMU(hardwareMap.get(BNO055IMU.class, "imu"));
-        imu.IMUinit(hardwareMap);
+        imu.IMUinit(hardwareMap, "imu");
 
         telemetry.addData("IMU Initialization Complete", "");
     }

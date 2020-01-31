@@ -145,18 +145,16 @@ public class DoubleSkystone extends BaseLinearOpMode
         moveForwardByInches(0.85, MOVE_BACKWARD_AFTER_GRAB_BEFORE_TURN_DIST);
 
         // We can't turn if we are on the wall, so we strafe away for a bit.
-        double strafeAwayFromWallInches = 6;
+        double strafeAwayFromWallInches = 10;
 
         // Ideally the yaws would be 90, but we overshoot it a bit.
         if (isBlue) {
             strafeRightByInches(1, strafeAwayFromWallInches);
-            rotate(-87, 0.3);
-           // rotateToAbsoluteYaw(-87);
+            rotateToAbsoluteYaw(-87);
         }
         else {
             strafeLeftByInches(1, strafeAwayFromWallInches);
-           // rotateToAbsoluteYaw(87);
-            rotate(87, 0.3);
+            rotateToAbsoluteYaw(87);
         }
 
         moveBackwardByInches(1, DEPOSIT_UNDER_BRIDGE_2ND_STONE_DIST - strafeAwayFromWallInches);

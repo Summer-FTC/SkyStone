@@ -67,7 +67,7 @@ public class IMU extends LinearOpMode
     }
 
     // Just basic init stuff; run in robot init method
-    public void IMUinit(HardwareMap map)
+    public void IMUinit(HardwareMap map, String imuDeviceName)
     {
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
@@ -79,7 +79,7 @@ public class IMU extends LinearOpMode
         // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
         // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
         // and named "imu".
-        IMU = map.get(BNO055IMU.class, "imu");
+        IMU = map.get(BNO055IMU.class, imuDeviceName);
         IMU.initialize(parameters);
     }
 
