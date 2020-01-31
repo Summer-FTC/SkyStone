@@ -88,10 +88,6 @@ public class VenomTeleOp extends OpMode
 
     public void doStoneHooks()
     {
-        telemetry.addData("right_trigger", gamepad2.right_trigger);
-        telemetry.addData("left_trigger", gamepad2.left_trigger);
-        telemetry.update();
-
         if(gamepad2.right_trigger > 0.5){
             robot.stoneHooks.startLowerOneHook("R");
         } else {

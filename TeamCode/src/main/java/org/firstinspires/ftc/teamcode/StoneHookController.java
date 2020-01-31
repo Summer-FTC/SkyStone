@@ -41,15 +41,10 @@ public class StoneHookController
     {
         if(LorR.equals("L")) // TODO: Fix this.
         {
-            if (rightStoneHook.getPosition() != 0) {
-                rightStoneHook.setPosition(0);
-            }
+            rightStoneHook.setPosition(0);
         }
-
         else{
-            if (leftStoneHook.getPosition() != 1) {
-                leftStoneHook.setPosition(1);
-            }
+            leftStoneHook.setPosition(1);
         }
     }
 
@@ -71,14 +66,10 @@ public class StoneHookController
     {
         if(LorR.equals("L")) // TODO: Fix this.
         {
-            if (rightStoneHook.getPosition() != 1.0) {
-                rightStoneHook.setPosition(1);
-            }
+            rightStoneHook.setPosition(1);
         }
         else{
-            if (leftStoneHook.getPosition() != 0) {
-                leftStoneHook.setPosition(0);
-            }
+            leftStoneHook.setPosition(0);
         }
     }
 
