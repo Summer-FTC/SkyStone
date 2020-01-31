@@ -45,30 +45,25 @@ public class HideParkLinearOpMode extends BaseLinearOpMode {
 
     public void runSideRed() {
         // So we don't get in the other team's way
+        moveForwardByInches(0.75, 60);
         sleep(20000);
-        moveForwardByInches(0.5, 1);
-        strafeRightByInches(0.5, 10);
+        strafeRightByInches(0.75, 8);
+        moveBackwardByInches(0.75, 64);
+        strafeLeftByInches(0.3, 24);
     }
 
     // red is right
     public void runCenterRed() {
-        sleep(20000);
-        moveForwardByInches(0.5,25);
-        strafeRightByInches(0.5,10);
+        moveForwardByInches(0.75, 60);
     }
 
     public void runSideBlue() {
-        // So we don't get in the other team's way
-        sleep(20000);
-        moveForwardByInches(0.5, 1);
-        strafeLeftByInches(0.5, 10);
+        moveForwardByInches(0.75, 60);
     }
 
     // blue is left
     public void runCenterBlue() {
-        sleep(20000);
-        moveForwardByInches(0.5, 25);
-        strafeLeftByInches(0.5, 10);
+        moveForwardByInches(0.75, 60);
     }
 
 
