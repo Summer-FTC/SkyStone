@@ -154,7 +154,7 @@ public class VenomTeleOp extends OpMode
 
             if (Math.max(Math.max(Math.abs(gamepad2.left_stick_x), Math.abs(gamepad2.right_stick_x)),
                     Math.max(Math.abs(gamepad2.left_stick_y), Math.abs(gamepad2.right_stick_y))) > 0.5) {
-                robot.output.moveClampOutOfRobotForJudges(robot);
+                robot.output.moveClampOutOfRobotFromUnderHooks(robot);
             } else {
 
                 // This is the normal one.
