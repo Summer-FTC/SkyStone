@@ -68,10 +68,20 @@ public class VenomTeleOp extends OpMode
         }
         slowDown();
 
-        double forward = -gamepad1.left_stick_y * drivePower;
-        double strafe = -gamepad1.left_stick_x * drivePower;
-        double rotate = gamepad1.right_stick_x * drivePower;
+        double forward;
+        double strafe;
+        double rotate;
 
+        if(gamepad1.left_bumper){
+             forward = gamepad1.left_stick_y * drivePower;
+             strafe = gamepad1.left_stick_x * drivePower;
+             rotate = -gamepad1.right_stick_x * drivePower;
+        } else {
+            forward = -gamepad1.left_stick_y * drivePower;
+            strafe = -gamepad1.left_stick_x * drivePower;
+            rotate = gamepad1.right_stick_x * drivePower;
+
+        }
         robot.driveTrain.arcadeDrive(forward, strafe, rotate);
     }
 
@@ -175,6 +185,11 @@ public class VenomTeleOp extends OpMode
         else
         {
             robot.output.stopClamp();
+        }
+
+        if(gamepad2.dpad_right){
+            robot.output.setElbowPositions(1);
+            robot.output.wrist.setPosition(0.97);
         }
 
     }

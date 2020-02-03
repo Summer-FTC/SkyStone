@@ -16,6 +16,8 @@ public class ParkLinearOpMode extends BaseLinearOpMode
     boolean parkOnSide = true;
 
     public void initialize() {
+        telemetry.addData("Side moves forward 5 inches to park", "");
+        telemetry.update();
         initialize(true);
     }
 
@@ -46,30 +48,30 @@ public class ParkLinearOpMode extends BaseLinearOpMode
 
     public void runSideRed() {
         // So we don't get in the other team's way
-        sleep(20000);
-        moveForwardByInches(0.5, 1);
-        strafeRightByInches(0.5, 10);
+       // sleep(20000);
+        moveForwardByInches(0.5, 5);
+      //  strafeRightByInches(0.5, 10);
     }
 
     // red is right
     public void runCenterRed() {
-        sleep(20000);
+     //   sleep(20000);
         moveForwardByInches(0.5,25);
-        strafeRightByInches(0.5,10);
+     //   strafeRightByInches(0.5,10);
     }
 
     public void runSideBlue() {
         // So we don't get in the other team's way
-        sleep(20000);
-        moveForwardByInches(0.5, 1);
-        strafeLeftByInches(0.5, 10);
+       // sleep(20000);
+        moveForwardByInches(0.5, 5);
+      //  strafeLeftByInches(0.5, 10);
     }
 
     // blue is left
     public void runCenterBlue() {
-        sleep(20000);
-        moveForwardByInches(0.5, 25);
-        strafeLeftByInches(0.5, 10);
+     //   sleep(20000);
+        moveForwardByInches(0.5, 5);
+      //  strafeLeftByInches(0.5, 10);
     }
 
     public void configMode()

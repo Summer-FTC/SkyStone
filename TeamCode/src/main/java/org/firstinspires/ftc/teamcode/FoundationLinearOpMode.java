@@ -11,7 +11,7 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
     private static final int MOVE_FORWARD_TO_TOUCH_PLATFORM_INCHES = 3;
     private static final int MOVE_BACKWARD_TO_PARK_INCHES1 = 10;
     private static final int MOVE_BACKWARD_TO_PARK_INCHES2 = 30;
-    private static final int STRAFE_TO_CENTER_TO_PARK_INCHES = 26;
+    private static final int STRAFE_TO_CENTER_TO_PARK_INCHES = 23;
 
 
     private static final int MAX_PARKING_DURATION_MILLIS = 5_000;

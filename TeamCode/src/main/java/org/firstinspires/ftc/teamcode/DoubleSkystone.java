@@ -55,6 +55,7 @@ public class DoubleSkystone extends BaseLinearOpMode
             }
             lowerHook();
             deposit123();
+            rotateToAbsoluteYaw(0);
             driveTo456();
             lowerHook();
 

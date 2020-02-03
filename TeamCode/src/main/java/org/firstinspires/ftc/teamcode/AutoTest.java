@@ -15,7 +15,7 @@ import static org.firstinspires.ftc.teamcode.OutputController.WRIST_POSITION_OUT
 import static org.firstinspires.ftc.teamcode.OutputController.WRIST_POSITION_SIDEWAYS;
 
 
-@Autonomous(name = "Test Run" , group = "6209")
+@Autonomous(name = "Full Run" , group = "6209")
 
 public class AutoTest extends BaseLinearOpMode
 {
@@ -33,16 +33,13 @@ public class AutoTest extends BaseLinearOpMode
         motorBR = hwMap.dcMotor.get("motorBR");
         motorBL = hwMap.dcMotor.get("motorBL");
 
-        printSkystonePositionUntilStarted();
+      //  printSkystonePositionUntilStarted();
 
         waitForStart();
 
-        while(opModeIsActive()){
-            robot.output.moveWristToPosition(WRIST_POSITION_OUTSIDE_ROBOT);
-            Thread.sleep(2000);
-            robot.output.moveWristToPosition(WRIST_POSITION_SIDEWAYS);
-            Thread.sleep(2000);
-        }
+            moveForwardByInches(0.5, 10);
+            strafeRightByInches(0.5, 10);
+
 
     }
 
