@@ -149,7 +149,7 @@ public class OutputController
      * This is just to demo moving out the clamp in the most impressive way possible.
      * With the output controller pull either joystick over and while it's held down, push Y.
      */
-    public void moveClampOutOfRobotForJudges(VenomRobot robot)
+    public void moveClampOutOfRobotFromUnderHooks(VenomRobot robot)
     {
         long startMillis = System.currentTimeMillis();
 

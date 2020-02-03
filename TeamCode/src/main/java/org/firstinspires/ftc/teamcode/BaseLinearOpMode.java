@@ -142,7 +142,8 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         if (targetYawChange != null)
         {
             if ((targetYawChange < -180) || (targetYawChange > 180)) {
-                throw new IllegalArgumentException("targetYawChange=" + targetYawChange + " must be between -180 and 180");
+                throw new IllegalArgumentException("targetYawChange=" + targetYawChange +
+                        " must be between -180 and 180");
             }
         }
 
@@ -236,11 +237,12 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
                     /**
                      *  When targeting values close to 180 or -180, we have to worry about the
-                     *  difference becoming negative or positive. So if the yaw change is large (>150)
-                     *  and the signs are different, then we've wrapped around.
+                     *  difference becoming negative or positive. So if the yaw change is large (
+                     *  >150) and the signs are different, then we've wrapped around.
                      **/
 
-                    if ((Math.abs(currentYawChange) > 150) && Math.signum(currentYawChange) != Math.signum(targetYawChange)) {
+                    if ((Math.abs(currentYawChange) > 150) && Math.signum(currentYawChange)
+                            != Math.signum(targetYawChange)) {
                         active = false;
                     }
 
@@ -255,8 +257,10 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                         if (Math.abs(currentYawChange) >=  Math.abs(targetYawChange) / 2) {
 
                             // Adjusts the encoder ticks based on what we have done so far.
-                            double fractionComplete = Math.abs(currentYawChange) / Math.abs(targetYawChange);
-                            int estimatedTargetedTicks = (int)Math.round(currentPosition / fractionComplete);
+                            double fractionComplete = Math.abs(currentYawChange) /
+                                    Math.abs(targetYawChange);
+                            int estimatedTargetedTicks = (int)Math.round(currentPosition /
+                                    fractionComplete);
                             m.setTargetPosition(estimatedTargetedTicks);
                             motorToEncoder.put(m, estimatedTargetedTicks);
                         }
@@ -285,7 +289,8 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
                     double inchesToEnd  = ticksRemaining * (1.0 / moveInchtoEnc(1));
                     double rampDownAcclerationInchesPerSecond2 = 96;
-                    double secondsToEnd  = Math.sqrt(2.0 * inchesToEnd / rampDownAcclerationInchesPerSecond2);
+                    double secondsToEnd  = Math.sqrt(2.0 * inchesToEnd /
+                            rampDownAcclerationInchesPerSecond2);
                     double msToEnd = 1000 * secondsToEnd;
                     double rampDownMaxPower = MIN_POWER + (msToEnd) / RAMP_DOWN_MS;
 
