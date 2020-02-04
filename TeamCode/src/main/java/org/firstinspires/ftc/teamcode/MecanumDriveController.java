@@ -142,6 +142,35 @@ public class MecanumDriveController
             stopDriveMotors();
          }
 
+        double maxAbs = Math.max(Math.max(Math.abs(FL), Math.abs(FR)), Math.max(Math.abs(BR), Math.abs(BL)));
+        // Don't divide by 0.
+        double scaledPower;
+        if(maxAbs != 0){
+            scaledPower = 1/maxAbs;
+        }
+        else{
+            scaledPower = 0;
+        }
+
+        double hypLen = Math.sqrt(((forward*forward) + (strafe*strafe)));
+
+        if(hypLen > 0.9){
+            hypLen = 1;
+        }
+
+        scaledPower *= hypLen;
+
+        FL *= scaledPower;
+        BL *= scaledPower;
+        FR *= scaledPower;
+        BR *= scaledPower;
+
+
+        telemetry.addData("Scaled Power", scaledPower);
+        telemetry.addData("Hypotenuse length", hypLen);
+        telemetry.addData("FL, BL, FR, BR", FL + ", " + BL +  ", " + FR +  ", "+ BR);
+        telemetry.update();
+
         motorFL.setPower(FL);
         motorBL.setPower(BL);
         motorFR.setPower(FR);

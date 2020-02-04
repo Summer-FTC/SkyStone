@@ -11,8 +11,9 @@ import java.io.StringWriter;
 public class VenomTeleOp extends OpMode
 {
     VenomRobot robot = new VenomRobot();
-    double intakePower = 1;
     double drivePower = 1;
+    boolean isReversed = false;
+    boolean prevReversePressed = false;
 
     @Override
     public void init()
@@ -53,35 +54,37 @@ public class VenomTeleOp extends OpMode
         doStoneHooks();
     }
 
-//    public void encoderTelemetry()
-//    {
-//        int liftEnc = robot.output.motorLift.getCurrentPosition();
-//        telemetry.addData("lift encoder", liftEnc);
-//        telemetry.update();
-//    }
+
 
     void doDrive()
     {
-      //  doBrake();
         if(robot.driveTrain.isBraking()){
             return;
         }
+
         slowDown();
 
         double forward;
         double strafe;
         double rotate;
 
-        if(gamepad1.left_bumper){
-             forward = gamepad1.left_stick_y * drivePower;
-             strafe = gamepad1.left_stick_x * drivePower;
-             rotate = -gamepad1.right_stick_x * drivePower;
+        if(gamepad1.back && !prevReversePressed){
+            if(isReversed){
+                forward = -gamepad1.left_stick_y * drivePower;
+                strafe = -gamepad1.left_stick_x * drivePower;
+                rotate = gamepad1.right_stick_x * drivePower;
+            }
+            else {
+                forward = gamepad1.left_stick_y * drivePower;
+                strafe = gamepad1.left_stick_x * drivePower;
+                rotate = gamepad1.right_stick_x * drivePower;
+            }
         } else {
             forward = -gamepad1.left_stick_y * drivePower;
             strafe = -gamepad1.left_stick_x * drivePower;
             rotate = gamepad1.right_stick_x * drivePower;
-
         }
+
         robot.driveTrain.arcadeDrive(forward, strafe, rotate);
     }
 

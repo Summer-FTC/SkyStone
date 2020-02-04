@@ -20,7 +20,7 @@ public class DoubleSkystone extends BaseLinearOpMode
     private static int MOVE_BACKWARD_AFTER_GRAB_BEFORE_TURN_DIST = 6;
     private static int STRAFE_UNDER_BRIDGE_1ST_STONE_DIST = 48;
     private static int STRAFE_BACK_TO_GET_2ND_STONE_DIST = 70;
-    private static int MOVE_FORWARD_TO_GET_2ND_STONE_DIST = 16;
+    private static int MOVE_FORWARD_TO_GET_2ND_STONE_DIST = 20;
     private static int DEPOSIT_UNDER_BRIDGE_2ND_STONE_DIST = 73;
     private static int PARK_DIST = 20;
 
