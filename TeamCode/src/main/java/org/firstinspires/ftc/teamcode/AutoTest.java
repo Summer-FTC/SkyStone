@@ -33,12 +33,8 @@ public class AutoTest extends BaseLinearOpMode
         motorBR = hwMap.dcMotor.get("motorBR");
         motorBL = hwMap.dcMotor.get("motorBL");
 
-      //  printSkystonePositionUntilStarted();
 
         waitForStart();
-
-            moveForwardByInches(0.5, 10);
-            strafeRightByInches(0.5, 10);
 
 
     }

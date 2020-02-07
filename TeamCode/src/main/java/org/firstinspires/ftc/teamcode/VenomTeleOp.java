@@ -72,20 +72,22 @@ public class VenomTeleOp extends OpMode
             if(isReversed){
                 forward = -gamepad1.left_stick_y * drivePower;
                 strafe = -gamepad1.left_stick_x * drivePower;
-                rotate = gamepad1.right_stick_x * drivePower;
+
             }
             else {
                 forward = gamepad1.left_stick_y * drivePower;
                 strafe = gamepad1.left_stick_x * drivePower;
-                rotate = gamepad1.right_stick_x * drivePower;
             }
         } else {
             forward = -gamepad1.left_stick_y * drivePower;
             strafe = -gamepad1.left_stick_x * drivePower;
-            rotate = gamepad1.right_stick_x * drivePower;
         }
 
+        rotate = gamepad1.right_stick_x * drivePower;
+
         robot.driveTrain.arcadeDrive(forward, strafe, rotate);
+
+
     }
 
     public void doBrake(){

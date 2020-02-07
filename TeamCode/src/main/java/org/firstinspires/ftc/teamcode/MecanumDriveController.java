@@ -152,7 +152,7 @@ public class MecanumDriveController
             scaledPower = 0;
         }
 
-        double hypLen = Math.sqrt(((forward*forward) + (strafe*strafe)));
+        double hypLen = Math.max(Math.sqrt(((forward*forward) + (strafe*strafe))), rotate);
 
         if(hypLen > 0.9){
             hypLen = 1;
@@ -236,7 +236,7 @@ public class MecanumDriveController
             setPowers(0.01);
             stopDriveMotors();
             isBraking = true;
-            log("Braked");
+          //  log("Braked");
         }
     }
 
@@ -244,7 +244,7 @@ public class MecanumDriveController
         if(isBraking) {
             setHaltModeCoast(true);
             isBraking = false;
-            log("Unbraked");
+         //   log("Unbraked");
         }
     }
 }
