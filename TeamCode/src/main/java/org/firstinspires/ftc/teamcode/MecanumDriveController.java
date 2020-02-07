@@ -152,7 +152,7 @@ public class MecanumDriveController
             scaledPower = 0;
         }
 
-        double hypLen = Math.max(Math.sqrt(((forward*forward) + (strafe*strafe))), 0);
+        double hypLen = Math.max(Math.sqrt(((forward*forward) + (strafe*strafe))), hypeLenLeft);
 
         if(hypLen > 0.9) {
             hypLen = 1;
