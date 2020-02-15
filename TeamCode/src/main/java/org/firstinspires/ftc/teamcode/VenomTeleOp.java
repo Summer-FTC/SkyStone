@@ -15,10 +15,20 @@ public class VenomTeleOp extends OpMode
     boolean isReversed = false;
     boolean prevReversePressed = false;
 
+
+    //    public void runOpMode(){
+    //        init();
+    //        loop();
+    //    }
+
+
     @Override
     public void init()
     {
         try {
+            telemetry.addData("here", "");
+            telemetry.update();
+
             robot.init(hardwareMap, telemetry, false);
             robot.output.motorLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             robot.output.motorLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -45,13 +55,23 @@ public class VenomTeleOp extends OpMode
 
     }
 
+    long maxDurationMillis = 0;
     public void loop()
     {
+        long startMillis = System.currentTimeMillis();
+
         doDrive();
         doFoundation();
         doOutput();
         doBrake();
         doStoneHooks();
+
+        long durationMillis = System.currentTimeMillis() - startMillis;
+
+        maxDurationMillis = Math.max(durationMillis, maxDurationMillis);
+        telemetry.addData("Loop duration (ms)", durationMillis);
+        telemetry.addData("Loop duration max (ms)", maxDurationMillis);
+        telemetry.update();
     }
 
 
@@ -68,27 +88,29 @@ public class VenomTeleOp extends OpMode
         double strafe;
         double rotate;
 
-        if(gamepad1.back && !prevReversePressed){
-            if(isReversed){
-                forward = -gamepad1.left_stick_y * drivePower;
-                strafe = -gamepad1.left_stick_x * drivePower;
+        if(gamepad1.back && !isReversed){
+            isReversed = true;
+        }
+        else if(gamepad1.start && isReversed){
+            isReversed = false;
+        }
 
-            }
-            else {
-                forward = gamepad1.left_stick_y * drivePower;
-                strafe = gamepad1.left_stick_x * drivePower;
-            }
-        } else {
+        if(!isReversed){
             forward = -gamepad1.left_stick_y * drivePower;
             strafe = -gamepad1.left_stick_x * drivePower;
         }
 
+        else{
+            forward = gamepad1.left_stick_y * drivePower;
+            strafe = gamepad1.left_stick_x * drivePower;
+        }
+
         rotate = gamepad1.right_stick_x * drivePower;
 
-        double hypLenL = Math.sqrt((gamepad1.right_stick_x*gamepad1.right_stick_x) + (gamepad1.right_stick_y*gamepad1.right_stick_y));
-        robot.driveTrain.arcadeDrive(forward, strafe, rotate, hypLenL);
-
+        double hypLenR = Math.abs(rotate);
+        robot.driveTrain.arcadeDrive(forward, strafe, rotate, hypLenR);
     }
+
 
     public void doBrake(){
 
@@ -156,46 +178,62 @@ public class VenomTeleOp extends OpMode
             robot.output.stopLift();
         }
 
-        if (gamepad2.b)
-        {
-            if (gamepad2.y)
-            {
-                robot.output.moveClampIntoRobot();
-            }
-        }
-        else if (gamepad2.y)
-        {
-            robot.driveTrain.stopDriveMotors();
+//        if (gamepad2.b)
+//        {
+//            if (gamepad2.y)
+//            {
+//                robot.output.moveClampIntoRobot();
+//            }
+//        }
+//        else if (gamepad2.y)
+//        {
+//            robot.driveTrain.stopDriveMotors();
+//
+//            if (Math.max(Math.max(Math.abs(gamepad2.left_stick_x), Math.abs(gamepad2.right_stick_x)),
+//                    Math.max(Math.abs(gamepad2.left_stick_y), Math.abs(gamepad2.right_stick_y))) > 0.5) {
+//                robot.output.moveClampOutOfRobotFromUnderHooks(robot);
+//            } else {
+//
+//                // This is the normal one.
+//                robot.output.moveClampOutOfRobot();
+//            }
+//        }
+//
+//        if (gamepad2.right_bumper)
+//        {
+//            robot.output.startOpeningClamp();
+//        }
+//
+//        else if (gamepad2.left_bumper)
+//        {
+//            robot.output.startClosingClamp();
+//        }
+//
+//        else
+//        {
+//            robot.output.stopClamp();
+//        }
+//
+//        if(gamepad2.dpad_right){iu
+//            robot.output.setElbowPositions(1);
+//            robot.output.wrist.setPosition(0.97);
+//        }
 
-            if (Math.max(Math.max(Math.abs(gamepad2.left_stick_x), Math.abs(gamepad2.right_stick_x)),
-                    Math.max(Math.abs(gamepad2.left_stick_y), Math.abs(gamepad2.right_stick_y))) > 0.5) {
-                robot.output.moveClampOutOfRobotFromUnderHooks(robot);
-            } else {
-
-                // This is the normal one.
-                robot.output.moveClampOutOfRobot();
-            }
+        if(gamepad2.y && gamepad2.b){
+            robot.output.openDoorsFully();
         }
 
-        if (gamepad2.right_bumper)
-        {
-            robot.output.startOpeningClamp();
+        else if(gamepad2.y){
+            robot.output.openDoorsPartyway();
         }
 
-        else if (gamepad2.left_bumper)
-        {
-            robot.output.startClosingClamp();
+        else if(gamepad2.b){
+            robot.output.shutDoors();
         }
 
-        else
-        {
-            robot.output.stopClamp();
-        }
-
-        if(gamepad2.dpad_right){
-            robot.output.setElbowPositions(1);
-            robot.output.wrist.setPosition(0.97);
-        }
+      //   if(gamepad2.back){
+             // deployCapstone();
+     //    }
 
     }
 
@@ -211,7 +249,6 @@ public class VenomTeleOp extends OpMode
         }
     }
 
-//    }
 }
 
 

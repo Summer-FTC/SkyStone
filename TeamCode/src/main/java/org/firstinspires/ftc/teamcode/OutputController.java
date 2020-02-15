@@ -37,12 +37,25 @@ public class OutputController
     private static final long OPEN_CLAMP_FULLY_DURATION = 1500; // This isn't fully.
     private static final long CLOSE_CLAMP_FULLY_DURATION = 3200;
 
+    public static final double RIGHT_DOOR_FULLY_OPEN = 0.9;
+    public static final double LEFT_DOOR_FULLY_OPEN = 0.1;
+
+    public static final double RIGHT_DOOR_PARTWAY_OPEN = 0.37;
+    public static final double LEFT_DOOR_PARTWAY_OPEN = 0.4;
+
+    public static final double RIGHT_DOOR_CLAMPING_BLOCK = 0.25;
+    public static final double LEFT_DOOR_CLAMPING_BLOCK = 0.59;
 
     public DcMotor motorLift;
     public Servo elbowR;
     public Servo elbowL;
     public Servo wrist;
     public CRServo clamp;
+
+    public Servo rightDoor;
+    public Servo leftDoor;
+    public Servo cap;
+
 
     HardwareMap hwMap;
     Telemetry telemetry;
@@ -56,13 +69,18 @@ public class OutputController
 
         // elbows flip
         // 1 and 2 should work simultaneously
-        elbowR = hwMap.servo.get("elbow1");
-        elbowL = hwMap.servo.get("elbow2");
+     //   elbowR = hwMap.servo.get("elbow1");
+     //   elbowL = hwMap.servo.get("elbow2");
 
         // wrist rotates block
-        wrist = hwMap.servo.get("wrist");
+     //   wrist = hwMap.servo.get("wrist");
         // clamp opens and closes on block
-        clamp = hwMap.crservo.get("clamp");
+     //   clamp = hwMap.crservo.get("clamp");
+
+        rightDoor = hwMap.servo.get("rightDoor");
+        leftDoor = hwMap.servo.get("leftDoor");
+        cap = hwMap.servo.get("cap");
+
 
         telemetry.addData("Output Servo Initialization Complete", "");
 
@@ -102,6 +120,21 @@ public class OutputController
 
     public void stopLift() {
         setLiftPower(0);
+    }
+
+    public void shutDoors(){
+        leftDoor.setPosition(LEFT_DOOR_CLAMPING_BLOCK);
+        rightDoor.setPosition(RIGHT_DOOR_CLAMPING_BLOCK);
+    }
+
+    public void openDoorsPartyway(){
+        leftDoor.setPosition(LEFT_DOOR_PARTWAY_OPEN);
+        rightDoor.setPosition(RIGHT_DOOR_PARTWAY_OPEN);
+    }
+
+    public void openDoorsFully(){
+        leftDoor.setPosition(LEFT_DOOR_FULLY_OPEN);
+        rightDoor.setPosition(RIGHT_DOOR_FULLY_OPEN);
     }
 
 

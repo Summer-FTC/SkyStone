@@ -33,13 +33,11 @@ public class AutoTest extends BaseLinearOpMode
         motorBR = hwMap.dcMotor.get("motorBR");
         motorBL = hwMap.dcMotor.get("motorBL");
 
-
         waitForStart();
-
+        testnewClamp();
 
     }
 
-    @Override
     protected boolean usesTensorFlow() {
         return true;
     }
@@ -52,10 +50,21 @@ public class AutoTest extends BaseLinearOpMode
     private void printSkystonePositionUntilStarted() throws InterruptedException {
         while (!isStarted()) {
             StonePosition sp = getSkystonePosition();
-
             sleep(500);
         }
     }
+
+    public void testnewClamp(){
+        robot.output.rightDoor.setPosition(0.42);
+        robot.output.leftDoor.setPosition(0.4);
+        sleep(5_000);
+
+       // robot.output.rightDoor.setPosition(0.5);
+       // robot.output.leftDoor.setPosition(0.6);
+       // sleep(25_000);
+    }
+
+
 
     public void testStoneHooks(){
         robot.stoneHooks.raiseOneHook("L");

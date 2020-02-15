@@ -108,7 +108,7 @@ public class MecanumDriveController
     }
 
 
-    public void arcadeDrive(double forward, double strafe, double rotate, double hypeLenLeft)
+    public void arcadeDrive(double forward, double strafe, double rotate, double hypeLenRight)
     {
         double FL = 0.0;
         double FR = 0.0;
@@ -152,7 +152,7 @@ public class MecanumDriveController
             scaledPower = 0;
         }
 
-        double hypLen = Math.max(Math.sqrt(((forward*forward) + (strafe*strafe))), hypeLenLeft);
+        double hypLen = Math.max(Math.sqrt(((forward*forward) + (strafe*strafe))), hypeLenRight);
 
         if(hypLen > 0.9) {
             hypLen = 1;
