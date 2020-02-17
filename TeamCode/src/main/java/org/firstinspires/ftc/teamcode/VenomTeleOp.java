@@ -13,7 +13,8 @@ public class VenomTeleOp extends OpMode
     VenomRobot robot = new VenomRobot();
     double drivePower = 1;
     boolean isReversed = false;
-    boolean prevReversePressed = false;
+
+    boolean allowDoorChanges = true;
 
 
     //    public void runOpMode(){
@@ -221,14 +222,25 @@ public class VenomTeleOp extends OpMode
 
         if(gamepad2.y && gamepad2.b){
             robot.output.openDoorsFully();
+            // We can't let go of y and b at exactly the same time, so ignore door changes
+            // untl they are both released.
+            allowDoorChanges = false;
         }
 
         else if(gamepad2.y){
-            robot.output.openDoorsPartyway();
+            if (allowDoorChanges) {
+                robot.output.openDoorsPartyway();
+            }
         }
 
         else if(gamepad2.b){
-            robot.output.shutDoors();
+            if (allowDoorChanges) {
+                robot.output.shutDoors();
+            }
+        }
+        else {
+            // Both buttons have been released, so allow other changes.
+            allowDoorChanges = true;
         }
 
       //   if(gamepad2.back){

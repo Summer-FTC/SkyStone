@@ -14,7 +14,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -75,6 +79,10 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     private static int HEIGHT_OF_RECTANGLE = 30;
     private static int WIDTH_OF_RECTANGLE = 60;
 
+    // When we move, we use PID to hold our heading.
+    // This starts off to be 0 (see init), which is how the robot is oriented at the start.
+    // We update this each time that we rotate to an absolute yaw.
+    private Double headingToHold = null;
 
     VenomRobot robot = new VenomRobot();
     double newPower;
@@ -103,6 +111,8 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                 initTfod();
             }
         }
+        // Use setHeadingToHold since AutoTestNoPID overrides it to not save the heading.
+        setHeadingToHold(0.0);
 
         log("BaseLinearOpMode::initialize complete");
     }
@@ -124,12 +134,44 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                 encFL, encFR, encBL, encBR, null);
     }
 
+    protected void setHeadingToHold(Double headingToHold) {
+        this.headingToHold = headingToHold;
+    }
 
     public void moveWithEncoders(String direction, double power, int msTimeOut,
                                   int encFL, int encFR, int encBL, int encBR,
                                   // null means that we don't stop when the yaw changes.
                                   Double targetYawChange)
     {
+        // Make this a parameter so that we don't do it all the time? We could even set it as a
+        // member variable to set it only for the next iteratin?
+        boolean holdHeading = (targetYawChange == null) && (headingToHold != null);
+
+        // These were tuned with https://robotics.stackexchange.com/questions/167/what-are-good-strategies-for-tuning-pid-loops
+        // The error is in degrees, but the adjustments are in power changes, so we expect these values to
+        // be very small.
+        final double PID_KP = 0.04; // Every degree that we are off, we will change the power by this amount.
+        final double PID_KD = 0.02;
+        final double PID_KI = 0.001;
+
+        // This is the most that we will adjust our power by.
+        final double maxHoldHeadingPowerAdjustment = power / 5;
+
+        // This is the maximum that we adjust the power by in a single iteration.
+        final double maxAdjustmentPerIteration = PID_KP * 2;
+
+        // We store all of the PID stuff in a csv file so we can analyze it if we want to afterwards.
+        StringBuilder csvBuffer = new StringBuilder();
+        csvBuffer.append("direction," + direction + "\n");
+        csvBuffer.append("power," + power + "\n");
+        csvBuffer.append("PID_KP," + PID_KP + "\n");
+        csvBuffer.append("PID_KD," + PID_KD + "\n");
+        csvBuffer.append("PID_KI," + PID_KI + "\n");
+        csvBuffer.append("maxHoldHeadingPowerAdjustment," + maxHoldHeadingPowerAdjustment + "\n");
+        csvBuffer.append("maxAdjustmentPerIteration," + maxAdjustmentPerIteration + "\n");
+        csvBuffer.append("Sec,yawError,prevYawError,errorDelta,adjust,rawAdjust,prevAdjust,adjDelta,yawErrorIntegral");
+        csvBuffer.append(",powFL,powFR,powBL,powBR,velFL,velFR,velBL,velBR");
+
         // Make sure the timeout is big enough.
         // int maxEnc = Math.max(Math.max(Math.abs(encFL), encFR), Math.max(encBL, encBR));
         // msTimeOut = Math.max(msTimeOut, (int)Math.ceil(maxEnc / power));
@@ -152,6 +194,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         long stopTime = msTimeOut + System.currentTimeMillis();
 
         Map<DcMotor, Integer> motorToEncoder = new LinkedHashMap<>();
+        Map<DcMotor, Integer> motorToPosition = new LinkedHashMap<>();
         Map<DcMotor, Double> motorToPowerRatio = new LinkedHashMap<>();
 
         motorToEncoder.put(robot.driveTrain.motorFL, encFL);
@@ -168,7 +211,10 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
         robot.log("Starting loop to move " + direction);
 
-        double initialYaw = robot.imu.getYaw();
+        final double initialYaw = robot.imu.getYaw();
+
+        // The power that we want to set for each motor. This is updated each time through the loop.
+        Map<DcMotor,Double> motorToDesiredPower = new HashMap<>();
 
         for (DcMotor m : motorToEncoder.keySet())
         {
@@ -177,12 +223,14 @@ public abstract class BaseLinearOpMode extends LinearOpMode
             // Scale each motor power relative to encoder ticks
             motorToPowerRatio.put(m, ((double)motorToEncoder.get(m)/maxEnc));
         }
+        motorToPowerRatio = Collections.unmodifiableMap(motorToPowerRatio);
 
         // Set the motors altogether here rather than in the loop above
         // so that we are starting them at close to the same time.
         for (DcMotor m : motorToEncoder.keySet())
         {
             m.setPower(Math.min(MIN_POWER, power));
+            motorToDesiredPower.put(m, Math.min(MIN_POWER, power));
         }
 
         boolean active = true;
@@ -190,6 +238,17 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         long startTime = System.currentTimeMillis();
         long totalMotorSetTime = 0;
         int loopCount = 0;
+
+        double prevYawError = 0;
+        double minYawAdjustment = 0;
+        double maxYawAdjustment = 0;
+
+        double yawErrorIntegral = 0;
+
+        double prevHoldHeadingPowerAdjustment = 0;
+        int oscillations = 0;
+
+
         while (System.currentTimeMillis() < stopTime && active && opModeIsActive())
         {
             loopCount++;
@@ -200,13 +259,11 @@ public abstract class BaseLinearOpMode extends LinearOpMode
             active = true;
             double maxTicksRemaining = 0;
 
-            // The power that we want to set for each motor.
-            Map<DcMotor,Double> motorToDesiredPower = new HashMap<>();
-
             for(DcMotor m : motorToEncoder.keySet())
             {
                 int encoderTicks = motorToEncoder.get(m);
                 int currentPosition = m.getCurrentPosition();
+                motorToPosition.put(m, currentPosition);
 
                 // Sometimes the motor is not busy right at the start, so assume we are
                 // busy if we haven't moved half of the encoder ticks.
@@ -214,10 +271,11 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                 double ticksRemaining = Math.abs(encoderTicks - currentPosition);
                 maxTicksRemaining = Math.max(maxTicksRemaining, ticksRemaining);
 
-
-                if (ticksRemaining <= 2)
+                // This is about 1/8 of an inch.
+                if (ticksRemaining <= 10)
                 {
                     active = false;
+                    break;
                 }
 
                 // If we are rotating, then we can stop the loop once we achieve the desired yaw
@@ -268,7 +326,8 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                 }
                 encoderTicks = motorToEncoder.get(m);
 
-                double powerToSet = 0;
+                // By default stay at the current power so that we don't set one motor to 0 and brake.
+                double powerToSet = motorToDesiredPower.get(m);
                 if (((encoderTicks < 0) && (currentPosition > encoderTicks)) ||
                         ((encoderTicks > 0) && (currentPosition < encoderTicks))) {
                     // Accelerate slowly at the start.
@@ -310,6 +369,96 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                 motorToDesiredPower.put(m, powerToSet * motorToPowerRatio.get(m));
             }
 
+            // How to hold a heading.
+            if (holdHeading) {
+                double powerFL = motorToDesiredPower.get(robot.driveTrain.motorFL);
+                double powerBL = motorToDesiredPower.get(robot.driveTrain.motorBL);
+                double powerFR = motorToDesiredPower.get(robot.driveTrain.motorFR);
+                double powerBR = motorToDesiredPower.get(robot.driveTrain.motorBR);
+                double currentMaxPower = absMax(powerFL, powerBL, powerFR, powerBR);
+
+                // This is the P in PID
+                double yawError = robot.imu.getTrueDiff(headingToHold);
+
+                // Keep track of oscillations for debugging.
+                if (Math.signum(yawError) != Math.signum(prevYawError)) {
+                    oscillations++;
+                }
+
+                // This is the I in PID.
+                yawErrorIntegral = yawErrorIntegral + yawError;
+
+                // This is the D in PID.
+                double yawErrorDerivative = yawError - prevYawError;
+
+                // Standard PID : output = (Kp * error) + (Ki * integral) + (Kd * derivative);
+                double holdHeadingPowerAdjustment = PID_KP * yawError +
+                        PID_KI * yawErrorIntegral + PID_KD * yawErrorDerivative;
+
+                // Remember the raw adjustment before we clamp it down.
+                double rawHoldHeadingPowerAdjustment = holdHeadingPowerAdjustment;
+
+                // Scale the adjustment by the current power, not the maximum.
+                // This is important when we are ramping up and down.
+                holdHeadingPowerAdjustment = holdHeadingPowerAdjustment * currentMaxPower;
+
+                // Cap the adjustment relative to the maximum limits and what we had set last time.
+                holdHeadingPowerAdjustment = Math.min(maxHoldHeadingPowerAdjustment, holdHeadingPowerAdjustment);
+                holdHeadingPowerAdjustment = Math.max(-maxHoldHeadingPowerAdjustment, holdHeadingPowerAdjustment);
+                holdHeadingPowerAdjustment = Math.min(holdHeadingPowerAdjustment,
+                        prevHoldHeadingPowerAdjustment + maxAdjustmentPerIteration);
+                holdHeadingPowerAdjustment = Math.max(holdHeadingPowerAdjustment,
+                        prevHoldHeadingPowerAdjustment - maxAdjustmentPerIteration);
+
+                // Keep track of the min and max for telemetry at the end.
+                maxYawAdjustment = Math.max(holdHeadingPowerAdjustment, maxYawAdjustment);
+                minYawAdjustment = Math.min(holdHeadingPowerAdjustment, minYawAdjustment);
+
+                message.append("yawError: " + hundredths(yawError) + "\n");
+                message.append("pidAdjustment: " + hundredths(holdHeadingPowerAdjustment) + "\n");
+
+                // To rotate clockwise (+ yaw)
+                //   encFL & encBL are positive.
+                //   encFR & encBR are negative.
+
+                // To rotate counterclockwise (- yaw)
+                //   encFL & encBL are negative.
+                //   encFR & encBR are positive
+
+                // So ...
+                // If yawError is positive, then we need to rotate counter clockwise
+                // If yawError is negative, then we need to rotate clockwise
+
+                // A positive adjustment means that we rotate clockwise and adjust powers as
+                // Add to encFL & encBL
+                // Subtract from encFR & encBR
+
+                // When we are speeding up or slowing down, don't let the adjustment get too big.
+                double maxPower = Math.min(1,
+                        (1 + (maxHoldHeadingPowerAdjustment/ power)) * currentMaxPower);
+
+                powerFL = adjustPower(powerFL, holdHeadingPowerAdjustment, maxPower);
+                powerBL = adjustPower(powerBL, holdHeadingPowerAdjustment, maxPower);
+                powerFR = adjustPower(powerFR, -holdHeadingPowerAdjustment, maxPower);
+                powerBR = adjustPower(powerBR, -holdHeadingPowerAdjustment, maxPower);
+                motorToDesiredPower.put(robot.driveTrain.motorFL, powerFL);
+                motorToDesiredPower.put(robot.driveTrain.motorBL, powerBL);
+                motorToDesiredPower.put(robot.driveTrain.motorFR, powerFR);
+                motorToDesiredPower.put(robot.driveTrain.motorBR, powerBR);
+
+                // Log this so we can analyze it later.
+                appendPid(startTime, csvBuffer,
+                        yawError, prevYawError, rawHoldHeadingPowerAdjustment,
+                        holdHeadingPowerAdjustment, prevHoldHeadingPowerAdjustment,
+                        yawErrorIntegral, motorToDesiredPower, motorToPosition);
+
+
+                prevHoldHeadingPowerAdjustment = holdHeadingPowerAdjustment;
+                prevYawError = yawError;
+            }
+
+            
+
             // Set the motor powers all at the end, so we are adjusting at the same time.
             long startMotorSet = System.currentTimeMillis();
             for (DcMotor m: motorToDesiredPower.keySet()) {
@@ -336,14 +485,129 @@ public abstract class BaseLinearOpMode extends LinearOpMode
             telemetry.addData(m.getDeviceName(), m.getCurrentPosition());
         }
 
+        // Log all of the PID details to a CSV file.
+        csvBuffer.append("\n");
+        csvBuffer.append("\n");
+        csvBuffer.append("Loop count," + loopCount + "\n");
+        csvBuffer.append("Yaw," + robot.imu.getYaw() + "\n");
+        csvBuffer.append("Initial Yaw," + initialYaw + "\n");
+        csvBuffer.append("Yaw change," + robot.imu.getTrueDiff(initialYaw) + "\n");
+        csvBuffer.append("Max yaw adjustment," + maxYawAdjustment + "\n");
+        csvBuffer.append("Min yaw adjustment," + minYawAdjustment + "\n");
+        csvBuffer.append("Oscillations," + oscillations + "\n");
+        File file = AppUtil.getInstance().getSettingsFile("pid-" + direction + "-" +
+                System.currentTimeMillis() + ".csv");
+        try(FileOutputStream out = new FileOutputStream((file))){
+            out.write(csvBuffer.toString().getBytes());
+        } catch(IOException e) {
+            telemetry.addLine(e.toString());
+        }
+
         telemetry.addData("Loop count", loopCount);
         telemetry.addData("totalMotorSetTime", totalMotorSetTime);
         telemetry.addData("Yaw: ", robot.imu.getYaw());
         telemetry.addData("Initial Yaw: ", initialYaw);
         telemetry.addData("Yaw change: ", robot.imu.getTrueDiff(initialYaw));
+        if (maxYawAdjustment != 0) {
+            telemetry.addData("Max yaw adjustment", maxYawAdjustment);
+        }
+        if (minYawAdjustment != 0) {
+            telemetry.addData("Min yaw adjustment", minYawAdjustment);
+        }
+        if (oscillations > 0) {
+            telemetry.addData("Yaw oscillations", oscillations);
+        }
         telemetry.addData("Method time: ", (System.currentTimeMillis()
                 - methodStartMillis) + " ms");
+        telemetry.addData("PID file", file.getAbsolutePath());
         telemetry.update();
+    }
+
+    private final DecimalFormat D1 = new DecimalFormat("0.0");
+    private final DecimalFormat D2 = new DecimalFormat("#.00");
+    private final DecimalFormat D3 = new DecimalFormat("#.000");
+    private final DecimalFormat D4 = new DecimalFormat("#.0000");
+
+    // Store the previous encders so we can see their velocities.
+    Map<DcMotor, Integer> prevMotorToPosition;
+
+    // Write out one row to the CSV file.
+    private void appendPid(long millis,
+                           StringBuilder csvBuffer,
+                           double yawError,
+                           double prevYawError,
+                           double rawAdjust,
+                           double adjust,
+                           double prevAdjust,
+                           double yawErrorIntegral,
+                           Map<DcMotor, Double> motorToDesiredPower,
+                           Map<DcMotor, Integer> motorToPosition
+                           ) {
+
+        DcMotor motorFL = robot.driveTrain.motorFL;
+        DcMotor motorBL = robot.driveTrain.motorBL;
+        DcMotor motorFR = robot.driveTrain.motorFR;
+        DcMotor motorBR = robot.driveTrain.motorBR;
+
+        double powerFL = motorToDesiredPower.get(motorFL);
+        double powerBL = motorToDesiredPower.get(motorBL);
+        double powerFR = motorToDesiredPower.get(motorFR);
+        double powerBR = motorToDesiredPower.get(motorBR);
+
+        double durationSec = (System.currentTimeMillis() - millis)/ 1000.0;
+
+        double errorDelta = Math.abs(yawError) - Math.abs(prevYawError);
+        double adjDelta = adjust - prevAdjust;
+
+        csvBuffer.append("\n" +
+                D3.format(durationSec) +
+                "," + D1.format(yawError) +
+                "," + D1.format(prevYawError) +
+                "," + D1.format(errorDelta) +
+                "," + D3.format(adjust) +
+                "," + D3.format(rawAdjust) +
+                "," + D3.format(prevAdjust) +
+                "," + D3.format(adjDelta) +
+                "," + D1.format(yawErrorIntegral));
+
+        if (prevMotorToPosition == null) {
+            prevMotorToPosition = new LinkedHashMap<>(motorToPosition);
+            prevMotorToPosition.put(motorFL, 0);
+            prevMotorToPosition.put(motorBL, 0);
+            prevMotorToPosition.put(motorFR, 0);
+            prevMotorToPosition.put(motorBR, 0);
+        }
+
+        csvBuffer.append("," + D3.format(Math.abs(powerFL)));
+        csvBuffer.append("," + D3.format(Math.abs(powerBL)));
+        csvBuffer.append("," + D3.format(Math.abs(powerFR)));
+        csvBuffer.append("," + D3.format(Math.abs(powerBR)));
+        csvBuffer.append("," + Math.abs(motorToPosition.get(motorFL) - prevMotorToPosition.get(motorFL)));
+        csvBuffer.append("," + Math.abs(motorToPosition.get(motorBL) - prevMotorToPosition.get(motorBL)));
+        csvBuffer.append("," + Math.abs(motorToPosition.get(motorFR) - prevMotorToPosition.get(motorFR)));
+        csvBuffer.append("," + Math.abs(motorToPosition.get(motorBR) - prevMotorToPosition.get(motorBR)));
+
+        prevMotorToPosition = new LinkedHashMap<>(motorToPosition);
+    }
+
+
+    private double absMax(double... values) {
+        double max = 0;
+        for (double value: values) {
+            max = Math.max(Math.abs(value), max);
+        }
+        return max;
+    }
+
+    private double adjustPower(double power, double adjustment, double maxAbsolutePower) {
+        double adjustedPower = power + adjustment;
+        if (adjustedPower > maxAbsolutePower) {
+            return maxAbsolutePower;
+        } else if (adjustedPower < -maxAbsolutePower) {
+            return -maxAbsolutePower;
+        } else {
+            return adjustedPower;
+        }
     }
 
     final DecimalFormat hundredthsFormat = new DecimalFormat("0.00");
@@ -396,17 +660,20 @@ public abstract class BaseLinearOpMode extends LinearOpMode
     {
         double targetYawChange = robot.imu.getTrueDiff(yawDegrees);
         rotate(targetYawChange);
+        setHeadingToHold(yawDegrees);
     }
 
 
     // positive is left, negative is right
-    public void rotate(double degrees)
+    // This is private because we need make sure headingToHold gets updated.
+    private void rotate(double degrees)
     {
         rotate(degrees, 0.5);
 
     }
 
-    public void rotate(double degrees, double power)
+    // This is private because we need make sure headingToHold gets updated.
+    private void rotate(double degrees, double power)
     {
         // Flip the direction of the encoders if degrees is negative.
         int encoderSign = 1;
@@ -505,6 +772,9 @@ public abstract class BaseLinearOpMode extends LinearOpMode
 
         double targetYawChange = robot.imu.getTrueDiff(endingAbsoluteYaw);
         moveWithEncoders(direction, power, 30_000, encL, encR, encL, encR, targetYawChange);
+
+        // Remember which direction we are heading.
+        setHeadingToHold(endingAbsoluteYaw);
     }
 
 

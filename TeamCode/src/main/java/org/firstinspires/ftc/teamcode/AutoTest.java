@@ -34,8 +34,14 @@ public class AutoTest extends BaseLinearOpMode
         motorBL = hwMap.dcMotor.get("motorBL");
 
         waitForStart();
-        testnewClamp();
 
+        // testnewClamp();
+
+        strafeRightByInches(1, 48);
+        Thread.sleep(5000);
+
+        strafeLeftByInches(1, 48);
+        Thread.sleep(5000);
     }
 
     protected boolean usesTensorFlow() {
@@ -95,7 +101,7 @@ public class AutoTest extends BaseLinearOpMode
     {
         robot.foundationHooks.lowerHooks();
         moveBackwardByInches(0.8, 36);
-        rotate(-20);
+//        rotate(-20);
         robot.foundationHooks.raiseHooks();
         strafeLeftByInches(0.8, 10);
         rotateToAbsoluteYaw(70);
@@ -128,7 +134,7 @@ public class AutoTest extends BaseLinearOpMode
 
         telemetry.addData("Status", "Running Autonomous!");
         telemetry.update();
-        rotate(90, 1);
+//        rotate(90, 1);
 
     }
 

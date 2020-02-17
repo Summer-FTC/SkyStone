@@ -84,7 +84,7 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
         strafeLeftByInches(0.75, 8);
 
-        arcBackwardsToAbsoluteYaw(0.8, 15, 30, false); // TODO: It seems like this should be true???
+        arcBackwardsToAbsoluteYaw(0.8, 15, 30, false);
         rotateToAbsoluteYaw(90);
         moveForwardByInches(0.8, 10);
 

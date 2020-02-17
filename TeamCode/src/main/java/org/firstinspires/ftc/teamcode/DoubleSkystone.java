@@ -151,11 +151,11 @@ public class DoubleSkystone extends BaseLinearOpMode
         // Ideally the yaws would be 90, but we overshoot it a bit.
         if (isBlue) {
             strafeRightByInches(1, strafeAwayFromWallInches);
-            rotateToAbsoluteYaw(-87);
+            rotateToAbsoluteYaw(-90);
         }
         else {
             strafeLeftByInches(1, strafeAwayFromWallInches);
-            rotateToAbsoluteYaw(87);
+            rotateToAbsoluteYaw(90);
         }
 
         moveBackwardByInches(1, DEPOSIT_UNDER_BRIDGE_2ND_STONE_DIST - strafeAwayFromWallInches);
