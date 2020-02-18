@@ -15,14 +15,14 @@ public class DoubleSkystone extends BaseLinearOpMode
     private static int MOVE_OFF_OF_WALL_DISTANCE = 2;
     private static int STRAFE_TO_POS_1_OR_2_DIST = 4;
     private static int STRAFE_TO_POS_3_DIST = 4;
-    private static int MOVE_FORWARD_TO_GET_1ST_STONE_DIST = 27;
-    private static int MOVE_BACKWARD_AFTER_GRAB_DIST = 12;
-    private static int MOVE_BACKWARD_AFTER_GRAB_BEFORE_TURN_DIST = 6;
+    private static int MOVE_FORWARD_TO_GET_1ST_STONE_DIST = 28;
+    private static int MOVE_BACKWARD_AFTER_GRAB_DIST = 11;
+    private static int MOVE_BACKWARD_AFTER_GRAB_BEFORE_TURN_DIST = 10;
     private static int STRAFE_UNDER_BRIDGE_1ST_STONE_DIST = 48;
-    private static int STRAFE_BACK_TO_GET_2ND_STONE_DIST = 70;
-    private static int MOVE_FORWARD_TO_GET_2ND_STONE_DIST = 20;
-    private static int DEPOSIT_UNDER_BRIDGE_2ND_STONE_DIST = 73;
-    private static int PARK_DIST = 20;
+    private static int STRAFE_BACK_TO_GET_2ND_STONE_DIST = 72;
+    private static int MOVE_FORWARD_TO_GET_2ND_STONE_DIST = 17;
+    private static int DEPOSIT_UNDER_BRIDGE_2ND_STONE_DIST = 70;
+    private static int PARK_DIST = 16;
 
     int position = 3;
 
@@ -47,7 +47,7 @@ public class DoubleSkystone extends BaseLinearOpMode
                 driveTo3();
                 // Adjust the remaining strafe movements by the width of a block.
                 STRAFE_UNDER_BRIDGE_1ST_STONE_DIST += 8;
-                STRAFE_BACK_TO_GET_2ND_STONE_DIST += 8;
+                STRAFE_BACK_TO_GET_2ND_STONE_DIST += 6;
                 DEPOSIT_UNDER_BRIDGE_2ND_STONE_DIST += 8;
             }
             else {

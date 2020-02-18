@@ -11,7 +11,7 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
     private static final int MOVE_FORWARD_TO_TOUCH_PLATFORM_INCHES = 3;
     private static final int MOVE_BACKWARD_TO_PARK_INCHES1 = 10;
     private static final int MOVE_BACKWARD_TO_PARK_INCHES2 = 30;
-    private static final int STRAFE_TO_CENTER_TO_PARK_INCHES = 23;
+    private static final int STRAFE_TO_CENTER_TO_PARK_INCHES = 26;
 
 
     private static final int MAX_PARKING_DURATION_MILLIS = 5_000;
@@ -56,7 +56,7 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         }
 
         moveBackwardByInches(0.7, MOVE_BACKWARD_TO_PARK_INCHES1);
-        moveClampOutInAuto();
+        //moveClampOutInAuto();
 
         long millisUntilPark = parkTimeMillis - System.currentTimeMillis();
         if (millisUntilPark > 0) {
@@ -117,7 +117,7 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
         moveRedFoundation();
 
-        strafeRightByInches(0.7, 10);
+        strafeRightByInches(0.7, 20);
     }
 
 
@@ -126,7 +126,7 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
 
         moveBlueFoundation();
 
-        strafeLeftByInches(0.7, 10);
+        strafeLeftByInches(0.7, 20);
     }
 
 
@@ -136,7 +136,7 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         moveRedFoundation();
 
         // Strafe into the wall to reset the distances
-        strafeRightByInches(0.7, 14);
+        strafeRightByInches(0.7, 18);
 
         strafeLeftByInches(0.7, STRAFE_TO_CENTER_TO_PARK_INCHES);
     }
@@ -149,7 +149,7 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         moveBlueFoundation();
 
         // Strafe into the wall to reset the distances
-        strafeLeftByInches(0.7, 14);
+        strafeLeftByInches(0.7, 18);
 
         strafeRightByInches(0.7, STRAFE_TO_CENTER_TO_PARK_INCHES);
     }
