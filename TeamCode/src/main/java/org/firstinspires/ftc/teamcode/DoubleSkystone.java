@@ -21,7 +21,7 @@ public class DoubleSkystone extends BaseLinearOpMode
     private static int STRAFE_UNDER_BRIDGE_1ST_STONE_DIST = 48;
     private static int STRAFE_BACK_TO_GET_2ND_STONE_DIST = 72;
     private static int MOVE_FORWARD_TO_GET_2ND_STONE_DIST = 17;
-    private static int DEPOSIT_UNDER_BRIDGE_2ND_STONE_DIST = 70;
+    private static int DEPOSIT_UNDER_BRIDGE_2ND_STONE_DIST = 66;
     private static int PARK_DIST = 16;
 
     int position = 3;
@@ -48,7 +48,7 @@ public class DoubleSkystone extends BaseLinearOpMode
                 // Adjust the remaining strafe movements by the width of a block.
                 STRAFE_UNDER_BRIDGE_1ST_STONE_DIST += 8;
                 STRAFE_BACK_TO_GET_2ND_STONE_DIST += 6;
-                DEPOSIT_UNDER_BRIDGE_2ND_STONE_DIST += 8;
+                DEPOSIT_UNDER_BRIDGE_2ND_STONE_DIST += 10;
             }
             else {
                 driveTo1Or2();

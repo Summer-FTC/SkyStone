@@ -33,7 +33,7 @@ public class StoneHookController
 
     public void startRaiseHooks()
     {
-        leftStoneHook.setPosition(1);
+        leftStoneHook.setPosition(0.9);
         rightStoneHook.setPosition(0);
     }
 
