@@ -137,6 +137,10 @@ public class OutputController
         rightDoor.setPosition(RIGHT_DOOR_FULLY_OPEN);
     }
 
+    public void releaseCap() {
+        cap.setPosition(1);
+    }
+
 
     public void openClampFully() {
         startOpeningClamp();

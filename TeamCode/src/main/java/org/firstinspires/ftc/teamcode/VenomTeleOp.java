@@ -37,6 +37,8 @@ public class VenomTeleOp extends OpMode
             robot.stoneHooks.startRaiseOneHook("L");
             robot.stoneHooks.startRaiseOneHook("R");
 
+            robot.output.cap.setPosition(0);
+
             telemetry.addData("Initialization complete", "");
             telemetry.update();
         } catch (Exception e) {
@@ -241,6 +243,10 @@ public class VenomTeleOp extends OpMode
         else {
             // Both buttons have been released, so allow other changes.
             allowDoorChanges = true;
+        }
+
+        if(gamepad2.right_bumper) {
+            robot.output.releaseCap();
         }
 
       //   if(gamepad2.back){
