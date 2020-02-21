@@ -37,7 +37,7 @@ public class VenomTeleOp extends OpMode
             robot.stoneHooks.startRaiseOneHook("L");
             robot.stoneHooks.startRaiseOneHook("R");
 
-            robot.output.cap.setPosition(0);
+            robot.output.cap.setPosition(1);
 
             telemetry.addData("Initialization complete", "");
             telemetry.update();
@@ -68,6 +68,7 @@ public class VenomTeleOp extends OpMode
         doOutput();
         doBrake();
         doStoneHooks();
+        doCapStoneDrop();
 
         long durationMillis = System.currentTimeMillis() - startMillis;
 
@@ -117,7 +118,7 @@ public class VenomTeleOp extends OpMode
 
     public void doBrake(){
 
-        if(gamepad1.dpad_down || gamepad1.dpad_up || gamepad1.dpad_left || gamepad1.dpad_right){
+        if(gamepad1.dpad_down || gamepad1.dpad_up){
             robot.driveTrain.brake();
         }
         else {
@@ -264,6 +265,16 @@ public class VenomTeleOp extends OpMode
         else if(gamepad2.x || gamepad1.x)
         {
             robot.foundationHooks.raiseHooks();
+        }
+    }
+
+    public void doCapStoneDrop(){
+        if(gamepad1.dpad_left){
+            robot.output.lowerCap();
+        }
+
+        else if (gamepad1.dpad_right){
+            robot.output.bringCapIn();
         }
     }
 

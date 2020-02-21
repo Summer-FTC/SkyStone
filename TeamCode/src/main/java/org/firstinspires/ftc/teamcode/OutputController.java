@@ -339,6 +339,25 @@ public class OutputController
         elbowR.setPosition(posR);
     }
 
+    public void bringCapIn(){
+        telemetry.addData("Moving the capstone into the stone", "");
+        telemetry.update();
+
+        double posIn = 1;
+        cap.setPosition(posIn);
+
+
+    }
+
+    public void lowerCap(){
+        telemetry.addData("Moving capstone onto the stone", "");
+        telemetry.update();
+
+        double posOut = 0;
+
+        cap.setPosition(posOut);
+    }
+
     public final void sleep(long milliseconds) {
         try {
             if (milliseconds > 0)
