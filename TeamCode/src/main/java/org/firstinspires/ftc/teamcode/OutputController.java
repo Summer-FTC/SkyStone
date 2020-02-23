@@ -82,7 +82,7 @@ public class OutputController
         cap = hwMap.servo.get("cap");
 
 
-        telemetry.addData("Output Servo Initialization Complete", "");
+  //      telemetry.addData("Output Servo Initialization Complete", "");
 
         motorLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -97,17 +97,17 @@ public class OutputController
         // This MIGHT have caused the chain to break. Disable it just in case for now.
 //        motorLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // stops lift from drifting down
 
-        telemetry.addData("Output Motor Initialization Complete", "");
-        telemetry.update();
+//        telemetry.addData("Output Motor Initialization Complete", "");
+//        telemetry.update();
     }
 
     private void setLiftPower(double liftPower) {
         motorLift.setPower(liftPower);
-        if (liftPower != 0) {
-            telemetry.addData("Lift Power", liftPower);
-            telemetry.addData("Lift encoder", motorLift.getCurrentPosition());
-            telemetry.update();
-        }
+//        if (liftPower != 0) {
+//            telemetry.addData("Lift Power", liftPower);
+//            telemetry.addData("Lift encoder", motorLift.getCurrentPosition());
+//            telemetry.update();
+//        }
     }
 
     public void startMoveLiftUp() {
@@ -138,6 +138,10 @@ public class OutputController
     }
 
     public void releaseCap() {
+        cap.setPosition(0);
+    }
+
+    public void pullCapBackIn(){
         cap.setPosition(1);
     }
 
@@ -177,9 +181,9 @@ public class OutputController
     }
 
     private void printElbows(String when, StringBuilder history) {
-        history.append(when + " L elbow=" + getLeftElbowPos() + "  R elbow=" + getRightElbowPos() + "\n");
-        telemetry.addData(history.toString(), "");
-        telemetry.update();
+//        history.append(when + " L elbow=" + getLeftElbowPos() + "  R elbow=" + getRightElbowPos() + "\n");
+//        telemetry.addData(history.toString(), "");
+//        telemetry.update();
     }
 
     /**

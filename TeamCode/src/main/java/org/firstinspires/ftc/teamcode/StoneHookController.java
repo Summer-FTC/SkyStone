@@ -27,7 +27,7 @@ public class StoneHookController
 
         startRaiseHooks();
 
-        telemetry.addData("Hook Servo Initialization Complete", "");
+      //  telemetry.addData("Hook Servo Initialization Complete", "");
     }
 
 

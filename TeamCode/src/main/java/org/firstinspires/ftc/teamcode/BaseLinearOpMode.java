@@ -144,7 +144,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
                                   Double targetYawChange)
     {
         // Make this a parameter so that we don't do it all the time? We could even set it as a
-        // member variable to set it only for the next iteratin?
+        // member variable to set it only for the next iteration?
         boolean holdHeading = (targetYawChange == null) && (headingToHold != null);
 
         // These were tuned with https://robotics.stackexchange.com/questions/167/what-are-good-strategies-for-tuning-pid-loops
@@ -482,7 +482,7 @@ public abstract class BaseLinearOpMode extends LinearOpMode
         for (DcMotor m : motorToEncoder.keySet())
         {
             m.setPower(0);
-            telemetry.addData(m.getDeviceName(), m.getCurrentPosition());
+          //  telemetry.addData(m.getDeviceName(), m.getCurrentPosition());
         }
 
         // Log all of the PID details to a CSV file.

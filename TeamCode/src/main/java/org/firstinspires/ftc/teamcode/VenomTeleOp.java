@@ -17,19 +17,10 @@ public class VenomTeleOp extends OpMode
     boolean allowDoorChanges = true;
 
 
-    //    public void runOpMode(){
-    //        init();
-    //        loop();
-    //    }
-
-
     @Override
     public void init()
     {
         try {
-            telemetry.addData("here", "");
-            telemetry.update();
-
             robot.init(hardwareMap, telemetry, false);
             robot.output.motorLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             robot.output.motorLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -37,28 +28,30 @@ public class VenomTeleOp extends OpMode
             robot.stoneHooks.startRaiseOneHook("L");
             robot.stoneHooks.startRaiseOneHook("R");
 
-            robot.output.cap.setPosition(0);
+            robot.output.cap.setPosition(1);
 
-            telemetry.addData("Initialization complete", "");
-            telemetry.update();
+          //  telemetry.addData("Initialization complete", "");
+          //  telemetry.update();
         } catch (Exception e) {
-            StringWriter sw = new StringWriter();
-            PrintWriter pw = new PrintWriter(sw);
-            e.printStackTrace(pw);
-            telemetry.addData(sw.toString().substring(0, Math.min(500, sw.toString().length())), "");
-            telemetry.update();
-            try {
-                Thread.sleep(10_000);
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-                Thread.currentThread().interrupt();
-            }
+//            StringWriter sw = new StringWriter();
+//            PrintWriter pw = new PrintWriter(sw);
+//            e.printStackTrace(pw);
+//            telemetry.addData(sw.toString().substring(0, Math.min(500, sw.toString().length())), "");
+//            telemetry.update();
+//            try {
+//                Thread.sleep(10_000);
+//            } catch (InterruptedException ex) {
+//                ex.printStackTrace();
+//                Thread.currentThread().interrupt();
+//            }
             throw new RuntimeException(e);
         }
 
     }
 
     long maxDurationMillis = 0;
+    long totalLoops = 0;
+    long totalLoopDurationMills = 0;
     public void loop()
     {
         long startMillis = System.currentTimeMillis();
@@ -70,10 +63,14 @@ public class VenomTeleOp extends OpMode
         doStoneHooks();
 
         long durationMillis = System.currentTimeMillis() - startMillis;
+        totalLoopDurationMills += durationMillis;
+        totalLoops++;
 
         maxDurationMillis = Math.max(durationMillis, maxDurationMillis);
         telemetry.addData("Loop duration (ms)", durationMillis);
+        telemetry.addData("Loop duration avg (ms)", totalLoopDurationMills/totalLoops);
         telemetry.addData("Loop duration max (ms)", maxDurationMillis);
+        telemetry.addData("Total Loops", totalLoops);
         telemetry.update();
     }
 
@@ -247,6 +244,10 @@ public class VenomTeleOp extends OpMode
 
         if(gamepad2.right_bumper) {
             robot.output.releaseCap();
+        }
+
+        else if(gamepad2.left_bumper){
+            robot.output.pullCapBackIn();
         }
 
       //   if(gamepad2.back){

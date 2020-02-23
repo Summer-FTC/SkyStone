@@ -38,6 +38,7 @@ public class FoundationLinearOpMode extends BaseLinearOpMode
         telemetry.update();
         initialize();
         configMode();
+
         waitForStart();
 
         // Autos are 30 seconds, so we work backwards from that to decide when to park.

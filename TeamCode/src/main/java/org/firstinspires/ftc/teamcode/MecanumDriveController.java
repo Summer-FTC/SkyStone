@@ -166,10 +166,10 @@ public class MecanumDriveController
         BR *= scaledPower;
 
 
-        telemetry.addData("Scaled Power", scaledPower);
-        telemetry.addData("Hypotenuse length", hypLen);
-        telemetry.addData("FL, BL, FR, BR", FL + ", " + BL +  ", " + FR +  ", "+ BR);
-        telemetry.update();
+//        telemetry.addData("Scaled Power", scaledPower);
+//        telemetry.addData("Hypotenuse length", hypLen);
+//        telemetry.addData("FL, BL, FR, BR", FL + ", " + BL +  ", " + FR +  ", "+ BR);
+//        telemetry.update();
 
         motorFL.setPower(FL);
         motorBL.setPower(BL);

@@ -254,12 +254,12 @@ public class DoubleSkystone extends BaseLinearOpMode
             try {
                 StonePosition sp = getSkystonePosition();
                 position = sp.getPosition(isBlue);
-                this.wait(50);
+
+                this.wait(500);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 return;
             }
         } while (!isStarted());
     }
-
 }
