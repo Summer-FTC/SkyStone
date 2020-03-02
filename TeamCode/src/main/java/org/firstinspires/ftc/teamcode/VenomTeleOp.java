@@ -261,11 +261,11 @@ public class VenomTeleOp extends OpMode
     {
         if(gamepad2.a||gamepad1.a)
         {
-            robot.foundationHooks.lowerHooks();
+            robot.foundationHooks.startLowerHooks();
         }
         else if(gamepad2.x || gamepad1.x)
         {
-            robot.foundationHooks.raiseHooks();
+            robot.foundationHooks.startRaiseHooks();
         }
     }
 

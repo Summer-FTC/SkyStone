@@ -32,6 +32,12 @@ public class FoundationHookController
         rightHook.setPosition(0);
     }
 
+    public void startLowerHooks()
+    {
+        leftHook.setPosition(0.21);
+        rightHook.setPosition(1);
+    }
+
     public void raiseHooks()
     {
         startRaiseHooks();
@@ -44,6 +50,7 @@ public class FoundationHookController
             Thread.currentThread().interrupt();
         }
     }
+
 
     public void lowerHooks()
     {
